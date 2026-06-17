@@ -61,6 +61,8 @@ class AuthService {
     required String role,
     required String phone,
     required String gender,
+    String? licenseNo,
+    String? businessAddress,
   }) async {
     try {
       final body = {
@@ -70,6 +72,8 @@ class AuthService {
         'role': role.toLowerCase(),
         'phone': phone,
         'gender': gender.toLowerCase(),
+        'license_no': licenseNo,
+        'business_address': businessAddress,
       };
 
       final response = await http.post(
@@ -83,12 +87,152 @@ class AuthService {
 
       if ((response.statusCode == 201 || response.statusCode == 200) &&
           data['success'] == true) {
-        return {'success': true};
+        return {'success': true, 'message': data['message'] ?? 'Signup successful'};
       } else {
         return {'success': false, 'message': data['message'] ?? 'Signup failed'};
       }
     } catch (e) {
       print('Register error: $e');
+      return {'success': false, 'message': 'Cannot connect to backend: $e'};
+    }
+  }
+
+  // Fetch Pending Wholesalers
+  static Future<List<dynamic>> fetchPendingWholesalers() async {
+    try {
+      final token = box.read('token');
+      final response = await http.get(
+        Uri.parse('$baseUrl/admin/pending-wholesalers'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      final data = json.decode(response.body);
+      print('Fetch Pending Wholesalers Response: $data');
+
+      if (response.statusCode == 200 && data['success'] == true) {
+        return data['data'] ?? [];
+      } else {
+        print('Failed to load pending businesses: ${data['message']}');
+        return [];
+      }
+    } catch (e) {
+      print('Fetch Pending error: $e');
+      return [];
+    }
+  }
+
+  // Update Wholesaler status (approve/reject)
+  static Future<Map<String, dynamic>> updateBusinessStatus(int userId, String status) async {
+    try {
+      final token = box.read('token');
+      final response = await http.post(
+        Uri.parse('$baseUrl/admin/update-status'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode({
+          'userId': userId,
+          'status': status,
+        }),
+      );
+
+      final data = json.decode(response.body);
+      print('Update status Response: $data');
+
+      if (response.statusCode == 200 && data['success'] == true) {
+        return {'success': true, 'message': data['message']};
+      } else {
+        return {'success': false, 'message': data['message'] ?? 'Failed to update status'};
+      }
+    } catch (e) {
+      print('Update status error: $e');
+      return {'success': false, 'message': 'Cannot connect to backend: $e'};
+    }
+  }
+
+  // Fetch all wholesale products
+  static Future<List<dynamic>> fetchWholesaleProducts() async {
+    try {
+      final token = box.read('token');
+      final response = await http.get(
+        Uri.parse('$baseUrl/admin/products'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      final data = json.decode(response.body);
+      print('Fetch Products Response: $data');
+
+      if (response.statusCode == 200 && data['success'] == true) {
+        return data['data'] ?? [];
+      } else {
+        print('Failed to load products: ${data['message']}');
+        return [];
+      }
+    } catch (e) {
+      print('Fetch Products error: $e');
+      return [];
+    }
+  }
+
+  // Delete product from catalog
+  static Future<Map<String, dynamic>> deleteProduct(int productId) async {
+    try {
+      final token = box.read('token');
+      final response = await http.delete(
+        Uri.parse('$baseUrl/admin/products/$productId'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      final data = json.decode(response.body);
+      print('Delete Product Response: $data');
+
+      if (response.statusCode == 200 && data['success'] == true) {
+        return {'success': true, 'message': data['message']};
+      } else {
+        return {'success': false, 'message': data['message'] ?? 'Failed to delete product'};
+      }
+    } catch (e) {
+      print('Delete Product error: $e');
+      return {'success': false, 'message': 'Cannot connect to backend: $e'};
+    }
+  }
+
+  // Update product status (approve/flag)
+  static Future<Map<String, dynamic>> updateProductStatus(int productId, String status) async {
+    try {
+      final token = box.read('token');
+      final response = await http.post(
+        Uri.parse('$baseUrl/admin/products/status'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode({
+          'productId': productId,
+          'status': status,
+        }),
+      );
+
+      final data = json.decode(response.body);
+      print('Update product status Response: $data');
+
+      if (response.statusCode == 200 && data['success'] == true) {
+        return {'success': true, 'message': data['message']};
+      } else {
+        return {'success': false, 'message': data['message'] ?? 'Failed to update product status'};
+      }
+    } catch (e) {
+      print('Update product status error: $e');
       return {'success': false, 'message': 'Cannot connect to backend: $e'};
     }
   }

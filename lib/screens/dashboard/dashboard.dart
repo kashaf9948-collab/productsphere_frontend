@@ -3,6 +3,10 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../../core/services/auth_service.dart';
 import '../../core/utils/theme.dart';
+import '../../core/widgets/wholesaler_drawer.dart';
+import '../../core/widgets/wholesaler_bottom_nav.dart';
+import '../../core/widgets/client_drawer.dart';
+import '../../core/widgets/client_bottom_nav.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -25,20 +29,17 @@ class DashboardScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
+      drawer: isWholesaler ? const WholesalerDrawer() : const ClientDrawer(),
+      bottomNavigationBar: isWholesaler
+          ? const WholesalerBottomNav(activeIndex: 0)
+          : const ClientBottomNav(activeIndex: 0),
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: isWholesaler ? Colors.indigo.shade700 : AppTheme.primary,
         foregroundColor: Colors.white,
         title: Text(
           isWholesaler ? 'Wholesaler Portal' : 'Buyer Marketplace',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout_rounded),
-            tooltip: 'Logout',
-            onPressed: _logout,
-          ),
-        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(

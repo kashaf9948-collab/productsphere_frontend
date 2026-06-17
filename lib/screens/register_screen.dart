@@ -15,6 +15,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _phoneController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _licenseController = TextEditingController();
+  final _addressController = TextEditingController();
 
   String? _selectedGender = 'Male';
   String _selectedRole = 'Buyer'; // default role
@@ -29,11 +31,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final phone = _phoneController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text;
+    final license = _licenseController.text.trim();
+    final address = _addressController.text.trim();
 
     if (name.isEmpty || email.isEmpty || password.isEmpty || phone.isEmpty) {
       Get.snackbar(
         "Validation Error",
         "Please fill in all the required fields",
+        backgroundColor: AppTheme.expiredLight,
+        colorText: AppTheme.expired,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    if (_selectedRole == 'Wholesaler' && (license.isEmpty || address.isEmpty)) {
+      Get.snackbar(
+        "Validation Error",
+        "Please fill in your license/NTN and business address",
         backgroundColor: AppTheme.expiredLight,
         colorText: AppTheme.expired,
         snackPosition: SnackPosition.BOTTOM,
@@ -61,19 +76,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
       role: _selectedRole,
       phone: phone,
       gender: _selectedGender ?? 'male',
+      licenseNo: _selectedRole == 'Wholesaler' ? license : null,
+      businessAddress: _selectedRole == 'Wholesaler' ? address : null,
     );
 
     setState(() => _isLoading = false);
 
     if (result['success']) {
+      Get.offAllNamed('/login');
       Get.snackbar(
-        "Success",
-        "Account created successfully! Please login.",
+        "Registration Successful",
+        result['message'] ?? "Account created successfully!",
         backgroundColor: AppTheme.activeLight,
         colorText: AppTheme.active,
         snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 5),
       );
-      Get.back(); // go back to login screen
     } else {
       Get.snackbar(
         "Registration Failed",
@@ -193,6 +211,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ],
               ),
               const SizedBox(height: 18),
+
+              // Wholesaler-specific fields (License & Address)
+              if (_selectedRole == 'Wholesaler') ...[
+                _label('Business License / NTN Number *'),
+                const SizedBox(height: 8),
+                _textField(controller: _licenseController, hint: 'e.g., TX-123456-A'),
+                const SizedBox(height: 18),
+                _label('Business Address *'),
+                const SizedBox(height: 8),
+                _textField(controller: _addressController, hint: 'e.g., Suite 10, Trade Center, Lahore'),
+                const SizedBox(height: 18),
+              ],
 
               // Email Address
               _label('Email Address *'),
@@ -367,6 +397,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _phoneController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _licenseController.dispose();
+    _addressController.dispose();
     super.dispose();
   }
 }
