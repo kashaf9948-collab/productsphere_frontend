@@ -6,7 +6,7 @@ import '../core/utils/theme.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -201,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: _isLoading ? null : _login,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppTheme.primary,
-                            disabledBackgroundColor: AppTheme.primary.withOpacity(0.6),
+                            disabledBackgroundColor: AppTheme.primary.withValues(alpha: 0.6),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                             ),
@@ -308,8 +308,8 @@ class _LoginScreenState extends State<LoginScreen> {
     required String password,
   }) {
     return ActionChip(
-      backgroundColor: color.withOpacity(0.08),
-      side: BorderSide(color: color.withOpacity(0.3)),
+      backgroundColor: color.withValues(alpha: 0.08),
+      side: BorderSide(color: color.withValues(alpha: 0.3)),
       label: Text(
         label,
         style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.bold),

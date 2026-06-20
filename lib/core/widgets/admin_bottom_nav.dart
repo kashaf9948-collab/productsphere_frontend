@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 class AdminBottomNav extends StatelessWidget {
   final int activeIndex; // 0=Home, 1=Verifications, 2=Users, 3=Profile
 
-  const AdminBottomNav({Key? key, required this.activeIndex}) : super(key: key);
+  const AdminBottomNav({super.key, required this.activeIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class AdminBottomNav extends StatelessWidget {
         border: Border(top: BorderSide(color: Colors.grey.shade300, width: 0.5)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 10,
             offset: const Offset(0, -2),
           )

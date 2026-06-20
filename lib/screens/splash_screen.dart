@@ -7,7 +7,7 @@ import '../routes/app_routes.dart';
 import '../core/utils/theme.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -139,7 +139,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                   height: size.width * 1.5,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppTheme.primary.withOpacity(0.04),
+                    color: AppTheme.primary.withValues(alpha: 0.04),
                   ),
                 ),
               ),
@@ -167,7 +167,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                         borderRadius: BorderRadius.circular(28),
                         boxShadow: [
                           BoxShadow(
-                            color: AppTheme.primary.withOpacity(0.4),
+                            color: AppTheme.primary.withValues(alpha: 0.4),
                             blurRadius: _logoGlow.value + 10,
                             spreadRadius: _logoGlow.value * 0.4,
                           ),

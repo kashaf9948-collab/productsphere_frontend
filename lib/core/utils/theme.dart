@@ -28,7 +28,7 @@ class AppTheme {
   // ── Border & Shadow ───────────────────────────────────────
   static const Color border = Color(0xFFCFD8DC);
   static BoxShadow cardShadow = BoxShadow(
-    color: Colors.black.withOpacity(0.04),
+    color: Colors.black.withValues(alpha: 0.04),
     blurRadius: 8,
     offset: const Offset(0, 3),
   );
@@ -93,7 +93,7 @@ class AppTheme {
         borderRadius: BorderRadius.circular(radiusMd),
         borderSide: const BorderSide(color: primary, width: 1.5),
       ),
-      hintStyle: const TextStyle(color: textHint, fontSize: 14),
+      hintStyle: const TextStyle(color: Color.fromARGB(255, 158, 177, 187), fontSize: 14),
     ),
   );
 }

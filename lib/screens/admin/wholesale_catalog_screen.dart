@@ -6,7 +6,7 @@ import '../../core/widgets/admin_drawer.dart';
 import '../../core/widgets/admin_bottom_nav.dart';
 
 class WholesaleCatalogScreen extends StatefulWidget {
-  const WholesaleCatalogScreen({Key? key}) : super(key: key);
+  const WholesaleCatalogScreen({super.key});
 
   @override
   State<WholesaleCatalogScreen> createState() => _WholesaleCatalogScreenState();
@@ -326,7 +326,7 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppTheme.radiusMd),
         boxShadow: [AppTheme.cardShadow],
-        border: isFlagged ? Border.all(color: AppTheme.expired.withOpacity(0.5), width: 1.5) : null,
+        border: isFlagged ? Border.all(color: AppTheme.expired.withValues(alpha: 0.5), width: 1.5) : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

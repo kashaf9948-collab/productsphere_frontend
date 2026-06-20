@@ -9,7 +9,7 @@ import '../../core/widgets/client_drawer.dart';
 import '../../core/widgets/client_bottom_nav.dart';
 
 class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({super.key});
 
   void _logout() {
     AuthService.logout();
@@ -67,7 +67,7 @@ class DashboardScreen extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 28,
-                          backgroundColor: Colors.white.withOpacity(0.25),
+                          backgroundColor: Colors.white.withValues(alpha: 0.25),
                           child: Text(
                             name.isNotEmpty ? name[0].toUpperCase() : '?',
                             style: const TextStyle(
@@ -94,7 +94,7 @@ class DashboardScreen extends StatelessWidget {
                               Text(
                                 isWholesaler ? 'Role: Wholesaler / Donor' : 'Role: Buyer / Retailer',
                                 style: TextStyle(
-                                  color: Colors.white.withOpacity(0.85),
+                                  color: Colors.white.withValues(alpha: 0.85),
                                   fontSize: 13,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -110,11 +110,11 @@ class DashboardScreen extends StatelessWidget {
                       children: [
                         Text(
                           email,
-                          style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 13),
+                          style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 13),
                         ),
                         Text(
                           phone,
-                          style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 13),
+                          style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 13),
                         ),
                       ],
                     ),
@@ -352,7 +352,7 @@ class DashboardScreen extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundColor: color.withOpacity(0.08),
+            backgroundColor: color.withValues(alpha: 0.08),
             child: Icon(icon, color: color, size: 20),
           ),
           const SizedBox(width: 14),
@@ -425,7 +425,7 @@ class DashboardScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.08),
+              color: color.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(AppTheme.radiusSm),
             ),
             child: Icon(icon, color: color, size: 24),
