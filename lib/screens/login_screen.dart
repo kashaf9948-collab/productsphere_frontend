@@ -158,8 +158,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextField(
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
-                        style: const TextStyle(fontSize: 14, color: AppTheme.textPrimary),
-                        decoration: _inputDecoration('e.g., buyer@productsphere.com'),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: AppTheme.textPrimary,
+                        ),
+                        decoration: _inputDecoration(
+                          'e.g., buyer@productsphere.com',
+                        ),
                       ),
                       const SizedBox(height: 18),
 
@@ -176,7 +181,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextField(
                         controller: _passwordController,
                         obscureText: _obscurePassword,
-                        style: const TextStyle(fontSize: 14, color: AppTheme.textPrimary),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: AppTheme.textPrimary,
+                        ),
                         decoration: _inputDecoration(
                           'Enter your password',
                           suffix: IconButton(
@@ -187,7 +195,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: AppTheme.textSecondary,
                               size: 20,
                             ),
-                            onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                            onPressed: () => setState(
+                              () => _obscurePassword = !_obscurePassword,
+                            ),
                           ),
                         ),
                       ),
@@ -203,7 +213,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             backgroundColor: AppTheme.primary,
                             disabledBackgroundColor: AppTheme.primary.withValues(alpha: 0.6),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+                              borderRadius: BorderRadius.circular(
+                                AppTheme.radiusMd,
+                              ),
                             ),
                             elevation: 0,
                           ),
@@ -312,7 +324,11 @@ class _LoginScreenState extends State<LoginScreen> {
       side: BorderSide(color: color.withValues(alpha: 0.3)),
       label: Text(
         label,
-        style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.bold),
+        style: TextStyle(
+          color: color,
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       onPressed: () => _quickFill(email, password),
     );

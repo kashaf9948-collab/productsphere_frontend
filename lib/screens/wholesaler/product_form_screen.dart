@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import '../../core/services/auth_service.dart';
+import '../../core/services/product_service.dart';
 import '../../core/utils/theme.dart';
 
 class ProductFormScreen extends StatefulWidget {
@@ -50,7 +50,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
     // 1. Fetch categories
     try {
-      final fetched = await AuthService.fetchCategories();
+      final fetched = await ProductService.fetchCategories();
       final List<String> names = fetched
           .map((c) => (c['name'] as String))
           .toList();
@@ -93,7 +93,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   Future<void> _loadWholesalers() async {
     setState(() => _isLoadingWholesalers = true);
     try {
-      final list = await AuthService.fetchApprovedWholesalers();
+      final list = await ProductService.fetchApprovedWholesalers();
       setState(() {
         _wholesalers = list;
         _isLoadingWholesalers = false;
@@ -182,9 +182,9 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
     Map<String, dynamic> result;
     if (_isEditMode && _productId != null) {
-      result = await AuthService.updateProduct(_productId!, productMap);
+      result = await ProductService.updateProduct(_productId!, productMap);
     } else {
-      result = await AuthService.publishProduct(productMap);
+      result = await ProductService.publishProduct(productMap);
     }
 
     Get.back(); // Close loading dialog

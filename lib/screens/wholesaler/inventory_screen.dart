@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import '../../core/services/auth_service.dart';
+import '../../core/services/product_service.dart';
 import '../../core/utils/theme.dart';
 import '../../core/widgets/wholesaler_drawer.dart';
 import '../../core/widgets/wholesaler_bottom_nav.dart';
@@ -38,7 +38,7 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
     }
     setState(() => _isLoading = true);
     try {
-      final data = await AuthService.fetchWholesalerProducts(_wholesalerId);
+      final data = await ProductService.fetchWholesalerProducts(_wholesalerId);
       setState(() {
         _products = data;
         _isLoading = false;
@@ -82,7 +82,7 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
                 barrierDismissible: false,
               );
 
-              final result = await AuthService.deleteWholesalerProduct(productId);
+              final result = await ProductService.deleteWholesalerProduct(productId);
               Get.back(); // close loading
 
               if (result['success']) {

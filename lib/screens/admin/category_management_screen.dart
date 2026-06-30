@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../core/services/auth_service.dart';
+import '../../core/services/product_service.dart';
 import '../../core/utils/theme.dart';
 import '../../core/widgets/admin_drawer.dart';
 import '../../core/widgets/admin_bottom_nav.dart';
@@ -9,7 +9,8 @@ class CategoryManagementScreen extends StatefulWidget {
   const CategoryManagementScreen({Key? key}) : super(key: key);
 
   @override
-  State<CategoryManagementScreen> createState() => _CategoryManagementScreenState();
+  State<CategoryManagementScreen> createState() =>
+      _CategoryManagementScreenState();
 }
 
 class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
@@ -25,7 +26,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
   Future<void> _fetchCategories() async {
     setState(() => _isLoading = true);
     try {
-      final data = await AuthService.fetchCategories();
+      final data = await ProductService.fetchCategories();
       setState(() {
         _categories = data;
         _isLoading = false;
@@ -37,8 +38,12 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
   }
 
   void _showCategoryDialog({Map<String, dynamic>? category}) {
-    final nameController = TextEditingController(text: category != null ? category['name'] : '');
-    final descController = TextEditingController(text: category != null ? category['description'] : '');
+    final nameController = TextEditingController(
+      text: category != null ? category['name'] : '',
+    );
+    final descController = TextEditingController(
+      text: category != null ? category['description'] : '',
+    );
     final formKey = GlobalKey<FormState>();
 
     Get.dialog(
@@ -48,7 +53,10 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
         ),
         title: Text(
           category == null ? 'Add New Category' : 'Edit Category',
-          style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.textDark),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: AppTheme.textDark,
+          ),
         ),
         content: Form(
           key: formKey,
@@ -83,7 +91,10 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Cancel', style: TextStyle(color: AppTheme.textSecondary)),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: AppTheme.textSecondary),
+            ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -107,7 +118,11 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
     );
   }
 
-  Future<void> _saveCategory({int? id, required String name, String? description}) async {
+  Future<void> _saveCategory({
+    int? id,
+    required String name,
+    String? description,
+  }) async {
     // Show a loading dialog
     Get.dialog(
       const Center(
@@ -123,9 +138,9 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
 
     Map<String, dynamic> result;
     if (id == null) {
-      result = await AuthService.createCategory(name, description);
+      result = await ProductService.createCategory(name, description);
     } else {
-      result = await AuthService.updateCategory(id, name, description);
+      result = await ProductService.updateCategory(id, name, description);
     }
 
     Get.back(); // close loading dialog
@@ -153,13 +168,23 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
   Future<void> _deleteCategory(int id, String name) async {
     Get.dialog(
       AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusLg)),
-        title: const Text('Delete Category', style: TextStyle(fontWeight: FontWeight.bold)),
-        content: Text('Are you sure you want to delete category "$name"? This might affect products linked to it.'),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+        ),
+        title: const Text(
+          'Delete Category',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          'Are you sure you want to delete category "$name"? This might affect products linked to it.',
+        ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Cancel', style: TextStyle(color: AppTheme.textSecondary)),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: AppTheme.textSecondary),
+            ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -169,7 +194,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
             ),
             onPressed: () async {
               Get.back(); // close confirm dialog
-              
+
               // Show loading
               Get.dialog(
                 const Center(
@@ -183,7 +208,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                 barrierDismissible: false,
               );
 
-              final result = await AuthService.deleteCategory(id);
+              final result = await ProductService.deleteCategory(id);
               Get.back(); // close loading
 
               if (result['success']) {
@@ -229,7 +254,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
           IconButton(
             icon: const Icon(Icons.refresh_rounded),
             onPressed: _fetchCategories,
-          )
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -244,75 +269,105 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                 child: CircularProgressIndicator(color: Colors.purple),
               )
             : _categories.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.category_outlined, size: 64, color: Colors.grey.shade400),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'No Categories Found',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Click the + button to add a new category.',
-                          style: TextStyle(fontSize: 14, color: AppTheme.textSecondary),
-                        ),
-                      ],
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.category_outlined,
+                      size: 64,
+                      color: Colors.grey.shade400,
                     ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: _categories.length,
-                    itemBuilder: (context, index) {
-                      final category = _categories[index];
-                      final name = category['name'] ?? 'Unnamed';
-                      final desc = category['description'] ?? 'No description provided';
+                    const SizedBox(height: 16),
+                    const Text(
+                      'No Categories Found',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Click the + button to add a new category.',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: _categories.length,
+                itemBuilder: (context, index) {
+                  final category = _categories[index];
+                  final name = category['name'] ?? 'Unnamed';
+                  final desc =
+                      category['description'] ?? 'No description provided';
 
-                      return Card(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.radiusMd),
-                          side: BorderSide(color: Colors.grey.shade200),
+                  return Card(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+                      side: BorderSide(color: Colors.grey.shade200),
+                    ),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.all(16),
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.purple.shade50,
+                        child: Icon(
+                          Icons.category_rounded,
+                          color: Colors.purple.shade700,
                         ),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.all(16),
-                          leading: CircleAvatar(
-                            backgroundColor: Colors.purple.shade50,
-                            child: Icon(Icons.category_rounded, color: Colors.purple.shade700),
+                      ),
+                      title: Text(
+                        name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: AppTheme.textPrimary,
+                        ),
+                      ),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(top: 4.0),
+                        child: Text(
+                          desc,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: AppTheme.textSecondary,
                           ),
-                          title: Text(
-                            name,
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppTheme.textPrimary),
-                          ),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.only(top: 4.0),
-                            child: Text(
-                              desc,
-                              style: const TextStyle(fontSize: 13, color: AppTheme.textSecondary),
+                        ),
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              Icons.edit_outlined,
+                              color: Colors.blue.shade700,
                             ),
+                            onPressed: () =>
+                                _showCategoryDialog(category: category),
+                            tooltip: 'Edit',
                           ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: Icon(Icons.edit_outlined, color: Colors.blue.shade700),
-                                onPressed: () => _showCategoryDialog(category: category),
-                                tooltip: 'Edit',
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.delete_outline_rounded, color: AppTheme.expired),
-                                onPressed: () => _deleteCategory(category['id'], name),
-                                tooltip: 'Delete',
-                              ),
-                            ],
+                          IconButton(
+                            icon: const Icon(
+                              Icons.delete_outline_rounded,
+                              color: AppTheme.expired,
+                            ),
+                            onPressed: () =>
+                                _deleteCategory(category['id'], name),
+                            tooltip: 'Delete',
                           ),
-                        ),
-                      );
-                    },
-                  ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
       ),
     );
   }

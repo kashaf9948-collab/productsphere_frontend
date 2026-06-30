@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../core/services/auth_service.dart';
+import '../../core/services/product_service.dart';
 import '../../core/utils/theme.dart';
 import '../../core/widgets/admin_drawer.dart';
 import '../../core/widgets/admin_bottom_nav.dart';
@@ -36,7 +36,7 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
 
   Future<void> _fetchProducts() async {
     setState(() => _isLoading = true);
-    final data = await AuthService.fetchWholesaleProducts();
+    final data = await ProductService.fetchWholesaleProducts();
     setState(() {
       _allProducts = data;
       _isLoading = false;
@@ -98,7 +98,7 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
       barrierDismissible: false,
     );
 
-    final result = await AuthService.deleteProduct(productId);
+    final result = await ProductService.deleteProduct(productId);
     Get.back(); // close dialog
 
     if (result['success']) {
@@ -137,7 +137,7 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
       barrierDismissible: false,
     );
 
-    final result = await AuthService.updateProductStatus(productId, newStatus);
+    final result = await ProductService.updateProductStatus(productId, newStatus);
     Get.back(); // close dialog
 
     if (result['success']) {
