@@ -5,6 +5,9 @@ import '../screens/register_screen.dart';
 import '../screens/dashboard/dashboard.dart';
 import '../screens/admin/admin_dashboard.dart';
 import '../screens/admin/wholesale_catalog_screen.dart';
+import '../screens/admin/category_management_screen.dart';
+import '../screens/wholesaler/inventory_screen.dart';
+import '../screens/wholesaler/product_form_screen.dart';
 import 'auth_middleware.dart';
 
 class AppRoutes {
@@ -15,6 +18,9 @@ class AppRoutes {
   static const String dashboard = '/dashboard';
   static const String adminDashboard = '/admin-dashboard';
   static const String adminCatalog = '/admin-catalog';
+  static const String adminCategories = '/admin-categories';
+  static const String wholesalerInventory = '/wholesaler-inventory';
+  static const String wholesalerProductForm = '/wholesaler-product-form';
 
   static final List<GetPage<dynamic>> pages = [
     GetPage(
@@ -44,5 +50,21 @@ class AppRoutes {
       page: () => const WholesaleCatalogScreen(),
       middlewares: [AuthMiddleware()],
     ),
+    GetPage(
+      name: adminCategories,
+      page: () => const CategoryManagementScreen(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: wholesalerInventory,
+      page: () => const WholesalerInventoryScreen(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: wholesalerProductForm,
+      page: () => const ProductFormScreen(),
+      middlewares: [AuthMiddleware()],
+    ),
   ];
 }
+

@@ -119,6 +119,7 @@ class AdminDrawer extends StatelessWidget {
               label: 'Category Management',
               onTap: () {
                 Get.back();
+                Get.toNamed('/admin-categories');
               },
             ),
             _drawerItem(

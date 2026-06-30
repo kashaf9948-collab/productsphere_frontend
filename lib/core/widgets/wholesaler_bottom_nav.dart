@@ -45,7 +45,7 @@ class WholesalerBottomNav extends StatelessWidget {
                 index: 1,
                 activeColor: activeColor,
                 inactiveColor: inactiveColor,
-                onTap: () {},
+                onTap: () => Get.offAllNamed('/wholesaler-inventory'),
               ),
               _item(
                 icon: Icons.gavel_rounded,

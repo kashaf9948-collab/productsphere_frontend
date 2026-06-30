@@ -212,6 +212,7 @@ class DashboardScreen extends StatelessWidget {
           title: 'Add New Product Listing',
           subtitle: 'Upload product details, images, and bulk prices.',
           color: Colors.teal,
+          onTap: () => Get.toNamed('/wholesaler-product-form'),
         ),
         const SizedBox(height: 12),
         _actionCard(
@@ -219,6 +220,7 @@ class DashboardScreen extends StatelessWidget {
           title: 'Manage Price Negotiations',
           subtitle: 'Review proposed prices and counter-offers from buyers.',
           color: Colors.orange,
+          onTap: () {},
         ),
         const SizedBox(height: 12),
         _actionCard(
@@ -226,6 +228,7 @@ class DashboardScreen extends StatelessWidget {
           title: 'Incoming Purchase Orders',
           subtitle: 'View placed orders and manage shipping status.',
           color: Colors.blue,
+          onTap: () {},
         ),
       ],
     );
@@ -322,6 +325,7 @@ class DashboardScreen extends StatelessWidget {
           title: 'Search Bulk Products',
           subtitle: 'Search wholesalers catalogues and find active listings.',
           color: Colors.teal,
+          onTap: () {},
         ),
         const SizedBox(height: 12),
         _actionCard(
@@ -329,6 +333,7 @@ class DashboardScreen extends StatelessWidget {
           title: 'My Negotiations & Quotes',
           subtitle: 'Check history of sent price offers and negotiations.',
           color: Colors.orange,
+          onTap: () {},
         ),
       ],
     );
@@ -412,50 +417,54 @@ class DashboardScreen extends StatelessWidget {
     required String title,
     required String subtitle,
     required Color color,
+    VoidCallback? onTap,
   }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(AppTheme.radiusMd),
-        boxShadow: [AppTheme.cardShadow],
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(AppTheme.radiusSm),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+          boxShadow: [AppTheme.cardShadow],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(AppTheme.radiusSm),
+              ),
+              child: Icon(icon, color: color, size: 24),
             ),
-            child: Icon(icon, color: color, size: 24),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.textPrimary,
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.textPrimary,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: AppTheme.textSecondary,
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppTheme.textSecondary,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: AppTheme.textHint),
-        ],
+            const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: AppTheme.textHint),
+          ],
+        ),
       ),
     );
   }

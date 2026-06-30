@@ -96,6 +96,7 @@ class WholesalerDrawer extends StatelessWidget {
               label: 'Publish Product',
               onTap: () {
                 Get.back();
+                Get.toNamed('/wholesaler-product-form');
               },
             ),
             _drawerItem(
@@ -103,6 +104,7 @@ class WholesalerDrawer extends StatelessWidget {
               label: 'My Inventory',
               onTap: () {
                 Get.back();
+                Get.toNamed('/wholesaler-inventory');
               },
             ),
             _drawerItem(

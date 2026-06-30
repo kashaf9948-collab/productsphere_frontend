@@ -166,6 +166,13 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
       backgroundColor: const Color(0xFFF5F7FA),
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: -1),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.purple.shade700,
+        foregroundColor: Colors.white,
+        onPressed: () => Get.toNamed('/wholesaler-product-form')?.then((_) => _fetchProducts()),
+        icon: const Icon(Icons.add_circle_outline_rounded),
+        label: const Text('Publish on Behalf'),
+      ),
       appBar: AppBar(
         backgroundColor: Colors.purple.shade700,
         foregroundColor: Colors.white,
