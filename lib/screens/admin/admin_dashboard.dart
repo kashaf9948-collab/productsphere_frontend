@@ -1,14 +1,16 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../../core/services/auth_service.dart';
+import '../../core/services/product_service.dart';
 import '../../core/utils/theme.dart';
 import '../../core/widgets/admin_drawer.dart';
 import '../../core/widgets/admin_bottom_nav.dart';
-
+import '../../core/widgets/snackbars.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
-  const AdminDashboardScreen({super.key});
+  const AdminDashboardScreen({Key? key}) : super(key: key);
 
   @override
   State<AdminDashboardScreen> createState() => _AdminDashboardScreenState();
@@ -16,6 +18,8 @@ class AdminDashboardScreen extends StatefulWidget {
 
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   List<dynamic> _pendingWholesalers = [];
+  List<dynamic> _approvedWholesalers = [];
+  List<dynamic> _allProducts = [];
   bool _isLoading = true;
 
   @override
@@ -26,11 +30,22 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
   Future<void> _fetchData() async {
     setState(() => _isLoading = true);
-    final data = await AuthService.fetchPendingWholesalers();
-    setState(() {
-      _pendingWholesalers = data;
-      _isLoading = false;
-    });
+    try {
+      final results = await Future.wait([
+        AuthService.fetchPendingWholesalers(),
+        ProductService.fetchApprovedWholesalers(),
+        ProductService.fetchWholesaleProducts(),
+      ]);
+      setState(() {
+        _pendingWholesalers = results[0];
+        _approvedWholesalers = results[1];
+        _allProducts = results[2];
+        _isLoading = false;
+      });
+    } catch (e) {
+      print('Admin Dashboard fetch data error: $e');
+      setState(() => _isLoading = false);
+    }
   }
 
   Future<void> _updateStatus(int userId, String name, String status) async {
@@ -52,21 +67,22 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     Get.back(); // close dialog
 
     if (result['success']) {
-      Get.snackbar(
-        "Action Successful",
-        "Business '$name' is now $status.",
-        backgroundColor: status == 'approved' ? AppTheme.activeLight : AppTheme.expiredLight,
-        colorText: status == 'approved' ? AppTheme.active : AppTheme.expired,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      if (status == 'approved') {
+        AppSnackbars.success(
+          title: "Action Successful",
+          message: "Business '$name' is now approved.",
+        );
+      } else {
+        AppSnackbars.error(
+          title: "Action Successful",
+          message: "Business '$name' is now rejected.",
+        );
+      }
       _fetchData(); // reload list
     } else {
-      Get.snackbar(
-        "Action Failed",
-        result['message'] ?? "Failed to update business status",
-        backgroundColor: AppTheme.expiredLight,
-        colorText: AppTheme.expired,
-        snackPosition: SnackPosition.BOTTOM,
+      AppSnackbars.error(
+        title: "Action Failed",
+        message: result['message'] ?? "Failed to update business status",
       );
     }
   }
@@ -84,11 +100,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     final String email = user['email'] ?? 'admin@productsphere.com';
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
+      backgroundColor: AppTheme.background,
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: 0),
       appBar: AppBar(
-        backgroundColor: Colors.purple.shade700,
+        backgroundColor: AppTheme.primary,
         foregroundColor: Colors.white,
         title: const Text(
           'Admin Control Panel',
@@ -113,7 +129,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Colors.purple.shade700, Colors.deepPurple.shade900],
+                    colors: [AppTheme.primary, AppTheme.primaryDark],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -124,7 +140,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   children: [
                     CircleAvatar(
                       radius: 28,
-                      backgroundColor: Colors.white.withValues(alpha: 0.25),
+                      backgroundColor: Colors.white.withOpacity(0.25),
                       child: const Icon(
                         Icons.admin_panel_settings_rounded,
                         color: Colors.white,
@@ -148,7 +164,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           Text(
                             email,
                             style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.85),
+                              color: Colors.white.withOpacity(0.85),
                               fontSize: 13,
                             ),
                           ),
@@ -176,7 +192,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   Expanded(
                     child: _statCard(
                       label: 'Verified Businesses',
-                      value: '18',
+                      value: _approvedWholesalers.length.toString(),
                       color: Colors.green,
                       icon: Icons.verified_user_outlined,
                     ),
@@ -198,7 +214,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   Expanded(
                     child: _statCard(
                       label: 'Active Products',
-                      value: '48',
+                      value: _allProducts.where((p) => p['status'] != 'flagged').length.toString(),
                       color: Colors.blue,
                       icon: Icons.grid_view_rounded,
                     ),
@@ -207,7 +223,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   Expanded(
                     child: _statCard(
                       label: 'Flagged Listings',
-                      value: '0',
+                      value: _allProducts.where((p) => p['status'] == 'flagged').length.toString(),
                       color: Colors.red,
                       icon: Icons.report_problem_outlined,
                     ),
@@ -216,7 +232,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               ),
               const SizedBox(height: 28),
 
-              // --- PENDING VERIFICATION LIST ---
+              // --- PENDING VERIFICATION SUMMARY ---
               const Text(
                 'Pending Business Verifications',
                 style: TextStyle(
@@ -227,57 +243,40 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               ),
               const SizedBox(height: 14),
 
-              if (_isLoading)
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 40.0),
-                    child: CircularProgressIndicator(color: AppTheme.primary),
-                  ),
-                )
-              else if (_pendingWholesalers.isEmpty)
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(AppTheme.radiusMd),
-                    boxShadow: [AppTheme.cardShadow],
-                  ),
-                  child: Column(
-                    children: [
-                      Icon(Icons.check_circle_outline_rounded, size: 48, color: Colors.green.shade300),
-                      const SizedBox(height: 12),
-                      const Text(
-                        'All caught up!',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
-                      ),
-                      const SizedBox(height: 4),
-                      const Text(
-                        'No businesses are currently pending approval.',
-                        style: TextStyle(fontSize: 13, color: AppTheme.textSecondary),
-                      ),
-                    ],
-                  ),
-                )
-              else
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(AppTheme.radiusMd),
-                    boxShadow: [AppTheme.cardShadow],
-                  ),
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.all(16),
-                    itemCount: _pendingWholesalers.length,
-                    separatorBuilder: (context, index) => const Divider(color: AppTheme.border, height: 24),
-                    itemBuilder: (context, index) {
-                      final business = _pendingWholesalers[index];
-                      return _verificationItem(business);
-                    },
-                  ),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+                  boxShadow: [AppTheme.cardShadow],
+                  border: Border.all(color: AppTheme.border, width: 0.6),
                 ),
+                child: Column(
+                  children: [
+                    const Icon(Icons.verified_user_rounded, size: 40, color: AppTheme.primary),
+                    const SizedBox(height: 12),
+                    Text(
+                      _pendingWholesalers.isEmpty
+                          ? 'No pending applications'
+                          : '${_pendingWholesalers.length} Wholesaler applications pending review',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppTheme.textPrimary),
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton(
+                        onPressed: () => Get.toNamed('/admin-verifications'),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: AppTheme.primary),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd)),
+                        ),
+                        child: const Text('Go to Verifications', style: TextStyle(color: AppTheme.primary)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               const SizedBox(height: 30),
             ],
           ),
@@ -330,118 +329,4 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     );
   }
 
-  Widget _verificationItem(dynamic business) {
-    final int userId = business['id'];
-    final String businessName = business['name'] ?? 'Unnamed Business';
-    final String email = business['email'] ?? 'No email';
-    final String phone = business['phone'] ?? 'No phone';
-    final String licenseNo = business['license_no'] ?? 'N/A';
-    final String address = business['business_address'] ?? 'No address provided';
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: Colors.purple.shade50,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.storefront_outlined,
-                color: Colors.purple.shade700,
-                size: 22,
-              ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    businessName,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'Email: $email  |  Phone: $phone',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppTheme.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.check_circle_outline_rounded, color: Colors.green, size: 24),
-                  onPressed: () => _updateStatus(userId, businessName, 'approved'),
-                  tooltip: 'Approve Business',
-                ),
-                IconButton(
-                  icon: const Icon(Icons.cancel_outlined, color: Colors.red, size: 24),
-                  onPressed: () => _updateStatus(userId, businessName, 'rejected'),
-                  tooltip: 'Reject Business',
-                ),
-              ],
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: const Color(0xFFF8F9FA),
-            borderRadius: BorderRadius.circular(AppTheme.radiusSm),
-            border: Border.all(color: AppTheme.border),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Text(
-                    'License / NTN: ',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppTheme.textPrimary),
-                  ),
-                  Text(
-                    licenseNo,
-                    style: const TextStyle(fontSize: 12, color: AppTheme.textPrimary),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Address: ',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppTheme.textPrimary),
-                  ),
-                  Expanded(
-                    child: Text(
-                      address,
-                      style: const TextStyle(fontSize: 12, color: AppTheme.textPrimary),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 }
