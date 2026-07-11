@@ -264,7 +264,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           _quickLoginChip(
                             label: 'Wholesaler',
-                            color: Colors.indigo,
+                            color: Color.fromARGB(255, 60, 159, 195),
                             email: 'wholesaler@productsphere.com',
                             password: 'wholesalerpassword',
                           ),

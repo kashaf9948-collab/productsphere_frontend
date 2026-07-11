@@ -34,7 +34,7 @@ class DashboardScreen extends StatelessWidget {
           ? const WholesalerBottomNav(activeIndex: 0)
           : const ClientBottomNav(activeIndex: 0),
       appBar: AppBar(
-        backgroundColor: isWholesaler ? Colors.indigo.shade700 : AppTheme.primary,
+        backgroundColor: isWholesaler ? Color.fromARGB(255, 60, 159, 195) : AppTheme.primary,
         foregroundColor: Colors.white,
         title: Text(
           isWholesaler ? 'Wholesaler Portal' : 'Buyer Marketplace',
@@ -53,7 +53,7 @@ class DashboardScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [AppTheme.primary, Color(0xFF009688)],
+                    colors: [AppTheme.primary, Color.fromARGB(255, 60, 159, 195)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),

@@ -34,7 +34,7 @@ class WholesalerDrawer extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-              color: Colors.indigo.shade700,
+              color: Color.fromARGB(255, 60, 159, 195),
               child: Row(
                 children: [
                   CircleAvatar(

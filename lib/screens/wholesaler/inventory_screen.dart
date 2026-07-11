@@ -7,7 +7,7 @@ import '../../core/widgets/wholesaler_drawer.dart';
 import '../../core/widgets/wholesaler_bottom_nav.dart';
 
 class WholesalerInventoryScreen extends StatefulWidget {
-  const WholesalerInventoryScreen({Key? key}) : super(key: key);
+  const WholesalerInventoryScreen({super.key});
 
   @override
   State<WholesalerInventoryScreen> createState() => _WholesalerInventoryScreenState();
@@ -75,7 +75,7 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
                   child: Card(
                     child: Padding(
                       padding: EdgeInsets.all(20.0),
-                      child: CircularProgressIndicator(color: Colors.indigo),
+                      child: CircularProgressIndicator(color: Color.fromARGB(255, 60, 159, 195)),
                     ),
                   ),
                 ),
@@ -118,7 +118,7 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
       drawer: const WholesalerDrawer(),
       bottomNavigationBar: const WholesalerBottomNav(activeIndex: 1),
       appBar: AppBar(
-        backgroundColor: Colors.indigo.shade700,
+        backgroundColor: Color.fromARGB(255, 60, 159, 195),
         foregroundColor: Colors.white,
         title: const Text(
           'My Inventory',
@@ -132,7 +132,7 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.indigo.shade700,
+        backgroundColor: Color.fromARGB(255, 60, 159, 195),
         foregroundColor: Colors.white,
         onPressed: () => Get.toNamed('/wholesaler-product-form')?.then((_) => _fetchProducts()),
         icon: const Icon(Icons.add_circle_outline_rounded),
@@ -141,7 +141,7 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
       body: SafeArea(
         child: _isLoading
             ? const Center(
-                child: CircularProgressIndicator(color: Colors.indigo),
+                child: CircularProgressIndicator(color: Color.fromARGB(255, 60, 159, 195)),
               )
             : _products.isEmpty
                 ? Center(
@@ -196,7 +196,7 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
                                       color: Colors.indigo.shade50,
                                       borderRadius: BorderRadius.circular(AppTheme.radiusSm),
                                     ),
-                                    child: Icon(Icons.shopping_bag_outlined, color: Colors.indigo.shade700, size: 28),
+                                    child: Icon(Icons.shopping_bag_outlined, color: Color.fromARGB(255, 60, 159, 195), size: 28),
                                   ),
                                   const SizedBox(width: 14),
                                   Expanded(
@@ -280,7 +280,7 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
                                   Row(
                                     children: [
                                       IconButton(
-                                        icon: Icon(Icons.edit_outlined, color: Colors.blue.shade700, size: 20),
+                                        icon: Icon(Icons.edit_outlined, color: Color.fromARGB(255, 60, 159, 195), size: 20),
                                         onPressed: () {
                                           Get.toNamed(
                                             '/wholesaler-product-form',

@@ -8,7 +8,7 @@ class WholesalerBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeColor = Colors.indigo.shade700;
+    final activeColor = const Color.fromARGB(255, 60, 159, 195);
     const inactiveColor = Color(0xFF546E7A);
 
     return Container(

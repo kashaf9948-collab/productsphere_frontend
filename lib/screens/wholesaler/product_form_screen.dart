@@ -5,7 +5,7 @@ import '../../core/services/product_service.dart';
 import '../../core/utils/theme.dart';
 
 class ProductFormScreen extends StatefulWidget {
-  const ProductFormScreen({Key? key}) : super(key: key);
+  const ProductFormScreen({super.key});
 
   @override
   State<ProductFormScreen> createState() => _ProductFormScreenState();
@@ -143,7 +143,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       return;
     }
 
-    final primaryColor = _isAdmin ? Colors.purple.shade700 : Colors.indigo.shade700;
+    final primaryColor = _isAdmin ? Colors.purple.shade700 : Color.fromARGB(255, 60, 159, 195);
 
     // Show loading
     Get.dialog(
@@ -213,7 +213,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = _isAdmin ? Colors.purple.shade700 : Colors.indigo.shade700;
+    final primaryColor = _isAdmin ? Colors.purple.shade700 : Color.fromARGB(255, 60, 159, 195);
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
@@ -259,7 +259,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         _isLoadingWholesalers
                             ? const LinearProgressIndicator(color: Colors.purple)
                             : DropdownButtonFormField<dynamic>(
-                                value: _selectedWholesaler,
+                                initialValue: _selectedWholesaler,
                                 items: _wholesalers.map((w) {
                                   return DropdownMenuItem<dynamic>(
                                     value: w,
@@ -300,7 +300,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       const Text('Category *', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<String>(
-                        value: _selectedCategory,
+                        initialValue: _selectedCategory,
                         items: _categories.map((c) {
                           return DropdownMenuItem<String>(
                             value: c,
