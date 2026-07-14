@@ -4,13 +4,14 @@ import '../../core/services/product_service.dart';
 import '../../core/utils/theme.dart';
 import '../../core/widgets/admin_drawer.dart';
 import '../../core/widgets/admin_bottom_nav.dart';
+import '../../core/widgets/dialogs.dart';
+import '../../core/widgets/snackbars.dart';
 
 class CategoryManagementScreen extends StatefulWidget {
   const CategoryManagementScreen({super.key});
 
   @override
-  State<CategoryManagementScreen> createState() =>
-      _CategoryManagementScreenState();
+  State<CategoryManagementScreen> createState() => _CategoryManagementScreenState();
 }
 
 class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
@@ -38,12 +39,8 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
   }
 
   void _showCategoryDialog({Map<String, dynamic>? category}) {
-    final nameController = TextEditingController(
-      text: category != null ? category['name'] : '',
-    );
-    final descController = TextEditingController(
-      text: category != null ? category['description'] : '',
-    );
+    final nameController = TextEditingController(text: category != null ? category['name'] : '');
+    final descController = TextEditingController(text: category != null ? category['description'] : '');
     final formKey = GlobalKey<FormState>();
 
     Get.dialog(
@@ -53,10 +50,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
         ),
         title: Text(
           category == null ? 'Add New Category' : 'Edit Category',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: AppTheme.textDark,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.textDark),
         ),
         content: Form(
           key: formKey,
@@ -91,14 +85,11 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: AppTheme.textSecondary),
-            ),
+            child: const Text('Cancel', style: TextStyle(color: AppTheme.textSecondary)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.purple.shade700,
+              backgroundColor: AppTheme.primary,
               minimumSize: const Size(100, 45),
             ),
             onPressed: () async {
@@ -118,23 +109,8 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
     );
   }
 
-  Future<void> _saveCategory({
-    int? id,
-    required String name,
-    String? description,
-  }) async {
-    // Show a loading dialog
-    Get.dialog(
-      const Center(
-        child: Card(
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: CircularProgressIndicator(color: Colors.purple),
-          ),
-        ),
-      ),
-      barrierDismissible: false,
-    );
+  Future<void> _saveCategory({int? id, required String name, String? description}) async {
+    showLoadingDialog(color: AppTheme.primary);
 
     Map<String, dynamic> result;
     if (id == null) {
@@ -146,119 +122,65 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
     Get.back(); // close loading dialog
 
     if (result['success']) {
-      Get.snackbar(
-        "Success",
-        result['message'] ?? "Category updated successfully",
-        backgroundColor: AppTheme.activeLight,
-        colorText: AppTheme.active,
-        snackPosition: SnackPosition.BOTTOM,
+      AppSnackbars.success(
+        title: "Success",
+        message: result['message'] ?? "Category updated successfully",
       );
       _fetchCategories();
     } else {
-      Get.snackbar(
-        "Failed",
-        result['message'] ?? "Operation failed",
-        backgroundColor: AppTheme.expiredLight,
-        colorText: AppTheme.expired,
-        snackPosition: SnackPosition.BOTTOM,
+      AppSnackbars.error(
+        title: "Failed",
+        message: result['message'] ?? "Operation failed",
       );
     }
   }
 
   Future<void> _deleteCategory(int id, String name) async {
-    Get.dialog(
-      AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppTheme.radiusLg),
-        ),
-        title: const Text(
-          'Delete Category',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        content: Text(
-          'Are you sure you want to delete category "$name"? This might affect products linked to it.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: AppTheme.textSecondary),
-            ),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.expired,
-              foregroundColor: Colors.white,
-              minimumSize: const Size(100, 45),
-            ),
-            onPressed: () async {
-              Get.back(); // close confirm dialog
-
-              // Show loading
-              Get.dialog(
-                const Center(
-                  child: Card(
-                    child: Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: CircularProgressIndicator(color: Colors.purple),
-                    ),
-                  ),
-                ),
-                barrierDismissible: false,
-              );
-
-              final result = await ProductService.deleteCategory(id);
-              Get.back(); // close loading
-
-              if (result['success']) {
-                Get.snackbar(
-                  "Deleted",
-                  "Category deleted successfully.",
-                  backgroundColor: AppTheme.activeLight,
-                  colorText: AppTheme.active,
-                  snackPosition: SnackPosition.BOTTOM,
-                );
-                _fetchCategories();
-              } else {
-                Get.snackbar(
-                  "Delete Failed",
-                  result['message'] ?? "Unable to delete category.",
-                  backgroundColor: AppTheme.expiredLight,
-                  colorText: AppTheme.expired,
-                  snackPosition: SnackPosition.BOTTOM,
-                );
-              }
-            },
-            child: const Text('Delete'),
-          ),
-        ],
-      ),
+    final confirm = await showConfirmDialog(
+      title: 'Delete Category',
+      content: 'Are you sure you want to delete category "$name"? This might affect products linked to it.',
+      confirmColor: AppTheme.expired,
     );
+
+    if (!confirm) return;
+
+    showLoadingDialog(color: AppTheme.primary);
+
+    final result = await ProductService.deleteCategory(id);
+    Get.back(); // close loading
+
+    if (result['success']) {
+      AppSnackbars.success(
+        title: "Deleted",
+        message: "Category deleted successfully.",
+      );
+      _fetchCategories();
+    } else {
+      AppSnackbars.error(
+        title: "Delete Failed",
+        message: result['message'] ?? "Unable to delete category.",
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
+      backgroundColor: AppTheme.background,
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: -1),
       appBar: AppBar(
-        backgroundColor: Colors.purple.shade700,
-        foregroundColor: Colors.white,
-        title: const Text(
-          'Category Management',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        backgroundColor: AppTheme.primary,
+        title: const Text('Category Management'),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh_rounded),
             onPressed: _fetchCategories,
-          ),
+          )
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.purple.shade700,
+        backgroundColor: AppTheme.primary,
         foregroundColor: Colors.white,
         onPressed: () => _showCategoryDialog(),
         child: const Icon(Icons.add),
@@ -266,108 +188,78 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       body: SafeArea(
         child: _isLoading
             ? const Center(
-                child: CircularProgressIndicator(color: Colors.purple),
+                child: CircularProgressIndicator(color: AppTheme.primary),
               )
             : _categories.isEmpty
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.category_outlined,
-                      size: 64,
-                      color: Colors.grey.shade400,
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.category_outlined, size: 64, color: Colors.grey.shade400),
+                        const SizedBox(height: 16),
+                        const Text(
+                          'No Categories Found',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Click the + button to add a new category.',
+                          style: TextStyle(fontSize: 14, color: AppTheme.textSecondary),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'No Categories Found',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.textPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Click the + button to add a new category.',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppTheme.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            : ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: _categories.length,
-                itemBuilder: (context, index) {
-                  final category = _categories[index];
-                  final name = category['name'] ?? 'Unnamed';
-                  final desc =
-                      category['description'] ?? 'No description provided';
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: _categories.length,
+                    itemBuilder: (context, index) {
+                      final category = _categories[index];
+                      final name = category['name'] ?? 'Unnamed';
+                      final desc = category['description'] ?? 'No description provided';
 
-                  return Card(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppTheme.radiusMd),
-                      side: BorderSide(color: Colors.grey.shade200),
-                    ),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.all(16),
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.purple.shade50,
-                        child: Icon(
-                          Icons.category_rounded,
-                          color: Colors.purple.shade700,
+                      return Card(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+                          side: BorderSide(color: Colors.grey.shade200),
                         ),
-                      ),
-                      title: Text(
-                        name,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: AppTheme.textPrimary,
-                        ),
-                      ),
-                      subtitle: Padding(
-                        padding: const EdgeInsets.only(top: 4.0),
-                        child: Text(
-                          desc,
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: AppTheme.textSecondary,
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.all(16),
+                          leading: CircleAvatar(
+                            backgroundColor: AppTheme.primaryLight,
+                            child: Icon(Icons.category_rounded, color: AppTheme.primary),
                           ),
-                        ),
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(
-                              Icons.edit_outlined,
-                              color: Colors.blue.shade700,
+                          title: Text(
+                            name,
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppTheme.textPrimary),
+                          ),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Text(
+                              desc,
+                              style: const TextStyle(fontSize: 13, color: AppTheme.textSecondary),
                             ),
-                            onPressed: () =>
-                                _showCategoryDialog(category: category),
-                            tooltip: 'Edit',
                           ),
-                          IconButton(
-                            icon: const Icon(
-                              Icons.delete_outline_rounded,
-                              color: AppTheme.expired,
-                            ),
-                            onPressed: () =>
-                                _deleteCategory(category['id'], name),
-                            tooltip: 'Delete',
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.edit_outlined, color: Colors.blue.shade700),
+                                onPressed: () => _showCategoryDialog(category: category),
+                                tooltip: 'Edit',
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete_outline_rounded, color: AppTheme.expired),
+                                onPressed: () => _deleteCategory(category['id'], name),
+                                tooltip: 'Delete',
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
+                        ),
+                      );
+                    },
+                  ),
       ),
     );
   }
