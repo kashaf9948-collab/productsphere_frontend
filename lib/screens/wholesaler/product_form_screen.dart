@@ -9,7 +9,7 @@ import '../../core/utils/theme.dart';
 import '../../core/widgets/snackbars.dart';
 
 class ProductFormScreen extends StatefulWidget {
-  const ProductFormScreen({Key? key}) : super(key: key);
+  const ProductFormScreen({super.key});
 
   @override
   State<ProductFormScreen> createState() => _ProductFormScreenState();
@@ -334,7 +334,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                                       bottom: 0, left: 0, right: 0,
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: Colors.black.withOpacity(0.45),
+                                          color: Colors.black.withValues(alpha: 0.45),
                                           borderRadius: const BorderRadius.vertical(bottom: Radius.circular(AppTheme.radiusMd - 1)),
                                         ),
                                         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -364,7 +364,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         _isLoadingWholesalers
                             ? const LinearProgressIndicator(color: AppTheme.primary)
                             : DropdownButtonFormField<dynamic>(
-                                value: _selectedWholesaler,
+                                initialValue: _selectedWholesaler,
                                 items: _wholesalers.map((w) {
                                   return DropdownMenuItem<dynamic>(
                                     value: w,
@@ -392,7 +392,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       const Text('Category *', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<String>(
-                        value: _selectedCategory,
+                        initialValue: _selectedCategory,
                         items: _categories.map((c) => DropdownMenuItem<String>(value: c, child: Text(c))).toList(),
                         onChanged: (val) => setState(() => _selectedCategory = val),
                         decoration: const InputDecoration(hintText: 'Select category'),

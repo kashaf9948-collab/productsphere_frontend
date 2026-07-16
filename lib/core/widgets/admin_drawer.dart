@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import '../utils/theme.dart';
 
 class AdminDrawer extends StatelessWidget {
-  const AdminDrawer({super.key});
+  const AdminDrawer({Key? key}) : super(key: key);
 
   void _logout() {
     final box = GetStorage();
@@ -34,12 +34,12 @@ class AdminDrawer extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-              color: Colors.purple.shade700,
+              color: AppTheme.primary,
               child: Row(
                 children: [
                   CircleAvatar(
                     radius: 24,
-                    backgroundColor: Colors.white.withValues(alpha: 0.25),
+                    backgroundColor: Colors.white.withOpacity(0.25),
                     child: Text(
                       initial,
                       style: const TextStyle(
@@ -68,7 +68,7 @@ class AdminDrawer extends StatelessWidget {
                         Text(
                           email,
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.75),
+                            color: Colors.white.withOpacity(0.75),
                             fontSize: 12,
                           ),
                           maxLines: 1,
@@ -96,7 +96,7 @@ class AdminDrawer extends StatelessWidget {
               label: 'Business Verifications',
               onTap: () {
                 Get.back();
-                Get.offAllNamed('/admin-dashboard');
+                Get.offAllNamed('/admin-verifications');
               },
             ),
             _drawerItem(
@@ -108,10 +108,19 @@ class AdminDrawer extends StatelessWidget {
               },
             ),
             _drawerItem(
-              icon: Icons.shopping_bag_outlined,
+              icon: Icons.people_outline_rounded,
               label: 'Registered Buyers',
               onTap: () {
                 Get.back();
+                Get.toNamed('/admin-buyers');
+              },
+            ),
+            _drawerItem(
+              icon: Icons.receipt_long_rounded,
+              label: 'Marketplace Orders',
+              onTap: () {
+                Get.back();
+                Get.toNamed('/admin-orders');
               },
             ),
             _drawerItem(
@@ -123,10 +132,19 @@ class AdminDrawer extends StatelessWidget {
               },
             ),
             _drawerItem(
+              icon: Icons.gavel_rounded,
+              label: 'Price Negotiations',
+              onTap: () {
+                Get.back();
+                Get.toNamed('/admin-negotiations');
+              },
+            ),
+            _drawerItem(
               icon: Icons.settings_outlined,
               label: 'System Settings',
               onTap: () {
                 Get.back();
+                Get.toNamed('/admin-settings');
               },
             ),
 

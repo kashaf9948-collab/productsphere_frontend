@@ -10,7 +10,7 @@ import '../../core/widgets/dialogs.dart';
 import '../../core/widgets/snackbars.dart';
 
 class WholesalerInventoryScreen extends StatefulWidget {
-  const WholesalerInventoryScreen({Key? key}) : super(key: key);
+  const WholesalerInventoryScreen({super.key});
 
   @override
   State<WholesalerInventoryScreen> createState() => _WholesalerInventoryScreenState();
@@ -167,7 +167,7 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
                                       borderRadius: BorderRadius.circular(AppTheme.radiusSm),
                                       child: hasImage
                                           ? Image.memory(
-                                              base64Decode(productImage!),
+                                              base64Decode(productImage),
                                               fit: BoxFit.cover,
                                               errorBuilder: (_, __, ___) => const Icon(
                                                 Icons.shopping_bag_outlined,
