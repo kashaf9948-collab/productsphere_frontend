@@ -9,7 +9,7 @@ import '../core/widgets/snackbars.dart';
 import 'package:get_storage/get_storage.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+  const RegisterScreen({super.key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -393,7 +393,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: _isLoading ? null : _register,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.primary,
-                    disabledBackgroundColor: AppTheme.primary.withOpacity(0.6),
+                    disabledBackgroundColor: AppTheme.primary.withValues(alpha: 0.6),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd)),
                     elevation: 0,
                   ),
@@ -460,7 +460,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     bottom: 0, left: 0, right: 0,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.45),
+                        color: Colors.black.withValues(alpha: 0.45),
                         borderRadius: const BorderRadius.vertical(bottom: Radius.circular(AppTheme.radiusMd - 1)),
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 6),

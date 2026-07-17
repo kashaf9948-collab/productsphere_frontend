@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../core/services/settings_service.dart';
 import '../../core/utils/theme.dart';
 import '../../core/widgets/snackbars.dart';
 import '../../core/widgets/wholesaler_bottom_nav.dart';

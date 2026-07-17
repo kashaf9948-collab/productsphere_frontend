@@ -5,7 +5,7 @@ import '../utils/theme.dart';
 class WholesalerBottomNav extends StatelessWidget {
   final int activeIndex; // 0=Home, 1=Products, 2=Negotiations, 3=Profile
 
-  const WholesalerBottomNav({Key? key, required this.activeIndex}) : super(key: key);
+  const WholesalerBottomNav({super.key, required this.activeIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class WholesalerBottomNav extends StatelessWidget {
         border: Border(top: BorderSide(color: Colors.grey.shade300, width: 0.5)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 10,
             offset: const Offset(0, -2),
           )
