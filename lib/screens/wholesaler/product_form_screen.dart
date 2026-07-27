@@ -138,7 +138,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
             const Text('Optional – helps buyers recognise your product', style: TextStyle(fontSize: 12, color: AppTheme.textSecondary)),
             const SizedBox(height: 16),
             ListTile(
-              leading: const CircleAvatar(backgroundColor: AppTheme.primary, child: Icon(Icons.camera_alt_rounded, color: Colors.white, size: 20)),
+              leading: const CircleAvatar(backgroundColor: Color.fromRGBO(0, 121, 107, 1), child: Icon(Icons.camera_alt_rounded, color: Colors.white, size: 20)),
               title: const Text('Take Photo'),
               subtitle: const Text('Use camera'),
               onTap: () async {

@@ -1,14 +1,16 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../core/services/settings_service.dart';
 import '../../core/utils/theme.dart';
 import '../../core/widgets/snackbars.dart';
 import '../../core/widgets/wholesaler_bottom_nav.dart';
 
 class BusinessSettingsScreen extends StatefulWidget {
-  const BusinessSettingsScreen({super.key});
+  const BusinessSettingsScreen({Key? key}) : super(key: key);
 
   @override
   State<BusinessSettingsScreen> createState() => _BusinessSettingsScreenState();
@@ -420,7 +422,7 @@ class _BusinessSettingsScreenState extends State<BusinessSettingsScreen>
       ),
       title: Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
       subtitle: Text(subtitle, style: const TextStyle(fontSize: 11, color: AppTheme.textSecondary)),
-      trailing: Switch(activeThumbColor: AppTheme.primary, value: value, onChanged: onChanged),
+      trailing: Switch(activeColor: AppTheme.primary, value: value, onChanged: onChanged),
     );
   }
 
@@ -485,7 +487,7 @@ class _BusinessSettingsScreenState extends State<BusinessSettingsScreen>
                   Positioned(
                     bottom: 0, left: 0, right: 0,
                     child: Container(
-                      decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: const BorderRadius.vertical(bottom: Radius.circular(AppTheme.radiusMd - 1))),
+                      decoration: BoxDecoration(color: Colors.black.withOpacity(0.45), borderRadius: const BorderRadius.vertical(bottom: Radius.circular(AppTheme.radiusMd - 1))),
                       padding: const EdgeInsets.symmetric(vertical: 6),
                       child: const Text('Tap to update', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 11)),
                     ),
