@@ -6,7 +6,7 @@ import '../../core/widgets/admin_drawer.dart';
 import '../../core/widgets/admin_bottom_nav.dart';
 
 class AdminNegotiationsScreen extends StatefulWidget {
-  const AdminNegotiationsScreen({Key? key}) : super(key: key);
+  const AdminNegotiationsScreen({super.key});
 
   @override
   State<AdminNegotiationsScreen> createState() => _AdminNegotiationsScreenState();

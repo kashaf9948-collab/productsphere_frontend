@@ -6,7 +6,7 @@ import '../../core/widgets/client_drawer.dart';
 import '../../core/widgets/client_bottom_nav.dart';
 
 class NegotiationsListScreen extends StatefulWidget {
-  const NegotiationsListScreen({Key? key}) : super(key: key);
+  const NegotiationsListScreen({super.key});
 
   @override
   State<NegotiationsListScreen> createState() => _NegotiationsListScreenState();

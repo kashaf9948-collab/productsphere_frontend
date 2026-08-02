@@ -6,7 +6,7 @@ import '../../core/widgets/client_bottom_nav.dart';
 import '../../core/widgets/snackbars.dart';
 
 class BuyerSettingsScreen extends StatefulWidget {
-  const BuyerSettingsScreen({Key? key}) : super(key: key);
+  const BuyerSettingsScreen({super.key});
 
   @override
   State<BuyerSettingsScreen> createState() => _BuyerSettingsScreenState();
@@ -189,7 +189,7 @@ class _BuyerSettingsScreenState extends State<BuyerSettingsScreen>
               children: [
                 CircleAvatar(
                   radius: 30,
-                  backgroundColor: Colors.white.withOpacity(0.25),
+                  backgroundColor: Colors.white.withValues(alpha: 0.25),
                   child: Text(initial, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
                 ),
                 const SizedBox(width: 16),
@@ -199,7 +199,7 @@ class _BuyerSettingsScreenState extends State<BuyerSettingsScreen>
                     children: [
                       Text(name, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 4),
-                      Text(email, style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12)),
+                      Text(email, style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 12)),
                     ],
                   ),
                 ),
@@ -455,7 +455,7 @@ class _BuyerSettingsScreenState extends State<BuyerSettingsScreen>
             ],
           ),
         ),
-        Switch(activeColor: AppTheme.primary, value: value, onChanged: onChanged),
+        Switch(activeThumbColor: AppTheme.primary, value: value, onChanged: onChanged),
       ],
     );
   }

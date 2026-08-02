@@ -4,7 +4,7 @@ import '../../core/services/product_service.dart';
 import '../../core/utils/theme.dart';
 
 class BuyerActivityScreen extends StatefulWidget {
-  const BuyerActivityScreen({Key? key}) : super(key: key);
+  const BuyerActivityScreen({super.key});
 
   @override
   State<BuyerActivityScreen> createState() => _BuyerActivityScreenState();

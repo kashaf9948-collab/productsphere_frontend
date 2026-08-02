@@ -8,7 +8,7 @@ import '../../core/widgets/admin_drawer.dart';
 import '../../core/widgets/snackbars.dart';
 
 class AdminVerificationsScreen extends StatefulWidget {
-  const AdminVerificationsScreen({Key? key}) : super(key: key);
+  const AdminVerificationsScreen({super.key});
 
   @override
   State<AdminVerificationsScreen> createState() => _AdminVerificationsScreenState();
@@ -307,7 +307,7 @@ class _AdminVerificationsScreenState extends State<AdminVerificationsScreen> {
   Widget _buildDocPreviewCard(String label, String? base64Str) {
     final bool hasImage = base64Str != null && base64Str.isNotEmpty;
     return GestureDetector(
-      onTap: hasImage ? () => _showImageDialog(label, base64Str!) : null,
+      onTap: hasImage ? () => _showImageDialog(label, base64Str) : null,
       child: Container(
         height: 80,
         decoration: BoxDecoration(
@@ -319,7 +319,7 @@ class _AdminVerificationsScreenState extends State<AdminVerificationsScreen> {
             ? ClipRRect(
                 borderRadius: BorderRadius.circular(AppTheme.radiusSm - 1),
                 child: Image.memory(
-                  base64Decode(base64Str!),
+                  base64Decode(base64Str),
                   fit: BoxFit.cover,
                   errorBuilder: (_, __, ___) => const Center(
                     child: Icon(Icons.broken_image_rounded, color: AppTheme.textHint),

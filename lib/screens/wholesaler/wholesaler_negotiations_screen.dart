@@ -8,7 +8,7 @@ import '../../core/widgets/dialogs.dart';
 import '../../core/widgets/snackbars.dart';
 
 class WholesalerNegotiationsScreen extends StatefulWidget {
-  const WholesalerNegotiationsScreen({Key? key}) : super(key: key);
+  const WholesalerNegotiationsScreen({super.key});
 
   @override
   State<WholesalerNegotiationsScreen> createState() => _WholesalerNegotiationsScreenState();

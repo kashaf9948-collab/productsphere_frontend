@@ -5,7 +5,7 @@ import '../screens/register_screen.dart';
 import '../screens/profile_screen.dart';
 import '../screens/dashboard/dashboard.dart';
 import '../screens/admin/admin_dashboard.dart';
-import '../screens/admin/admin_settings_screen.dart';
+
 import '../screens/admin/wholesale_catalog_screen.dart';
 import '../screens/admin/category_management_screen.dart';
 import '../screens/admin/admin_negotiations_screen.dart';
@@ -14,9 +14,7 @@ import '../screens/wholesaler/product_form_screen.dart';
 import '../screens/wholesaler/business_settings_screen.dart';
 import '../screens/wholesaler/wholesaler_negotiations_screen.dart';
 import '../screens/buyer/negotiations_list_screen.dart';
-import '../screens/buyer/bid_checkout_screen.dart';
 import '../screens/buyer/cart_screen.dart';
-import '../screens/maintenance_screen.dart';
 import 'auth_middleware.dart';
 
 class AppRoutes {
