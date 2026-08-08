@@ -63,6 +63,9 @@ class AuthService {
     required String gender,
     String? licenseNo,
     String? businessAddress,
+    String? shopPicture,
+    String? cnicFront,
+    String? cnicBack,
   }) async {
     try {
       final body = {
@@ -74,6 +77,9 @@ class AuthService {
         'gender': gender.toLowerCase(),
         'license_no': licenseNo,
         'business_address': businessAddress,
+        'shop_picture': shopPicture,
+        'cnic_front': cnicFront,
+        'cnic_back': cnicBack,
       };
 
       final response = await http.post(

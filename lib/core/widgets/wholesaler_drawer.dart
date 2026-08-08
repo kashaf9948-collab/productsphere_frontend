@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import '../utils/theme.dart';
 
 class WholesalerDrawer extends StatelessWidget {
-  const WholesalerDrawer({super.key});
+  const WholesalerDrawer({Key? key}) : super(key: key);
 
   void _logout() {
     final box = GetStorage();
@@ -34,12 +34,12 @@ class WholesalerDrawer extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-              color: Color.fromARGB(255, 60, 159, 195),
+              color: AppTheme.primary,
               child: Row(
                 children: [
                   CircleAvatar(
                     radius: 24,
-                    backgroundColor: Colors.white.withValues(alpha: 0.25),
+                    backgroundColor: Colors.white.withOpacity(0.25),
                     child: Text(
                       initial,
                       style: const TextStyle(
@@ -68,7 +68,7 @@ class WholesalerDrawer extends StatelessWidget {
                         Text(
                           email,
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.75),
+                            color: Colors.white.withOpacity(0.75),
                             fontSize: 12,
                           ),
                           maxLines: 1,
@@ -112,6 +112,7 @@ class WholesalerDrawer extends StatelessWidget {
               label: 'Price Negotiations',
               onTap: () {
                 Get.back();
+                Get.toNamed('/wholesaler-negotiations');
               },
             ),
             _drawerItem(
@@ -119,6 +120,7 @@ class WholesalerDrawer extends StatelessWidget {
               label: 'Received Orders',
               onTap: () {
                 Get.back();
+                Get.toNamed('/orders-history');
               },
             ),
             _drawerItem(

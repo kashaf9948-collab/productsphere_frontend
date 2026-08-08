@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../utils/theme.dart';
 
 class WholesalerBottomNav extends StatelessWidget {
   final int activeIndex; // 0=Home, 1=Products, 2=Negotiations, 3=Profile
 
-  const WholesalerBottomNav({super.key, required this.activeIndex});
+  const WholesalerBottomNav({Key? key, required this.activeIndex}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final activeColor = const Color.fromARGB(255, 60, 159, 195);
+    final activeColor = AppTheme.primary;
     const inactiveColor = Color(0xFF546E7A);
 
     return Container(
@@ -17,7 +18,7 @@ class WholesalerBottomNav extends StatelessWidget {
         border: Border(top: BorderSide(color: Colors.grey.shade300, width: 0.5)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: Colors.black.withOpacity(0.03),
             blurRadius: 10,
             offset: const Offset(0, -2),
           )
@@ -54,7 +55,7 @@ class WholesalerBottomNav extends StatelessWidget {
                 index: 2,
                 activeColor: activeColor,
                 inactiveColor: inactiveColor,
-                onTap: () {},
+                onTap: () => Get.offAllNamed('/wholesaler-negotiations'),
               ),
               _item(
                 icon: Icons.business_outlined,
@@ -63,7 +64,7 @@ class WholesalerBottomNav extends StatelessWidget {
                 index: 3,
                 activeColor: activeColor,
                 inactiveColor: inactiveColor,
-                onTap: () {},
+                onTap: () => Get.toNamed('/profile'),
               ),
             ],
           ),

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../utils/theme.dart';
 
 class AdminBottomNav extends StatelessWidget {
   final int activeIndex; // 0=Home, 1=Verifications, 2=Users, 3=Profile
 
-  const AdminBottomNav({super.key, required this.activeIndex});
+  const AdminBottomNav({Key? key, required this.activeIndex}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final activeColor = Colors.purple.shade700;
+    final activeColor = AppTheme.primary;
     const inactiveColor = Color(0xFF546E7A);
 
     return Container(
@@ -17,7 +18,7 @@ class AdminBottomNav extends StatelessWidget {
         border: Border(top: BorderSide(color: Colors.grey.shade300, width: 0.5)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: Colors.black.withOpacity(0.03),
             blurRadius: 10,
             offset: const Offset(0, -2),
           )
@@ -45,7 +46,7 @@ class AdminBottomNav extends StatelessWidget {
                 index: 1,
                 activeColor: activeColor,
                 inactiveColor: inactiveColor,
-                onTap: () {},
+                onTap: () => Get.offAllNamed('/admin-verifications'),
               ),
               _item(
                 icon: Icons.people_outline,
@@ -54,16 +55,16 @@ class AdminBottomNav extends StatelessWidget {
                 index: 2,
                 activeColor: activeColor,
                 inactiveColor: inactiveColor,
-                onTap: () {},
+                onTap: () => Get.offAllNamed('/admin-buyers'),
               ),
               _item(
-                icon: Icons.admin_panel_settings_outlined,
-                activeIcon: Icons.admin_panel_settings_rounded,
-                label: 'Profile',
+                icon: Icons.settings_outlined,
+                activeIcon: Icons.settings_rounded,
+                label: 'Settings',
                 index: 3,
                 activeColor: activeColor,
                 inactiveColor: inactiveColor,
-                onTap: () {},
+                onTap: () => Get.toNamed('/admin-settings'),
               ),
             ],
           ),

@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import '../utils/theme.dart';
 
 class ClientBottomNav extends StatelessWidget {
-  final int activeIndex; // 0=Shop, 1=Search, 2=Negotiations, 3=Profile
+  final int activeIndex; // 0=Shop, 1=Negotiations, 2=Profile, 3=Settings
 
-  const ClientBottomNav({super.key, required this.activeIndex});
+  const ClientBottomNav({Key? key, required this.activeIndex}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class ClientBottomNav extends StatelessWidget {
         border: Border(top: BorderSide(color: Colors.grey.shade300, width: 0.5)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: Colors.black.withOpacity(0.03),
             blurRadius: 10,
             offset: const Offset(0, -2),
           )
@@ -40,31 +40,31 @@ class ClientBottomNav extends StatelessWidget {
                 onTap: () => Get.offAllNamed('/dashboard'),
               ),
               _item(
-                icon: Icons.search_rounded,
-                activeIcon: Icons.search_rounded,
-                label: 'Search',
-                index: 1,
-                activeColor: activeColor,
-                inactiveColor: inactiveColor,
-                onTap: () {},
-              ),
-              _item(
                 icon: Icons.gavel_rounded,
                 activeIcon: Icons.gavel_rounded,
                 label: 'Negotiations',
-                index: 2,
+                index: 1,
                 activeColor: activeColor,
                 inactiveColor: inactiveColor,
-                onTap: () {},
+                onTap: () => Get.offAllNamed('/buyer-negotiations'),
               ),
               _item(
                 icon: Icons.account_circle_outlined,
                 activeIcon: Icons.account_circle_rounded,
                 label: 'Profile',
+                index: 2,
+                activeColor: activeColor,
+                inactiveColor: inactiveColor,
+                onTap: () => Get.toNamed('/profile'),
+              ),
+              _item(
+                icon: Icons.settings_outlined,
+                activeIcon: Icons.settings_rounded,
+                label: 'Settings',
                 index: 3,
                 activeColor: activeColor,
                 inactiveColor: inactiveColor,
-                onTap: () {},
+                onTap: () => Get.offAllNamed('/buyer-settings'),
               ),
             ],
           ),

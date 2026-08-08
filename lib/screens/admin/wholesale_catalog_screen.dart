@@ -1,12 +1,15 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/services/product_service.dart';
 import '../../core/utils/theme.dart';
 import '../../core/widgets/admin_drawer.dart';
 import '../../core/widgets/admin_bottom_nav.dart';
+import '../../core/widgets/dialogs.dart';
+import '../../core/widgets/snackbars.dart';
 
 class WholesaleCatalogScreen extends StatefulWidget {
-  const WholesaleCatalogScreen({super.key});
+  const WholesaleCatalogScreen({Key? key}) : super(key: key);
 
   @override
   State<WholesaleCatalogScreen> createState() => _WholesaleCatalogScreenState();
@@ -63,60 +66,28 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
   }
 
   Future<void> _deleteProduct(int productId, String name) async {
-    // Show confirmation dialog
-    final confirm = await Get.dialog<bool>(
-      AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd)),
-        title: const Text('Delete Product Listing', style: TextStyle(fontWeight: FontWeight.bold)),
-        content: Text('Are you sure you want to delete "$name" from the wholesale catalog?'),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(result: false),
-            child: const Text('Cancel', style: TextStyle(color: AppTheme.textSecondary)),
-          ),
-          ElevatedButton(
-            onPressed: () => Get.back(result: true),
-            style: ElevatedButton.styleFrom(backgroundColor: AppTheme.expired),
-            child: const Text('Delete', style: TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
+    final confirm = await showConfirmDialog(
+      title: 'Delete Product Listing',
+      content: 'Are you sure you want to delete "$name" from the wholesale catalog?',
     );
 
-    if (confirm != true) return;
+    if (!confirm) return;
 
-    // Show loading indicator
-    Get.dialog(
-      const Center(
-        child: Card(
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: CircularProgressIndicator(color: AppTheme.primary),
-          ),
-        ),
-      ),
-      barrierDismissible: false,
-    );
+    showLoadingDialog();
 
     final result = await ProductService.deleteProduct(productId);
     Get.back(); // close dialog
 
     if (result['success']) {
-      Get.snackbar(
-        "Product Deleted",
-        "The product listing was removed successfully.",
-        backgroundColor: AppTheme.activeLight,
-        colorText: AppTheme.active,
-        snackPosition: SnackPosition.BOTTOM,
+      AppSnackbars.success(
+        title: "Product Deleted",
+        message: "The product listing was removed successfully.",
       );
       _fetchProducts();
     } else {
-      Get.snackbar(
-        "Deletion Failed",
-        result['message'] ?? "Could not delete product.",
-        backgroundColor: AppTheme.expiredLight,
-        colorText: AppTheme.expired,
-        snackPosition: SnackPosition.BOTTOM,
+      AppSnackbars.error(
+        title: "Deletion Failed",
+        message: result['message'] ?? "Could not delete product.",
       );
     }
   }
@@ -124,38 +95,28 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
   Future<void> _toggleProductStatus(int productId, String currentStatus, String name) async {
     final String newStatus = currentStatus == 'flagged' ? 'active' : 'flagged';
     
-    // Show loading
-    Get.dialog(
-      const Center(
-        child: Card(
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: CircularProgressIndicator(color: AppTheme.primary),
-          ),
-        ),
-      ),
-      barrierDismissible: false,
-    );
+    showLoadingDialog();
 
     final result = await ProductService.updateProductStatus(productId, newStatus);
     Get.back(); // close dialog
 
     if (result['success']) {
-      Get.snackbar(
-        "Status Updated",
-        "'$name' is now marked as $newStatus.",
-        backgroundColor: newStatus == 'active' ? AppTheme.activeLight : AppTheme.expiredLight,
-        colorText: newStatus == 'active' ? AppTheme.active : AppTheme.expired,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      if (newStatus == 'active') {
+        AppSnackbars.success(
+          title: "Status Updated",
+          message: "'$name' is now marked as active.",
+        );
+      } else {
+        AppSnackbars.error(
+          title: "Status Updated",
+          message: "'$name' is now marked as flagged.",
+        );
+      }
       _fetchProducts();
     } else {
-      Get.snackbar(
-        "Action Failed",
-        result['message'] ?? "Could not update status.",
-        backgroundColor: AppTheme.expiredLight,
-        colorText: AppTheme.expired,
-        snackPosition: SnackPosition.BOTTOM,
+      AppSnackbars.error(
+        title: "Action Failed",
+        message: result['message'] ?? "Could not update status.",
       );
     }
   }
@@ -163,23 +124,19 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
+      backgroundColor: AppTheme.background,
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: -1),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.purple.shade700,
+        backgroundColor: AppTheme.primary,
         foregroundColor: Colors.white,
         onPressed: () => Get.toNamed('/wholesaler-product-form')?.then((_) => _fetchProducts()),
         icon: const Icon(Icons.add_circle_outline_rounded),
         label: const Text('Publish on Behalf'),
       ),
       appBar: AppBar(
-        backgroundColor: Colors.purple.shade700,
-        foregroundColor: Colors.white,
-        title: const Text(
-          'Wholesalers Catalog',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        backgroundColor: AppTheme.primary,
+        title: const Text('Wholesalers Catalog'),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh_rounded),
@@ -236,7 +193,7 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
                               ),
                             ),
                             selected: isSelected,
-                            selectedColor: Colors.purple.shade700,
+                            selectedColor: AppTheme.primary,
                             backgroundColor: const Color(0xFFECEFF1),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(AppTheme.radiusSm),
@@ -327,13 +284,16 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
       categoryIcon = Icons.electrical_services_rounded;
     }
 
+    final String? productImage = product['product_image'];
+    final bool hasImage = productImage != null && productImage.isNotEmpty;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppTheme.radiusMd),
         boxShadow: [AppTheme.cardShadow],
-        border: isFlagged ? Border.all(color: AppTheme.expired.withValues(alpha: 0.5), width: 1.5) : null,
+        border: isFlagged ? Border.all(color: AppTheme.expired.withOpacity(0.5), width: 1.5) : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -341,18 +301,31 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Product Category Icon
+              // Product Image or Category Icon
               Container(
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: isFlagged ? Colors.red.shade50 : Colors.purple.shade50,
+                  color: isFlagged ? Colors.red.shade50 : AppTheme.primaryLight,
                   borderRadius: BorderRadius.circular(AppTheme.radiusSm),
                 ),
-                child: Icon(
-                  categoryIcon,
-                  color: isFlagged ? AppTheme.expired : Colors.purple.shade700,
-                  size: 24,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(AppTheme.radiusSm),
+                  child: hasImage
+                      ? Image.memory(
+                          base64Decode(productImage!),
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Icon(
+                            categoryIcon,
+                            color: isFlagged ? AppTheme.expired : AppTheme.primary,
+                            size: 24,
+                          ),
+                        )
+                      : Icon(
+                          categoryIcon,
+                          color: isFlagged ? AppTheme.expired : AppTheme.primary,
+                          size: 24,
+                        ),
                 ),
               ),
               const SizedBox(width: 14),
@@ -420,10 +393,10 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
                     children: [
                       Text(
                         'Rs ${price.toStringAsFixed(0)}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
-                          color: Colors.purple.shade700,
+                          color: AppTheme.primary,
                         ),
                       ),
                       const SizedBox(width: 6),
@@ -462,6 +435,18 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
                     tooltip: isFlagged ? 'Unflag listing' : 'Flag/suspend listing',
                   ),
                   
+                  // Edit Button
+                  IconButton(
+                    icon: Icon(Icons.edit_outlined, color: Colors.blue.shade700, size: 22),
+                    onPressed: () {
+                      Get.toNamed(
+                        '/wholesaler-product-form',
+                        arguments: product,
+                      )?.then((_) => _fetchProducts());
+                    },
+                    tooltip: 'Edit Listing',
+                  ),
+
                   // Delete Button
                   IconButton(
                     icon: const Icon(Icons.delete_outline_rounded, color: AppTheme.expired, size: 22),
