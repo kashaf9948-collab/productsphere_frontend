@@ -413,7 +413,7 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
                                                     ),
                                                     const SizedBox(height: 8),
                                                     SizedBox(
-                                                      maxHeight: MediaQuery.of(context).size.height * 0.6,
+                                                      height: MediaQuery.of(context).size.height * 0.6,
                                                       child: InteractiveViewer(
                                                         child: Image.memory(
                                                           base64Decode(paymentProof),
