@@ -3,10 +3,11 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../../core/services/product_service.dart';
 import '../../core/utils/theme.dart';
+import '../../core/widgets/client_bottom_nav.dart';
 import '../../core/widgets/snackbars.dart';
 
 class BidCheckoutScreen extends StatefulWidget {
-  const BidCheckoutScreen({super.key});
+  const BidCheckoutScreen({Key? key}) : super(key: key);
 
   @override
   State<BidCheckoutScreen> createState() => _BidCheckoutScreenState();
