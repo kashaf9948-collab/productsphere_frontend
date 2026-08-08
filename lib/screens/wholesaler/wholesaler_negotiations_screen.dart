@@ -75,7 +75,7 @@ class _WholesalerNegotiationsScreenState extends State<WholesalerNegotiationsScr
       drawer: const WholesalerDrawer(),
       bottomNavigationBar: const WholesalerBottomNav(activeIndex: 2),
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.primaryDark,
         title: const Text('Received Bids & Price Offers'),
         actions: [
           IconButton(

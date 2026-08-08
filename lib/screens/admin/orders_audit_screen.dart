@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:get/get.dart';
 import '../../core/services/product_service.dart';
 import '../../core/utils/theme.dart';
 import '../../core/widgets/admin_drawer.dart';
 import '../../core/widgets/admin_bottom_nav.dart';
 
 class OrdersAuditScreen extends StatefulWidget {
-  const OrdersAuditScreen({Key? key}) : super(key: key);
+  const OrdersAuditScreen({super.key});
 
   @override
   State<OrdersAuditScreen> createState() => _OrdersAuditScreenState();
@@ -176,7 +175,7 @@ class _OrdersAuditScreenState extends State<OrdersAuditScreen> {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   );
-                                }).toList(),
+                                }),
                               ],
                               onChanged: (val) {
                                 setState(() {

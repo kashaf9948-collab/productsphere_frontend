@@ -87,7 +87,7 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
       drawer: const WholesalerDrawer(),
       bottomNavigationBar: const WholesalerBottomNav(activeIndex: 1),
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.primaryDark,
         title: const Text('My Inventory'),
         actions: [
           IconButton(

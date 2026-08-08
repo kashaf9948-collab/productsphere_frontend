@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppTheme {
   // ── Brand Colors ──────────────────────────────────────────
   static const Color primary = Color(0xFF00796B); // Teal brand color
-  static const Color primaryDark = Color(0xFF004D40); // Darker teal
+  static const Color primaryDark = Color.fromARGB(255, 4, 79, 72); // Darker teal
   static const Color primaryLight = Color(0xFFE0F2F1); // Teal tint bg
 
   static const Color dark = Color(0xFF212121);

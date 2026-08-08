@@ -9,7 +9,7 @@ import '../../core/widgets/snackbars.dart';
 import '../../core/widgets/dialogs.dart';
 
 class BuyersManagementScreen extends StatefulWidget {
-  const BuyersManagementScreen({Key? key}) : super(key: key);
+  const BuyersManagementScreen({super.key});
 
   @override
   State<BuyersManagementScreen> createState() => _BuyersManagementScreenState();

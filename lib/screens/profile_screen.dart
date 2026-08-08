@@ -8,7 +8,7 @@ import '../../core/widgets/admin_bottom_nav.dart';
 import '../../core/widgets/snackbars.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -77,7 +77,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [AppTheme.primary, Color.fromARGB(255, 4, 185, 161)],
+                    colors: [AppTheme.primary, Color(0xFF00BFA5)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -101,7 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 12),
                     CircleAvatar(
                       radius: 42,
-                      backgroundColor: Colors.white.withValues(alpha: 0.25),
+                      backgroundColor: Colors.white.withOpacity(0.25),
                       child: Text(
                         name.isNotEmpty ? name[0].toUpperCase() : 'U',
                         style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white),
@@ -113,7 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
+                        color: Colors.white.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
@@ -126,7 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                         decoration: BoxDecoration(
-                          color: status == 'approved' ? Colors.green.withValues(alpha: 0.85) : Colors.orange.withValues(alpha: 0.85),
+                          color: status == 'approved' ? Colors.green.withOpacity(0.85) : Colors.orange.withOpacity(0.85),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Row(
@@ -278,7 +278,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd)),
         leading: CircleAvatar(
           radius: 20,
-          backgroundColor: (color ?? AppTheme.primary).withValues(alpha: 0.1),
+          backgroundColor: (color ?? AppTheme.primary).withOpacity(0.1),
           child: Icon(icon, size: 20, color: color ?? AppTheme.primary),
         ),
         title: Text(label, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: color ?? AppTheme.textPrimary)),

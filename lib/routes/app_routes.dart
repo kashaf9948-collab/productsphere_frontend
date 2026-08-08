@@ -10,7 +10,6 @@ import '../screens/admin/wholesale_catalog_screen.dart';
 import '../screens/admin/category_management_screen.dart';
 import '../screens/admin/admin_negotiations_screen.dart';
 import '../screens/admin/buyers_management_screen.dart';
-import '../screens/admin/buyer_activity_screen.dart';
 import '../screens/admin/orders_audit_screen.dart';
 import '../screens/admin/admin_verifications_screen.dart';
 import '../screens/wholesaler/inventory_screen.dart';
@@ -70,12 +69,9 @@ class AppRoutes {
     GetPage(name: adminBuyers,page: () => const BuyersManagementScreen(), middlewares: [AuthMiddleware()],),
     GetPage(name: adminOrders, page: () => const OrdersAuditScreen(),middlewares: [AuthMiddleware()],),
     GetPage(name: ordersHistory, page: () => const OrdersHistoryScreen(), middlewares: [AuthMiddleware()],),
-    
-
     GetPage(name: profile, page: () => const ProfileScreen(),middlewares: [AuthMiddleware()],),
     GetPage(name: businessSettings,page: () => const BusinessSettingsScreen(),middlewares: [AuthMiddleware()],),
     GetPage(name: adminSettings,page: () => const AdminSettingsScreen(),middlewares: [AuthMiddleware()],),
-    
     GetPage(name: buyerSettings, page: () => const BuyerSettingsScreen(),middlewares: [AuthMiddleware()],),
     GetPage(name: adminVerifications, page: () => const AdminVerificationsScreen(),middlewares: [AuthMiddleware()],),
     GetPage(name: maintenance, page: () => const MaintenanceScreen(),middlewares: [AuthMiddleware()],),
