@@ -118,10 +118,10 @@ class _OrdersAuditScreenState extends State<OrdersAuditScreen> {
                     decoration: InputDecoration(
                       hintText: 'Search by Order #, Buyer, or Product...',
                       hintStyle: const TextStyle(color: AppTheme.textHint, fontSize: 13),
-                      prefixIcon: const Icon(Icons.search_rounded, color: AppTheme.primary, size: 20),
+                      prefixIcon: const Icon(Icons.search_rounded, color: AppTheme.secondary, size: 20),
                       suffixIcon: _searchQuery.isNotEmpty
                           ? IconButton(
-                              icon: const Icon(Icons.close_rounded, color: AppTheme.textSecondary, size: 18),
+                              icon: const Icon(Icons.close_rounded, color: AppTheme.secondaryLight, size: 18),
                               onPressed: () {
                                 _searchController.clear();
                                 setState(() {
@@ -297,7 +297,7 @@ class _OrdersAuditScreenState extends State<OrdersAuditScreen> {
                                       children: [
                                         Text(
                                           "Order #$id",
-                                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppTheme.primary),
+                                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppTheme.secondaryDark),
                                         ),
                                         if (date.isNotEmpty)
                                           Text(
