@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import '../utils/theme.dart';
 
 class ClientDrawer extends StatelessWidget {
-  const ClientDrawer({super.key});
+  const ClientDrawer({Key? key}) : super(key: key);
 
   void _logout() {
     final box = GetStorage();
@@ -51,7 +51,7 @@ class ClientDrawer extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 24,
-                    backgroundColor: Colors.white.withValues(alpha: 0.25),
+                    backgroundColor: Colors.white.withOpacity(0.25),
                     child: Text(
                       initial,
                       style: const TextStyle(
@@ -80,7 +80,7 @@ class ClientDrawer extends StatelessWidget {
                         Text(
                           email,
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.75),
+                            color: Colors.white.withOpacity(0.75),
                             fontSize: 12,
                           ),
                           maxLines: 1,

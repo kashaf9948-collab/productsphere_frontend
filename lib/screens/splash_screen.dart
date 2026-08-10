@@ -7,7 +7,7 @@ import '../routes/app_routes.dart';
 import '../core/utils/theme.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -51,6 +51,15 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       Get.offAllNamed(AppRoutes.login);
     }
+    if (token != null) {
+      if (role == 'admin') {
+        Get.offAllNamed(AppRoutes.adminDashboard);
+      } else {
+        Get.offAllNamed(AppRoutes.dashboard);
+      }
+    } else {
+      Get.offAllNamed(AppRoutes.login);
+    }
   }
 
   @override
@@ -74,7 +83,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: AppTheme.primary.withValues(alpha: 0.2),
+                          color: AppTheme.primary.withOpacity(0.2),
                           blurRadius: 15,
                           spreadRadius: 2,
                           offset: const Offset(0, 4),
@@ -128,23 +137,6 @@ class _SplashScreenState extends State<SplashScreen> {
                     ),
                   ),
                 ],
-              ),
-            ),
-            
-            // Bottom Indicator
-            const Positioned(
-              bottom: 60,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2.5,
-                    color: AppTheme.primary,
-                  ),
-                ),
               ),
             ),
           ],

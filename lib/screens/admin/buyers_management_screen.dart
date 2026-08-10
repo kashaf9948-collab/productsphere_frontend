@@ -9,7 +9,7 @@ import '../../core/widgets/snackbars.dart';
 import '../../core/widgets/dialogs.dart';
 
 class BuyersManagementScreen extends StatefulWidget {
-  const BuyersManagementScreen({super.key});
+  const BuyersManagementScreen({Key? key}) : super(key: key);
 
   @override
   State<BuyersManagementScreen> createState() => _BuyersManagementScreenState();
@@ -75,7 +75,7 @@ class _BuyersManagementScreenState extends State<BuyersManagementScreen> {
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: 2), // Maps to Users/Buyers tab
       appBar: AppBar(
-        backgroundColor: AppTheme.secondaryDark,
+        backgroundColor: AppTheme.primary,
         title: const Text('Registered Buyers'),
         actions: [
           IconButton(

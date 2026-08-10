@@ -8,7 +8,7 @@ import '../../core/widgets/dialogs.dart';
 import '../../core/widgets/snackbars.dart';
 
 class CategoryManagementScreen extends StatefulWidget {
-  const CategoryManagementScreen({super.key});
+  const CategoryManagementScreen({Key? key}) : super(key: key);
 
   @override
   State<CategoryManagementScreen> createState() => _CategoryManagementScreenState();
@@ -89,7 +89,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.secondary,
+              backgroundColor: AppTheme.primary,
               minimumSize: const Size(100, 45),
             ),
             onPressed: () async {
@@ -110,7 +110,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
   }
 
   Future<void> _saveCategory({int? id, required String name, String? description}) async {
-    showLoadingDialog(color: AppTheme.secondary);
+    showLoadingDialog(color: AppTheme.primary);
 
     Map<String, dynamic> result;
     if (id == null) {
@@ -144,7 +144,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
 
     if (!confirm) return;
 
-    showLoadingDialog(color: AppTheme.secondary);
+    showLoadingDialog(color: AppTheme.primary);
 
     final result = await ProductService.deleteCategory(id);
     Get.back(); // close loading
@@ -170,7 +170,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: -1),
       appBar: AppBar(
-        backgroundColor: AppTheme.secondaryDark,
+        backgroundColor: AppTheme.primary,
         title: const Text('Category Management'),
         actions: [
           IconButton(
@@ -180,7 +180,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: AppTheme.secondaryDark,
+        backgroundColor: AppTheme.primary,
         foregroundColor: Colors.white,
         onPressed: () => _showCategoryDialog(),
         child: const Icon(Icons.add),
@@ -188,7 +188,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       body: SafeArea(
         child: _isLoading
             ? const Center(
-                child: CircularProgressIndicator(color: AppTheme.secondary),
+                child: CircularProgressIndicator(color: AppTheme.primary),
               )
             : _categories.isEmpty
                 ? Center(
@@ -228,7 +228,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                           contentPadding: const EdgeInsets.all(16),
                           leading: CircleAvatar(
                             backgroundColor: AppTheme.primaryLight,
-                            child: Icon(Icons.category_rounded, color: AppTheme.secondaryDark),
+                            child: Icon(Icons.category_rounded, color: AppTheme.primary),
                           ),
                           title: Text(
                             name,

@@ -6,7 +6,7 @@ import '../../core/widgets/client_drawer.dart';
 import '../../core/widgets/client_bottom_nav.dart';
 
 class NegotiationsListScreen extends StatefulWidget {
-  const NegotiationsListScreen({super.key});
+  const NegotiationsListScreen({Key? key}) : super(key: key);
 
   @override
   State<NegotiationsListScreen> createState() => _NegotiationsListScreenState();
@@ -53,7 +53,7 @@ class _NegotiationsListScreenState extends State<NegotiationsListScreen> {
                 ? _buildEmptyState()
                 : RefreshIndicator(
                     onRefresh: _fetchBids,
-                    color: AppTheme.primaryDark,
+                    color: AppTheme.primary,
                     child: ListView.separated(
                       padding: const EdgeInsets.all(16),
                       itemCount: _bids.length,

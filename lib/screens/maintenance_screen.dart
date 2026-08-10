@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import '../core/utils/theme.dart';
 
 class MaintenanceScreen extends StatelessWidget {
-  const MaintenanceScreen({super.key});
+  const MaintenanceScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

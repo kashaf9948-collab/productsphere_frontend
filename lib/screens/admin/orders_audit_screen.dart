@@ -7,7 +7,7 @@ import '../../core/widgets/admin_drawer.dart';
 import '../../core/widgets/admin_bottom_nav.dart';
 
 class OrdersAuditScreen extends StatefulWidget {
-  const OrdersAuditScreen({super.key});
+  const OrdersAuditScreen({Key? key}) : super(key: key);
 
   @override
   State<OrdersAuditScreen> createState() => _OrdersAuditScreenState();
@@ -92,7 +92,7 @@ class _OrdersAuditScreenState extends State<OrdersAuditScreen> {
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: -1), // Admin Audit view
       appBar: AppBar(
-        backgroundColor: AppTheme.secondaryDark,
+        backgroundColor: AppTheme.primary,
         title: const Text('Marketplace Orders log'),
         actions: [
           IconButton(
@@ -176,7 +176,7 @@ class _OrdersAuditScreenState extends State<OrdersAuditScreen> {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   );
-                                }),
+                                }).toList(),
                               ],
                               onChanged: (val) {
                                 setState(() {

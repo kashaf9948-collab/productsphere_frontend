@@ -8,7 +8,7 @@ import '../../core/widgets/admin_drawer.dart';
 import '../../core/widgets/snackbars.dart';
 
 class AdminVerificationsScreen extends StatefulWidget {
-  const AdminVerificationsScreen({super.key});
+  const AdminVerificationsScreen({Key? key}) : super(key: key);
 
   @override
   State<AdminVerificationsScreen> createState() => _AdminVerificationsScreenState();
@@ -44,7 +44,7 @@ class _AdminVerificationsScreenState extends State<AdminVerificationsScreen> {
         child: Card(
           child: Padding(
             padding: EdgeInsets.all(20.0),
-            child: CircularProgressIndicator(color: AppTheme.secondary),
+            child: CircularProgressIndicator(color: AppTheme.primary),
           ),
         ),
       ),
@@ -134,7 +134,7 @@ class _AdminVerificationsScreenState extends State<AdminVerificationsScreen> {
       ),
       body: SafeArea(
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator(color: AppTheme.secondary))
+            ? const Center(child: CircularProgressIndicator(color: AppTheme.primary))
             : _pendingWholesalers.isEmpty
                 ? _buildEmptyState()
                 : ListView.builder(
@@ -159,7 +159,7 @@ class _AdminVerificationsScreenState extends State<AdminVerificationsScreen> {
             CircleAvatar(
               radius: 48,
               backgroundColor: AppTheme.primaryLight,
-              child: const Icon(Icons.verified_rounded, size: 48, color: AppTheme.secondary),
+              child: const Icon(Icons.verified_rounded, size: 48, color: AppTheme.primary),
             ),
             const SizedBox(height: 18),
             const Text(
@@ -210,7 +210,7 @@ class _AdminVerificationsScreenState extends State<AdminVerificationsScreen> {
                 CircleAvatar(
                   backgroundColor: AppTheme.primaryLight,
                   radius: 20,
-                  child: const Icon(Icons.business_rounded, color: AppTheme.secondaryDark, size: 20),
+                  child: const Icon(Icons.business_rounded, color: AppTheme.primary, size: 20),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -307,7 +307,7 @@ class _AdminVerificationsScreenState extends State<AdminVerificationsScreen> {
   Widget _buildDocPreviewCard(String label, String? base64Str) {
     final bool hasImage = base64Str != null && base64Str.isNotEmpty;
     return GestureDetector(
-      onTap: hasImage ? () => _showImageDialog(label, base64Str) : null,
+      onTap: hasImage ? () => _showImageDialog(label, base64Str!) : null,
       child: Container(
         height: 80,
         decoration: BoxDecoration(
@@ -319,7 +319,7 @@ class _AdminVerificationsScreenState extends State<AdminVerificationsScreen> {
             ? ClipRRect(
                 borderRadius: BorderRadius.circular(AppTheme.radiusSm - 1),
                 child: Image.memory(
-                  base64Decode(base64Str),
+                  base64Decode(base64Str!),
                   fit: BoxFit.cover,
                   errorBuilder: (_, __, ___) => const Center(
                     child: Icon(Icons.broken_image_rounded, color: AppTheme.textHint),

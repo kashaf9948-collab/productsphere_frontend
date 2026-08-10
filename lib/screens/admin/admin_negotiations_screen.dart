@@ -6,7 +6,7 @@ import '../../core/widgets/admin_drawer.dart';
 import '../../core/widgets/admin_bottom_nav.dart';
 
 class AdminNegotiationsScreen extends StatefulWidget {
-  const AdminNegotiationsScreen({super.key});
+  const AdminNegotiationsScreen({Key? key}) : super(key: key);
 
   @override
   State<AdminNegotiationsScreen> createState() => _AdminNegotiationsScreenState();
@@ -38,7 +38,7 @@ class _AdminNegotiationsScreenState extends State<AdminNegotiationsScreen> {
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: -1),
       appBar: AppBar(
-        backgroundColor: AppTheme.secondaryDark,
+        backgroundColor: AppTheme.primary,
         title: const Text('B2B Price Bids & Negotiations'),
         actions: [
           IconButton(
@@ -54,7 +54,7 @@ class _AdminNegotiationsScreenState extends State<AdminNegotiationsScreen> {
                 ? _buildEmptyState()
                 : RefreshIndicator(
                     onRefresh: _fetchBids,
-                    color: AppTheme.secondaryDark,
+                    color: AppTheme.primary,
                     child: ListView.separated(
                       padding: const EdgeInsets.all(16),
                       itemCount: _bids.length,
@@ -105,7 +105,7 @@ class _AdminNegotiationsScreenState extends State<AdminNegotiationsScreen> {
     Color badgeColor = AppTheme.pending;
     Color badgeBg = AppTheme.pendingLight;
     if (status == 'accepted') {
-      badgeColor = AppTheme.secondaryLight;
+      badgeColor = AppTheme.active;
       badgeBg = AppTheme.activeLight;
     } else if (status == 'ordered') {
       badgeColor = Colors.blue;
@@ -171,7 +171,7 @@ class _AdminNegotiationsScreenState extends State<AdminNegotiationsScreen> {
                   children: [
                     Text(
                       'Bid Proposal: Rs ${bidPrice.toStringAsFixed(0)}',
-                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppTheme.secondary),
+                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppTheme.primary),
                     ),
                     const SizedBox(height: 2),
                     Text(

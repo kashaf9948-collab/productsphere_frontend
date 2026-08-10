@@ -5,10 +5,7 @@ import '../utils/theme.dart';
 class ClientBottomNav extends StatelessWidget {
   final int activeIndex; // 0=Shop, 1=Negotiations, 2=Profile, 3=Settings
 
-  const ClientBottomNav({
-    super.key,
-    required this.activeIndex,
-  });
+  const ClientBottomNav({Key? key, required this.activeIndex}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +23,7 @@ class ClientBottomNav extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: Colors.black.withOpacity(0.03),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -47,7 +44,6 @@ class ClientBottomNav extends StatelessWidget {
                 inactiveColor: inactiveColor,
                 onTap: () => Get.offAllNamed('/dashboard'),
               ),
-
               _item(
                 icon: Icons.gavel_rounded,
                 activeIcon: Icons.gavel_rounded,
@@ -67,7 +63,6 @@ class ClientBottomNav extends StatelessWidget {
                 inactiveColor: inactiveColor,
                 onTap: () => Get.toNamed('/profile'),
               ),
-
               _item(
                 icon: Icons.settings_outlined,
                 activeIcon: Icons.settings_rounded,

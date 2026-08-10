@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../utils/theme.dart';
+import '../utils/theme.dart';
 
 class AdminBottomNav extends StatelessWidget {
   final int activeIndex; // 0=Home, 1=Verifications, 2=Users, 3=Profile
 
-  const AdminBottomNav({super.key, required this.activeIndex});
+  const AdminBottomNav({Key? key, required this.activeIndex}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final activeColor = AppTheme.secondary;
+    final activeColor = AppTheme.primary;
     const inactiveColor = Color(0xFF546E7A);
 
     return Container(
@@ -18,7 +19,7 @@ class AdminBottomNav extends StatelessWidget {
         border: Border(top: BorderSide(color: Colors.grey.shade300, width: 0.5)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: Colors.black.withOpacity(0.03),
             blurRadius: 10,
             offset: const Offset(0, -2),
           )
@@ -64,7 +65,7 @@ class AdminBottomNav extends StatelessWidget {
                 index: 3,
                 activeColor: activeColor,
                 inactiveColor: inactiveColor,
-                onTap: () => Get.toNamed('/admin-settings'),
+                onTap: () => Get.offAllNamed('/admin-settings'),
               ),
             ],
           ),
