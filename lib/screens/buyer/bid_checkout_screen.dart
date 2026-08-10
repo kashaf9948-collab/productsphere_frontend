@@ -7,7 +7,7 @@ import '../../core/widgets/client_bottom_nav.dart';
 import '../../core/widgets/snackbars.dart';
 
 class BidCheckoutScreen extends StatefulWidget {
-  const BidCheckoutScreen({super.key});
+  const BidCheckoutScreen({Key? key}) : super(key: key);
 
   @override
   State<BidCheckoutScreen> createState() => _BidCheckoutScreenState();
