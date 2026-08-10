@@ -4,10 +4,11 @@ import 'package:get_storage/get_storage.dart';
 import '../core/services/auth_service.dart';
 import '../core/utils/theme.dart';
 import '../core/widgets/snackbars.dart';
+import '../core/widgets/snackbars.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -74,6 +75,9 @@ class _LoginScreenState extends State<LoginScreen>
       AppSnackbars.warning(
         title: "Validation Error",
         message: "Please enter both email and password",
+      AppSnackbars.warning(
+        title: "Validation Error",
+        message: "Please enter both email and password",
       );
       return;
     }
@@ -86,11 +90,9 @@ class _LoginScreenState extends State<LoginScreen>
 
     if (result['success']) {
       final role = result['data']['user']['role'];
-
       AppSnackbars.success(
         title: "Success",
-        message:
-            "Logged in as ${role[0].toUpperCase()}${role.substring(1)}!",
+        message: "Logged in as ${role[0].toUpperCase()}${role.substring(1)}!",
       );
 
       if (role == 'admin') {
@@ -99,6 +101,9 @@ class _LoginScreenState extends State<LoginScreen>
         Get.offAllNamed('/dashboard');
       }
     } else {
+      AppSnackbars.error(
+        title: "Login Failed",
+        message: result['message'],
       AppSnackbars.error(
         title: "Login Failed",
         message: result['message'],
@@ -210,13 +215,8 @@ class _LoginScreenState extends State<LoginScreen>
                       TextField(
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: AppTheme.textPrimary,
-                        ),
-                        decoration: _inputDecoration(
-                          'e.g., buyer@productsphere.com',
-                        ),
+                        style: const TextStyle(fontSize: 14, color: AppTheme.textPrimary),
+                        decoration: _inputDecoration('e.g., buyer@productsphere.com'),
                       ),
 
                       const SizedBox(height: 18),
@@ -238,10 +238,7 @@ class _LoginScreenState extends State<LoginScreen>
                       TextField(
                         controller: _passwordController,
                         obscureText: _obscurePassword,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: AppTheme.textPrimary,
-                        ),
+                        style: const TextStyle(fontSize: 14, color: AppTheme.textPrimary),
                         decoration: _inputDecoration(
                           'Enter your password',
                           suffix: IconButton(
@@ -252,12 +249,7 @@ class _LoginScreenState extends State<LoginScreen>
                               color: AppTheme.textSecondary,
                               size: 20,
                             ),
-                            onPressed: () {
-                              setState(() {
-                                _obscurePassword =
-                                    !_obscurePassword;
-                              });
-                            },
+                            onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                           ),
                         ),
                       ),
@@ -274,14 +266,9 @@ class _LoginScreenState extends State<LoginScreen>
                           onPressed: _isLoading ? null : _login,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppTheme.primary,
-                            disabledBackgroundColor:
-                                AppTheme.primary.withValues(
-                              alpha: 0.6,
-                            ),
+                            disabledBackgroundColor: AppTheme.primary.withOpacity(0.6),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                AppTheme.radiusMd,
-                              ),
+                              borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                             ),
                             elevation: 0,
                           ),
@@ -335,6 +322,7 @@ class _LoginScreenState extends State<LoginScreen>
                           _quickLoginChip(
                             label: 'Admin',
                             color: Colors.blueGrey,
+                            color: Colors.blueGrey,
                             email: 'admin@productsphere.com',
                             password: 'adminpassword',
                           ),
@@ -342,12 +330,14 @@ class _LoginScreenState extends State<LoginScreen>
                           _quickLoginChip(
                             label: 'Wholesaler',
                             color: AppTheme.primaryDark,
+                            color: AppTheme.primaryDark,
                             email: 'wholesaler@productsphere.com',
                             password: 'wholesalerpassword',
                           ),
 
                           _quickLoginChip(
                             label: 'Buyer',
+                            color: AppTheme.primary,
                             color: AppTheme.primary,
                             email: 'buyer@productsphere.com',
                             password: 'buyerpassword',
@@ -407,17 +397,11 @@ class _LoginScreenState extends State<LoginScreen>
     required String password,
   }) {
     return ActionChip(
-      backgroundColor: color.withValues(alpha: 0.08),
-      side: BorderSide(
-        color: color.withValues(alpha: 0.3),
-      ),
+      backgroundColor: color.withOpacity(0.08),
+      side: BorderSide(color: color.withOpacity(0.3)),
       label: Text(
         label,
-        style: TextStyle(
-          color: color,
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-        ),
+        style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.bold),
       ),
       onPressed: () => _quickFill(
         email,
