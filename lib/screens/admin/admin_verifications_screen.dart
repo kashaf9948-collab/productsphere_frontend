@@ -122,7 +122,7 @@ class _AdminVerificationsScreenState extends State<AdminVerificationsScreen> {
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: 1),
       appBar: AppBar(
-        backgroundColor: AppTheme.secondaryDark,
+        backgroundColor: AppTheme.secondary,
         foregroundColor: Colors.white,
         title: const Text('Business Verifications', style: TextStyle(fontWeight: FontWeight.bold)),
         actions: [
