@@ -1,111 +1,205 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import '../utils/theme.dart';
 
-class AdminBottomNav extends StatelessWidget {
-  final int activeIndex; // 0=Home, 1=Verifications, 2=Users, 3=Profile
+class AdminDrawer extends StatelessWidget {
+  const AdminDrawer({Key? key}) : super(key: key);
 
-  const AdminBottomNav({Key? key, required this.activeIndex}) : super(key: key);
+  void _logout() {
+    final box = GetStorage();
+    box.remove('token');
+    box.remove('user');
+    box.remove('role');
+    box.remove('isLoggedIn');
+    box.remove('userName');
+    Get.offAllNamed('/login');
+  }
 
   @override
   Widget build(BuildContext context) {
-    final activeColor = AppTheme.primary;
-    const inactiveColor = Color(0xFF546E7A);
+    final box = GetStorage();
+    final user = box.read('user') ?? {};
+    final String name = user['name'] ?? 'Admin User';
+    final String email = user['email'] ?? 'admin@productsphere.com';
+    final String initial = name.isNotEmpty ? name[0].toUpperCase() : 'A';
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: Colors.grey.shade300, width: 0.5)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
-          )
-        ]
-      ),
+    return Drawer(
+      backgroundColor: Colors.white,
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _item(
-                icon: Icons.home_outlined,
-                activeIcon: Icons.home_rounded,
-                label: 'Home',
-                index: 0,
-                activeColor: activeColor,
-                inactiveColor: inactiveColor,
-                onTap: () => Get.offAllNamed('/admin-dashboard'),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+              color: AppTheme.primary,
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 24,
+                    backgroundColor: Colors.white.withOpacity(0.25),
+                    child: Text(
+                      initial,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          name,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          email,
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.75),
+                            fontSize: 12,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              _item(
-                icon: Icons.verified_user_outlined,
-                activeIcon: Icons.verified_user_rounded,
-                label: 'Verifications',
-                index: 1,
-                activeColor: activeColor,
-                inactiveColor: inactiveColor,
-                onTap: () => Get.offAllNamed('/admin-verifications'),
+            ),
+            const SizedBox(height: 12),
+
+            // Items
+            _drawerItem(
+              icon: Icons.dashboard_outlined,
+              label: 'Overview Dashboard',
+              onTap: () {
+                Get.back();
+                Get.offAllNamed('/admin-dashboard');
+              },
+            ),
+            _drawerItem(
+              icon: Icons.verified_user_outlined,
+              label: 'Business Verifications',
+              onTap: () {
+                Get.back();
+                Get.offAllNamed('/admin-verifications');
+              },
+            ),
+            _drawerItem(
+              icon: Icons.storefront_outlined,
+              label: 'Wholesalers Catalog',
+              onTap: () {
+                Get.back();
+                Get.offAllNamed('/admin-catalog');
+              },
+            ),
+            _drawerItem(
+              icon: Icons.people_outline_rounded,
+              label: 'Registered Buyers',
+              onTap: () {
+                Get.back();
+                Get.toNamed('/admin-buyers');
+              },
+            ),
+            _drawerItem(
+              icon: Icons.receipt_long_rounded,
+              label: 'Marketplace Orders',
+              onTap: () {
+                Get.back();
+                Get.toNamed('/admin-orders');
+              },
+            ),
+            _drawerItem(
+              icon: Icons.category_outlined,
+              label: 'Category Management',
+              onTap: () {
+                Get.back();
+                Get.toNamed('/admin-categories');
+              },
+            ),
+            _drawerItem(
+              icon: Icons.gavel_rounded,
+              label: 'Price Negotiations',
+              onTap: () {
+                Get.back();
+                Get.toNamed('/admin-negotiations');
+              },
+            ),
+            _drawerItem(
+              icon: Icons.settings_outlined,
+              label: 'System Settings',
+              onTap: () {
+                Get.back();
+                Get.toNamed('/admin-settings');
+              },
+            ),
+
+            const Spacer(),
+            const Divider(color: AppTheme.border),
+
+            // Logout
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: ListTile(
+                onTap: _logout,
+                leading: const Icon(
+                  Icons.logout_rounded,
+                  color: AppTheme.expired,
+                  size: 22,
+                ),
+                title: const Text(
+                  'Sign Out',
+                  style: TextStyle(
+                    color: AppTheme.expired,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+                ),
               ),
-              _item(
-                icon: Icons.people_outline,
-                activeIcon: Icons.people_rounded,
-                label: 'Users',
-                index: 2,
-                activeColor: activeColor,
-                inactiveColor: inactiveColor,
-                onTap: () => Get.offAllNamed('/admin-buyers'),
-              ),
-              _item(
-                icon: Icons.settings_outlined,
-                activeIcon: Icons.settings_rounded,
-                label: 'Settings',
-                index: 3,
-                activeColor: activeColor,
-                inactiveColor: inactiveColor,
-                onTap: () => Get.toNamed('/admin-settings'),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _item({
+  Widget _drawerItem({
     required IconData icon,
-    required IconData activeIcon,
     required String label,
-    required int index,
-    required Color activeColor,
-    required Color inactiveColor,
     required VoidCallback onTap,
   }) {
-    final isActive = index == activeIndex;
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        width: 80,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              isActive ? activeIcon : icon,
-              size: 24,
-              color: isActive ? activeColor : inactiveColor,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 10,
-                color: isActive ? activeColor : inactiveColor,
-                fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
-              ),
-            ),
-          ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+      child: ListTile(
+        onTap: onTap,
+        leading: Icon(icon, color: AppTheme.textSecondary, size: 22),
+        title: Text(
+          label,
+          style: const TextStyle(
+            fontSize: 14,
+            color: AppTheme.textPrimary,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppTheme.radiusMd),
         ),
       ),
     );
