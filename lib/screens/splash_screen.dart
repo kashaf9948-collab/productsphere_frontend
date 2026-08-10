@@ -3,20 +3,46 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../core/services/settings_service.dart';
+import '../core/services/settings_service.dart';
 import '../routes/app_routes.dart';
 import '../core/utils/theme.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    _initApp();
+  }
+
+  Future<void> _initApp() async {
+    // Wait for splash logo display
+    await Future.delayed(const Duration(milliseconds: 1800));
+
+    final box = GetStorage();
+    final result = await SettingsService.fetchPublicSettings();
+
+    bool isMaintenance = false;
+    if (result['success'] == true) {
+      final data = result['data'];
+      box.write('public_settings', data);
+      isMaintenance = data['maintenance_mode'] == 'true';
+    }
+
+    final token = box.read('token');
+    final role = box.read('role');
+
+    if (isMaintenance && role != 'admin') {
+      Get.offAllNamed('/maintenance');
+      return;
+    }
     _initApp();
   }
 
@@ -51,6 +77,15 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       Get.offAllNamed(AppRoutes.login);
     }
+    if (token != null) {
+      if (role == 'admin') {
+        Get.offAllNamed(AppRoutes.adminDashboard);
+      } else {
+        Get.offAllNamed(AppRoutes.dashboard);
+      }
+    } else {
+      Get.offAllNamed(AppRoutes.login);
+    }
   }
 
   @override
@@ -74,7 +109,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: AppTheme.primary.withValues(alpha: 0.2),
+                          color: AppTheme.primary.withOpacity(0.2),
                           blurRadius: 15,
                           spreadRadius: 2,
                           offset: const Offset(0, 4),
@@ -144,8 +179,67 @@ class _SplashScreenState extends State<SplashScreen> {
                     strokeWidth: 2.5,
                     color: AppTheme.primary,
                   ),
+                  const SizedBox(height: 24),
+                  
+                  // App Name
+                  RichText(
+                    text: const TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Product",
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.textPrimary,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "Sphere",
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.primary,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  
+                  // Subtitle
+                  const Text(
+                    "B2B Local Market Platform",
+                    style: TextStyle(
+                      color: AppTheme.textSecondary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            
+            // Bottom Indicator
+            const Positioned(
+              bottom: 60,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.5,
+                    color: AppTheme.primary,
+                  ),
                 ),
               ),
+            ),
+          ],
+        ),
+      ),
             ),
           ],
         ),
