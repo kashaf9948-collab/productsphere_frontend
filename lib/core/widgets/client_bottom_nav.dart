@@ -4,7 +4,6 @@ import '../utils/theme.dart';
 
 class ClientBottomNav extends StatelessWidget {
   final int activeIndex; // 0=Shop, 1=Negotiations, 2=Profile, 3=Settings
-  final int activeIndex; // 0=Shop, 1=Negotiations, 2=Profile, 3=Settings
 
   const ClientBottomNav({Key? key, required this.activeIndex}) : super(key: key);
 
@@ -50,10 +49,8 @@ class ClientBottomNav extends StatelessWidget {
                 activeIcon: Icons.gavel_rounded,
                 label: 'Negotiations',
                 index: 1,
-                index: 1,
                 activeColor: activeColor,
                 inactiveColor: inactiveColor,
-                onTap: () => Get.offAllNamed('/buyer-negotiations'),
                 onTap: () => Get.offAllNamed('/buyer-negotiations'),
               ),
 
@@ -73,7 +70,6 @@ class ClientBottomNav extends StatelessWidget {
                 index: 3,
                 activeColor: activeColor,
                 inactiveColor: inactiveColor,
-                onTap: () => Get.offAllNamed('/buyer-settings'),
                 onTap: () => Get.offAllNamed('/buyer-settings'),
               ),
             ],

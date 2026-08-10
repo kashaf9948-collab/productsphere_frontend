@@ -89,11 +89,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-<<<<<<< HEAD
-              backgroundColor: AppTheme.secondary,
-=======
               backgroundColor: AppTheme.primary,
->>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
               minimumSize: const Size(100, 45),
             ),
             onPressed: () async {
@@ -114,11 +110,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
   }
 
   Future<void> _saveCategory({int? id, required String name, String? description}) async {
-<<<<<<< HEAD
-    showLoadingDialog(color: AppTheme.secondary);
-=======
     showLoadingDialog(color: AppTheme.primary);
->>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
 
     Map<String, dynamic> result;
     if (id == null) {
@@ -152,11 +144,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
 
     if (!confirm) return;
 
-<<<<<<< HEAD
-    showLoadingDialog(color: AppTheme.secondary);
-=======
     showLoadingDialog(color: AppTheme.primary);
->>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
 
     final result = await ProductService.deleteCategory(id);
     Get.back(); // close loading
@@ -182,11 +170,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: -1),
       appBar: AppBar(
-<<<<<<< HEAD
-        backgroundColor: AppTheme.secondaryDark,
-=======
         backgroundColor: AppTheme.primary,
->>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
         title: const Text('Category Management'),
         actions: [
           IconButton(
@@ -196,11 +180,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-<<<<<<< HEAD
-        backgroundColor: AppTheme.secondaryDark,
-=======
         backgroundColor: AppTheme.primary,
->>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
         foregroundColor: Colors.white,
         onPressed: () => _showCategoryDialog(),
         child: const Icon(Icons.add),
@@ -208,11 +188,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       body: SafeArea(
         child: _isLoading
             ? const Center(
-<<<<<<< HEAD
-                child: CircularProgressIndicator(color: AppTheme.secondary),
-=======
                 child: CircularProgressIndicator(color: AppTheme.primary),
->>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
               )
             : _categories.isEmpty
                 ? Center(
@@ -252,11 +228,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                           contentPadding: const EdgeInsets.all(16),
                           leading: CircleAvatar(
                             backgroundColor: AppTheme.primaryLight,
-<<<<<<< HEAD
-                            child: Icon(Icons.category_rounded, color: AppTheme.secondaryDark),
-=======
                             child: Icon(Icons.category_rounded, color: AppTheme.primary),
->>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
                           ),
                           title: Text(
                             name,

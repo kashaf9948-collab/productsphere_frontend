@@ -4,7 +4,6 @@ import 'package:get_storage/get_storage.dart';
 import '../core/services/auth_service.dart';
 import '../core/utils/theme.dart';
 import '../core/widgets/snackbars.dart';
-import '../core/widgets/snackbars.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -75,9 +74,6 @@ class _LoginScreenState extends State<LoginScreen>
       AppSnackbars.warning(
         title: "Validation Error",
         message: "Please enter both email and password",
-      AppSnackbars.warning(
-        title: "Validation Error",
-        message: "Please enter both email and password",
       );
       return;
     }
@@ -101,9 +97,6 @@ class _LoginScreenState extends State<LoginScreen>
         Get.offAllNamed('/dashboard');
       }
     } else {
-      AppSnackbars.error(
-        title: "Login Failed",
-        message: result['message'],
       AppSnackbars.error(
         title: "Login Failed",
         message: result['message'],
@@ -322,7 +315,6 @@ class _LoginScreenState extends State<LoginScreen>
                           _quickLoginChip(
                             label: 'Admin',
                             color: Colors.blueGrey,
-                            color: Colors.blueGrey,
                             email: 'admin@productsphere.com',
                             password: 'adminpassword',
                           ),
@@ -330,14 +322,12 @@ class _LoginScreenState extends State<LoginScreen>
                           _quickLoginChip(
                             label: 'Wholesaler',
                             color: AppTheme.primaryDark,
-                            color: AppTheme.primaryDark,
                             email: 'wholesaler@productsphere.com',
                             password: 'wholesalerpassword',
                           ),
 
                           _quickLoginChip(
                             label: 'Buyer',
-                            color: AppTheme.primary,
                             color: AppTheme.primary,
                             email: 'buyer@productsphere.com',
                             password: 'buyerpassword',

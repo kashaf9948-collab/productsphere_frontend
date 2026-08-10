@@ -34,20 +34,7 @@ class WholesalerDrawer extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-<<<<<<< HEAD
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    AppTheme.primaryDark,
-                    Color.fromARGB(255, 0, 121, 107),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-=======
               color: AppTheme.primary,
->>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
               child: Row(
                 children: [
                   CircleAvatar(

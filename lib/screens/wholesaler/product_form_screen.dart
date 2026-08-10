@@ -1,19 +1,15 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image_picker/image_picker.dart';
 import '../../core/services/product_service.dart';
 import '../../core/utils/theme.dart';
 import '../../core/widgets/snackbars.dart';
-import '../../core/widgets/snackbars.dart';
 
 class ProductFormScreen extends StatefulWidget {
-  const ProductFormScreen({Key? key}) : super(key: key);
+  const ProductFormScreen({super.key});
 
   @override
   State<ProductFormScreen> createState() => _ProductFormScreenState();
@@ -22,14 +18,12 @@ class ProductFormScreen extends StatefulWidget {
 class _ProductFormScreenState extends State<ProductFormScreen> {
   final _formKey = GlobalKey<FormState>();
 
-
   // Form controllers
   final _nameController = TextEditingController();
   final _descController = TextEditingController();
   final _priceController = TextEditingController();
   final _origPriceController = TextEditingController();
   final _qtyController = TextEditingController();
-
 
   String? _selectedCategory;
   List<String> _categories = [];
@@ -42,17 +36,11 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   String? _existingImageBase64; // from edit mode args
   final ImagePicker _picker = ImagePicker();
 
-  // Product image
-  Uint8List? _imageBytes;
-  String? _existingImageBase64; // from edit mode args
-  final ImagePicker _picker = ImagePicker();
-
   // Admin override fields
   bool _isAdmin = false;
   List<dynamic> _wholesalers = [];
   dynamic _selectedWholesaler;
   bool _isLoadingWholesalers = false;
-  bool _isSubmitting = false;
   bool _isSubmitting = false;
 
   @override
@@ -74,7 +62,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     try {
       final fetched = await ProductService.fetchCategories();
       final List<String> names = fetched.map((c) => (c['name'] as String)).toList();
-      final List<String> names = fetched.map((c) => (c['name'] as String)).toList();
       setState(() {
         _categories = names;
         _isLoadingCategories = false;
@@ -95,8 +82,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
         _priceController.text = (args['price'] ?? '').toString();
         _origPriceController.text = (args['original_price'] ?? '').toString();
         _qtyController.text = (args['quantity'] ?? '1').toString();
-        _existingImageBase64 = args['product_image'];
-
         _existingImageBase64 = args['product_image'];
 
         final String? productCategory = args['category'];
@@ -153,7 +138,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
             const Text('Optional – helps buyers recognise your product', style: TextStyle(fontSize: 12, color: AppTheme.textSecondary)),
             const SizedBox(height: 16),
             ListTile(
-              leading: const CircleAvatar(backgroundColor: AppTheme.primary, child: Icon(Icons.camera_alt_rounded, color: Colors.white, size: 20)),
+              leading: const CircleAvatar(backgroundColor: Color.fromRGBO(0, 121, 107, 1), child: Icon(Icons.camera_alt_rounded, color: Colors.white, size: 20)),
               title: const Text('Take Photo'),
               subtitle: const Text('Use camera'),
               onTap: () async {
@@ -204,22 +189,17 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   Future<void> _submitForm() async {
     if (_isSubmitting) return;
     if (!_formKey.currentState!.validate()) return;
-    if (_isSubmitting) return;
-    if (!_formKey.currentState!.validate()) return;
 
     if (_selectedCategory == null) {
-      AppSnackbars.warning(title: "Validation Error", message: "Please select a product category.");
       AppSnackbars.warning(title: "Validation Error", message: "Please select a product category.");
       return;
     }
 
     if (_isAdmin && _selectedWholesaler == null) {
       AppSnackbars.warning(title: "Validation Error", message: "Please select a wholesaler on whose behalf you are publishing.");
-      AppSnackbars.warning(title: "Validation Error", message: "Please select a wholesaler on whose behalf you are publishing.");
       return;
     }
 
-    setState(() => _isSubmitting = true);
     setState(() => _isSubmitting = true);
 
     final double price = double.parse(_priceController.text.trim());
@@ -238,7 +218,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       'quantity': qty,
       'category': _selectedCategory,
       'product_image': _getImageBase64(),
-      'product_image': _getImageBase64(),
     };
 
     if (_isAdmin && _selectedWholesaler != null) {
@@ -255,25 +234,11 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       }
     } catch (e) {
       result = {'success': false, 'message': 'Connection error: $e'};
-    try {
-      if (_isEditMode && _productId != null) {
-        result = await ProductService.updateProduct(_productId!, productMap);
-      } else {
-        result = await ProductService.publishProduct(productMap);
-      }
-    } catch (e) {
-      result = {'success': false, 'message': 'Connection error: $e'};
     }
 
     setState(() => _isSubmitting = false);
-    setState(() => _isSubmitting = false);
 
     if (result['success']) {
-      Navigator.pop(context, true);
-      AppSnackbars.success(
-        title: _isEditMode ? "Product Updated" : "Product Published",
-        message: result['message'] ?? "Catalog updated successfully.",
-      );
       Navigator.pop(context, true);
       AppSnackbars.success(
         title: _isEditMode ? "Product Updated" : "Product Published",
@@ -283,20 +248,16 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       AppSnackbars.error(
         title: _isEditMode ? "Update Failed" : "Publish Failed",
         message: result['message'] ?? "An error occurred.",
-      AppSnackbars.error(
-        title: _isEditMode ? "Update Failed" : "Publish Failed",
-        message: result['message'] ?? "An error occurred.",
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = AppTheme.primary;
+    final primaryColor = AppTheme.primaryDark;
     final hasImage = _imageBytes != null || (_existingImageBase64 != null && _existingImageBase64!.isNotEmpty);
 
     return Scaffold(
-      backgroundColor: AppTheme.background,
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         backgroundColor: primaryColor,
@@ -306,7 +267,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       ),
       body: SafeArea(
         child: _isLoadingCategories
-            ? Center(child: CircularProgressIndicator(color: primaryColor))
             ? Center(child: CircularProgressIndicator(color: primaryColor))
             : SingleChildScrollView(
                 padding: const EdgeInsets.all(20),
@@ -321,10 +281,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        _isEditMode
-                            ? 'Modify product details.'
-                            : (_isAdmin
-                                ? 'Select a verified wholesaler and fill out details.'
                         _isEditMode
                             ? 'Modify product details.'
                             : (_isAdmin
@@ -378,7 +334,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                                       bottom: 0, left: 0, right: 0,
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: Colors.black.withOpacity(0.45),
+                                          color: Colors.black.withValues(alpha: 0.45),
                                           borderRadius: const BorderRadius.vertical(bottom: Radius.circular(AppTheme.radiusMd - 1)),
                                         ),
                                         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -407,9 +363,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         const SizedBox(height: 8),
                         _isLoadingWholesalers
                             ? const LinearProgressIndicator(color: AppTheme.primary)
-                            ? const LinearProgressIndicator(color: AppTheme.primary)
                             : DropdownButtonFormField<dynamic>(
-                                value: _selectedWholesaler,
+                                initialValue: _selectedWholesaler,
                                 items: _wholesalers.map((w) {
                                   return DropdownMenuItem<dynamic>(
                                     value: w,
@@ -418,14 +373,11 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                                 }).toList(),
                                 onChanged: _isEditMode ? null : (val) => setState(() => _selectedWholesaler = val),
                                 decoration: const InputDecoration(hintText: 'Select Wholesaler'),
-                                onChanged: _isEditMode ? null : (val) => setState(() => _selectedWholesaler = val),
-                                decoration: const InputDecoration(hintText: 'Select Wholesaler'),
                                 validator: (val) => val == null ? 'Please select a wholesaler' : null,
                               ),
                         const SizedBox(height: 18),
                       ],
 
-                      // ─── Product Title ──────────────────────────────────────
                       // ─── Product Title ──────────────────────────────────────
                       const Text('Product Title *', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
                       const SizedBox(height: 8),
@@ -433,17 +385,14 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         controller: _nameController,
                         decoration: const InputDecoration(hintText: 'e.g. Leather Jacket, Sports Shoes'),
                         validator: (val) => (val == null || val.trim().isEmpty) ? 'Product title is required' : null,
-                        decoration: const InputDecoration(hintText: 'e.g. Leather Jacket, Sports Shoes'),
-                        validator: (val) => (val == null || val.trim().isEmpty) ? 'Product title is required' : null,
                       ),
                       const SizedBox(height: 18),
 
                       // ─── Category Dropdown ──────────────────────────────────
-                      // ─── Category Dropdown ──────────────────────────────────
                       const Text('Category *', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<String>(
-                        value: _selectedCategory,
+                        initialValue: _selectedCategory,
                         items: _categories.map((c) => DropdownMenuItem<String>(value: c, child: Text(c))).toList(),
                         onChanged: (val) => setState(() => _selectedCategory = val),
                         decoration: const InputDecoration(hintText: 'Select category'),
@@ -451,7 +400,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       ),
                       const SizedBox(height: 18),
 
-                      // ─── Price and Original Price ───────────────────────────
                       // ─── Price and Original Price ───────────────────────────
                       Row(
                         children: [
@@ -465,10 +413,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                                   controller: _priceController,
                                   keyboardType: TextInputType.number,
                                   decoration: const InputDecoration(hintText: 'Rs. Price'),
-                                  decoration: const InputDecoration(hintText: 'Rs. Price'),
                                   validator: (val) {
-                                    if (val == null || val.trim().isEmpty) return 'Required';
-                                    if (double.tryParse(val) == null || double.parse(val) <= 0) return 'Invalid price';
                                     if (val == null || val.trim().isEmpty) return 'Required';
                                     if (double.tryParse(val) == null || double.parse(val) <= 0) return 'Invalid price';
                                     return null;
@@ -488,10 +433,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                                   controller: _origPriceController,
                                   keyboardType: TextInputType.number,
                                   decoration: const InputDecoration(hintText: 'Rs. (Optional)'),
-                                  decoration: const InputDecoration(hintText: 'Rs. (Optional)'),
                                   validator: (val) {
                                     if (val != null && val.trim().isNotEmpty) {
-                                      if (double.tryParse(val) == null || double.parse(val) <= 0) return 'Invalid price';
                                       if (double.tryParse(val) == null || double.parse(val) <= 0) return 'Invalid price';
                                     }
                                     return null;
@@ -505,17 +448,13 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       const SizedBox(height: 18),
 
                       // ─── Stock Quantity ─────────────────────────────────────
-                      // ─── Stock Quantity ─────────────────────────────────────
                       const Text('Initial Stock Quantity *', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _qtyController,
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(hintText: 'e.g. 100'),
-                        decoration: const InputDecoration(hintText: 'e.g. 100'),
                         validator: (val) {
-                          if (val == null || val.trim().isEmpty) return 'Quantity is required';
-                          if (int.tryParse(val) == null || int.parse(val) <= 0) return 'Invalid quantity';
                           if (val == null || val.trim().isEmpty) return 'Quantity is required';
                           if (int.tryParse(val) == null || int.parse(val) <= 0) return 'Invalid quantity';
                           return null;
@@ -524,37 +463,15 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       const SizedBox(height: 18),
 
                       // ─── Description ────────────────────────────────────────
-                      // ─── Description ────────────────────────────────────────
                       const Text('Description', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _descController,
                         decoration: const InputDecoration(hintText: 'Enter details about sizes, minimum order qty, etc.'),
-                        decoration: const InputDecoration(hintText: 'Enter details about sizes, minimum order qty, etc.'),
                         maxLines: 4,
                       ),
                       const SizedBox(height: 32),
 
-                      // ─── Submit Button ──────────────────────────────────────
-                      _isSubmitting
-                          ? Center(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                child: CircularProgressIndicator(color: primaryColor),
-                              ),
-                            )
-                          : SizedBox(
-                              width: double.infinity,
-                              height: 50,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(backgroundColor: primaryColor, elevation: 0, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd))),
-                                onPressed: _submitForm,
-                                child: Text(
-                                  _isEditMode ? 'Update Listing' : (_isAdmin ? 'Publish Product' : 'Publish Product Listing'),
-                                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
-                                ),
-                              ),
-                            ),
                       // ─── Submit Button ──────────────────────────────────────
                       _isSubmitting
                           ? Center(
@@ -582,16 +499,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
               ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _descController.dispose();
-    _priceController.dispose();
-    _origPriceController.dispose();
-    _qtyController.dispose();
-    super.dispose();
   }
 
   @override

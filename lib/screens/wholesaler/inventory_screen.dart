@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -7,8 +6,6 @@ import '../../core/services/product_service.dart';
 import '../../core/utils/theme.dart';
 import '../../core/widgets/wholesaler_drawer.dart';
 import '../../core/widgets/wholesaler_bottom_nav.dart';
-import '../../core/widgets/dialogs.dart';
-import '../../core/widgets/snackbars.dart';
 import '../../core/widgets/dialogs.dart';
 import '../../core/widgets/snackbars.dart';
 
@@ -65,18 +62,7 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
     if (!confirm) return;
 
     showLoadingDialog(color: AppTheme.primary);
-    final confirm = await showConfirmDialog(
-      title: 'Delete Product',
-      content: 'Are you sure you want to permanently delete "$name" from your catalog?',
-      confirmColor: AppTheme.expired,
-    );
 
-    if (!confirm) return;
-
-    showLoadingDialog(color: AppTheme.primary);
-
-    final result = await ProductService.deleteWholesalerProduct(productId);
-    Get.back(); // close loading
     final result = await ProductService.deleteWholesalerProduct(productId);
     Get.back(); // close loading
 
@@ -110,7 +96,6 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
-      backgroundColor: AppTheme.background,
       drawer: const WholesalerDrawer(),
       bottomNavigationBar: const WholesalerBottomNav(activeIndex: 1),
       appBar: AppBar(
@@ -133,7 +118,6 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
       body: SafeArea(
         child: _isLoading
             ? const Center(
-                child: CircularProgressIndicator(color: AppTheme.primary),
                 child: CircularProgressIndicator(color: AppTheme.primary),
               )
             : _products.isEmpty
@@ -168,8 +152,6 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
                       final status = product['status'] ?? 'active';
                       final String? productImage = product['product_image'];
                       final bool hasImage = productImage != null && productImage.isNotEmpty;
-                      final String? productImage = product['product_image'];
-                      final bool hasImage = productImage != null && productImage.isNotEmpty;
 
                       return Card(
                         margin: const EdgeInsets.only(bottom: 12),
@@ -190,7 +172,6 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
                                     width: 50,
                                     height: 50,
                                     decoration: BoxDecoration(
-                                      color: AppTheme.primaryLight,
                                       color: AppTheme.primaryLight,
                                       borderRadius: BorderRadius.circular(AppTheme.radiusSm),
                                     ),
@@ -295,7 +276,6 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
                                   Row(
                                     children: [
                                       IconButton(
-                                        icon: Icon(Icons.edit_outlined, color: Colors.blue.shade700, size: 20),
                                         icon: Icon(Icons.edit_outlined, color: Colors.blue.shade700, size: 20),
                                         onPressed: () {
                                           Get.toNamed(

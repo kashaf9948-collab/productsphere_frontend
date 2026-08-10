@@ -128,22 +128,14 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: -1),
       floatingActionButton: FloatingActionButton.extended(
-<<<<<<< HEAD
-        backgroundColor: AppTheme.secondaryDark,
-=======
         backgroundColor: AppTheme.primary,
->>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
         foregroundColor: Colors.white,
         onPressed: () => Get.toNamed('/wholesaler-product-form')?.then((_) => _fetchProducts()),
         icon: const Icon(Icons.add_circle_outline_rounded),
         label: const Text('Publish on Behalf'),
       ),
       appBar: AppBar(
-<<<<<<< HEAD
-        backgroundColor: AppTheme.secondaryDark,
-=======
         backgroundColor: AppTheme.primary,
->>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
         title: const Text('Wholesalers Catalog'),
         actions: [
           IconButton(
@@ -201,11 +193,7 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
                               ),
                             ),
                             selected: isSelected,
-<<<<<<< HEAD
-                            selectedColor: AppTheme.secondary,
-=======
                             selectedColor: AppTheme.primary,
->>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
                             backgroundColor: const Color(0xFFECEFF1),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(AppTheme.radiusSm),
@@ -325,11 +313,7 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
                   borderRadius: BorderRadius.circular(AppTheme.radiusSm),
                   child: hasImage
                       ? Image.memory(
-<<<<<<< HEAD
-                          base64Decode(productImage),
-=======
                           base64Decode(productImage!),
->>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
                           fit: BoxFit.cover,
                           errorBuilder: (_, __, ___) => Icon(
                             categoryIcon,
