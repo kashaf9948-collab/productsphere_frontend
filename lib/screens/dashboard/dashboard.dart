@@ -14,7 +14,103 @@ import '../../core/widgets/client_bottom_nav.dart';
 import '../../core/widgets/dialogs.dart';
 
 class DashboardScreen extends StatefulWidget {
+<<<<<<< HEAD
   const DashboardScreen({super.key});
+=======
+  const DashboardScreen({Key? key}) : super(key: key);
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  // Common states
+  bool _isLoading = true;
+
+  // Wholesaler stats states
+  List<dynamic> _wholesalerProducts = [];
+  List<dynamic> _wholesalerBids = [];
+
+  // Buyer marketplace states
+  List<dynamic> _allCategories = [];
+  List<dynamic> _allWholesalers = [];
+  List<dynamic> _allProducts = [];
+  List<dynamic> _filteredProducts = [];
+
+  // Buyer filters
+  String? _selectedCategory;
+  int _selectedWholesalerId = 0;
+  String _searchQuery = '';
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
+    setState(() => _isLoading = true);
+    final box = GetStorage();
+    final user = box.read('user') ?? {};
+    final String role = box.read('role') ?? 'buyer';
+    final isWholesaler = role.toLowerCase() == 'wholesaler';
+
+    try {
+      if (isWholesaler) {
+        final wholesalerId = user['id'] ?? 0;
+        final results = await Future.wait([
+          ProductService.fetchWholesalerProducts(wholesalerId),
+          ProductService.fetchWholesalerBids(),
+        ]);
+        setState(() {
+          _wholesalerProducts = results[0];
+          _wholesalerBids = results[1];
+          _isLoading = false;
+        });
+      } else {
+        final results = await Future.wait([
+          ProductService.fetchCategories(),
+          ProductService.fetchApprovedWholesalers(),
+          ProductService.fetchWholesaleProducts(),
+        ]);
+        setState(() {
+          _allCategories = results[0];
+          _allWholesalers = results[1];
+          _allProducts = results[2].where((p) => p['status'] != 'flagged').toList();
+          _isLoading = false;
+          _applyFilters();
+        });
+      }
+    } catch (e) {
+      print('Dashboard fetch data error: $e');
+      setState(() => _isLoading = false);
+    }
+  }
+
+  void _applyFilters() {
+    setState(() {
+      _filteredProducts = _allProducts.where((product) {
+        final name = (product['name'] ?? '').toString().toLowerCase();
+        final desc = (product['description'] ?? '').toString().toLowerCase();
+        final category = (product['category'] ?? '').toString();
+        final wholesalerId = product['wholesaler_id'] as int?;
+
+        final matchesSearch = _searchQuery.isEmpty || 
+            name.contains(_searchQuery.toLowerCase()) ||
+            desc.contains(_searchQuery.toLowerCase());
+
+        final matchesCategory = _selectedCategory == null ||
+            category.toLowerCase() == _selectedCategory!.toLowerCase();
+
+        final matchesWholesaler = _selectedWholesalerId == 0 ||
+            wholesalerId == _selectedWholesalerId;
+
+        return matchesSearch && matchesCategory && matchesWholesaler;
+      }).toList();
+    });
+  }
+>>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -135,7 +231,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ? const WholesalerBottomNav(activeIndex: 0)
           : const ClientBottomNav(activeIndex: 0),
       appBar: AppBar(
+<<<<<<< HEAD
         backgroundColor: AppTheme.primaryDark,
+=======
+        backgroundColor: AppTheme.primary,
+>>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
         foregroundColor: Colors.white,
         title: Text(
           isWholesaler ? 'Wholesaler Portal' : 'Buyer Marketplace',
@@ -191,9 +291,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
+<<<<<<< HEAD
                     colors: [AppTheme.primaryDark, Color.fromARGB(255, 0, 121, 107),],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
+=======
+                    colors: [AppTheme.primary, Color(0xFF009688)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+>>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
                   ),
                   borderRadius: BorderRadius.circular(AppTheme.radiusLg),
                   boxShadow: [AppTheme.cardShadow],
@@ -205,7 +311,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       children: [
                         CircleAvatar(
                           radius: 28,
-                          backgroundColor: Colors.white.withValues(alpha: 0.25),
+                          backgroundColor: Colors.white.withOpacity(0.25),
                           child: Text(
                             name.isNotEmpty ? name[0].toUpperCase() : '?',
                             style: const TextStyle(
@@ -232,7 +338,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               Text(
                                 isWholesaler ? 'Role: Wholesaler / Donor' : 'Role: Buyer / Retailer',
                                 style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.85),
+                                  color: Colors.white.withOpacity(0.85),
                                   fontSize: 13,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -248,11 +354,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       children: [
                         Text(
                           email,
-                          style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 13),
+                          style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 13),
                         ),
                         Text(
                           phone,
-                          style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 13),
+                          style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 13),
                         ),
                       ],
                     ),
@@ -475,7 +581,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         value: w['id'],
                         child: Text(w['name'] ?? 'Wholesaler'),
                       );
+<<<<<<< HEAD
                     }),
+=======
+                    }).toList(),
+>>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
                   ],
                   onChanged: (val) {
                     setState(() {
@@ -519,7 +629,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     _applyFilters();
                   });
                 });
+<<<<<<< HEAD
               }),
+=======
+              }).toList(),
+>>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
             ],
           ),
         ),
@@ -628,7 +742,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundColor: color.withValues(alpha: 0.08),
+            backgroundColor: color.withOpacity(0.08),
             child: Icon(icon, color: color, size: 20),
           ),
           const SizedBox(width: 14),
@@ -678,7 +792,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           boxShadow: isSelected
               ? [
                   BoxShadow(
+<<<<<<< HEAD
                     color: AppTheme.primary.withValues(alpha: 0.2),
+=======
+                    color: AppTheme.primary.withOpacity(0.2),
+>>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   )
@@ -719,7 +837,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.08),
+                color: color.withOpacity(0.08),
                 borderRadius: BorderRadius.circular(AppTheme.radiusSm),
               ),
               child: Icon(icon, color: color, size: 24),
@@ -772,7 +890,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         border: Border.all(color: Colors.grey.shade200, width: 1),
         boxShadow: [
           BoxShadow(
+<<<<<<< HEAD
             color: Colors.black.withValues(alpha: 0.01),
+=======
+            color: Colors.black.withOpacity(0.01),
+>>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
             blurRadius: 6,
             offset: const Offset(0, 3),
           )

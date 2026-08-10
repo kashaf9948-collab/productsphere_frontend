@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import '../utils/theme.dart';
 
 class WholesalerDrawer extends StatelessWidget {
-  const WholesalerDrawer({super.key});
+  const WholesalerDrawer({Key? key}) : super(key: key);
 
   void _logout() {
     final box = GetStorage();
@@ -34,6 +34,7 @@ class WholesalerDrawer extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+<<<<<<< HEAD
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [
@@ -44,11 +45,14 @@ class WholesalerDrawer extends StatelessWidget {
                   end: Alignment.bottomCenter,
                 ),
               ),
+=======
+              color: AppTheme.primary,
+>>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
               child: Row(
                 children: [
                   CircleAvatar(
                     radius: 24,
-                    backgroundColor: Colors.white.withValues(alpha: 0.25),
+                    backgroundColor: Colors.white.withOpacity(0.25),
                     child: Text(
                       initial,
                       style: const TextStyle(
@@ -77,7 +81,7 @@ class WholesalerDrawer extends StatelessWidget {
                         Text(
                           email,
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.75),
+                            color: Colors.white.withOpacity(0.75),
                             fontSize: 12,
                           ),
                           maxLines: 1,

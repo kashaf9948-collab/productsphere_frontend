@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -8,9 +9,11 @@ import '../../core/widgets/wholesaler_drawer.dart';
 import '../../core/widgets/wholesaler_bottom_nav.dart';
 import '../../core/widgets/dialogs.dart';
 import '../../core/widgets/snackbars.dart';
+import '../../core/widgets/dialogs.dart';
+import '../../core/widgets/snackbars.dart';
 
 class WholesalerInventoryScreen extends StatefulWidget {
-  const WholesalerInventoryScreen({super.key});
+  const WholesalerInventoryScreen({Key? key}) : super(key: key);
 
   @override
   State<WholesalerInventoryScreen> createState() => _WholesalerInventoryScreenState();
@@ -62,10 +65,33 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
     if (!confirm) return;
 
     showLoadingDialog(color: AppTheme.primary);
+    final confirm = await showConfirmDialog(
+      title: 'Delete Product',
+      content: 'Are you sure you want to permanently delete "$name" from your catalog?',
+      confirmColor: AppTheme.expired,
+    );
+
+    if (!confirm) return;
+
+    showLoadingDialog(color: AppTheme.primary);
 
     final result = await ProductService.deleteWholesalerProduct(productId);
     Get.back(); // close loading
+    final result = await ProductService.deleteWholesalerProduct(productId);
+    Get.back(); // close loading
 
+    if (result['success']) {
+      AppSnackbars.success(
+        title: "Product Deleted",
+        message: "Product has been removed from your catalog.",
+      );
+      _fetchProducts();
+    } else {
+      AppSnackbars.error(
+        title: "Delete Failed",
+        message: result['message'] ?? "Unable to delete product.",
+      );
+    }
     if (result['success']) {
       AppSnackbars.success(
         title: "Product Deleted",
@@ -84,10 +110,11 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
+      backgroundColor: AppTheme.background,
       drawer: const WholesalerDrawer(),
       bottomNavigationBar: const WholesalerBottomNav(activeIndex: 1),
       appBar: AppBar(
-        backgroundColor: AppTheme.primaryDark,
+        backgroundColor: AppTheme.primary,
         title: const Text('My Inventory'),
         actions: [
           IconButton(
@@ -97,7 +124,7 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppTheme.primaryDark,
+        backgroundColor: AppTheme.primary,
         foregroundColor: Colors.white,
         onPressed: () => Get.toNamed('/wholesaler-product-form')?.then((_) => _fetchProducts()),
         icon: const Icon(Icons.add_circle_outline_rounded),
@@ -106,6 +133,7 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
       body: SafeArea(
         child: _isLoading
             ? const Center(
+                child: CircularProgressIndicator(color: AppTheme.primary),
                 child: CircularProgressIndicator(color: AppTheme.primary),
               )
             : _products.isEmpty
@@ -140,6 +168,8 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
                       final status = product['status'] ?? 'active';
                       final String? productImage = product['product_image'];
                       final bool hasImage = productImage != null && productImage.isNotEmpty;
+                      final String? productImage = product['product_image'];
+                      final bool hasImage = productImage != null && productImage.isNotEmpty;
 
                       return Card(
                         margin: const EdgeInsets.only(bottom: 12),
@@ -161,13 +191,14 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
                                     height: 50,
                                     decoration: BoxDecoration(
                                       color: AppTheme.primaryLight,
+                                      color: AppTheme.primaryLight,
                                       borderRadius: BorderRadius.circular(AppTheme.radiusSm),
                                     ),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(AppTheme.radiusSm),
                                       child: hasImage
                                           ? Image.memory(
-                                              base64Decode(productImage),
+                                              base64Decode(productImage!),
                                               fit: BoxFit.cover,
                                               errorBuilder: (_, __, ___) => const Icon(
                                                 Icons.shopping_bag_outlined,
@@ -264,6 +295,7 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
                                   Row(
                                     children: [
                                       IconButton(
+                                        icon: Icon(Icons.edit_outlined, color: Colors.blue.shade700, size: 20),
                                         icon: Icon(Icons.edit_outlined, color: Colors.blue.shade700, size: 20),
                                         onPressed: () {
                                           Get.toNamed(

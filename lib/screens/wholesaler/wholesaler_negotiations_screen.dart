@@ -8,7 +8,7 @@ import '../../core/widgets/dialogs.dart';
 import '../../core/widgets/snackbars.dart';
 
 class WholesalerNegotiationsScreen extends StatefulWidget {
-  const WholesalerNegotiationsScreen({super.key});
+  const WholesalerNegotiationsScreen({Key? key}) : super(key: key);
 
   @override
   State<WholesalerNegotiationsScreen> createState() => _WholesalerNegotiationsScreenState();
@@ -75,7 +75,7 @@ class _WholesalerNegotiationsScreenState extends State<WholesalerNegotiationsScr
       drawer: const WholesalerDrawer(),
       bottomNavigationBar: const WholesalerBottomNav(activeIndex: 2),
       appBar: AppBar(
-        backgroundColor: AppTheme.primaryDark,
+        backgroundColor: AppTheme.primary,
         title: const Text('Received Bids & Price Offers'),
         actions: [
           IconButton(

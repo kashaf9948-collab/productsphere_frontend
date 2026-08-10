@@ -5,6 +5,7 @@ import '../utils/theme.dart';
 class WholesalerBottomNav extends StatelessWidget {
   final int activeIndex; // 0=Dashboard, 1=Inventory, 2=Negotiations, 3=Profile
 
+<<<<<<< HEAD
   const WholesalerBottomNav({
     super.key,
     required this.activeIndex,
@@ -13,6 +14,13 @@ class WholesalerBottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final activeColor = AppTheme.primaryDark;
+=======
+  const WholesalerBottomNav({Key? key, required this.activeIndex}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final activeColor = AppTheme.primary;
+>>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
     const inactiveColor = Color(0xFF546E7A);
 
     return Container(
@@ -26,7 +34,7 @@ class WholesalerBottomNav extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: Colors.black.withOpacity(0.03),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -65,8 +73,12 @@ class WholesalerBottomNav extends StatelessWidget {
                 index: 2,
                 activeColor: activeColor,
                 inactiveColor: inactiveColor,
+<<<<<<< HEAD
                 onTap: () =>
                     Get.offAllNamed('/wholesaler-negotiations'),
+=======
+                onTap: () => Get.offAllNamed('/wholesaler-negotiations'),
+>>>>>>> 4f8040a (Create {order-history, wholesaler-negotiation, Admin(admin-setting, admin-verification, buyer-management, order-audit, buyer-activity)}, Update previous files)
               ),
 
               _item(
