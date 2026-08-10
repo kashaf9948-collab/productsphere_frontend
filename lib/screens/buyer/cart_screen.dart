@@ -147,7 +147,8 @@ class _CartScreenState extends State<CartScreen> {
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
-        title: const Text('Your Cart & Checkout'),
+        backgroundColor: AppTheme.primaryDark,
+       title: const Text('Your Cart & Checkout'),
       ),
       body: Obx(() {
         if (cart.cartItems.isEmpty) {
@@ -177,6 +178,7 @@ class _CartScreenState extends State<CartScreen> {
                   ElevatedButton(
                     onPressed: () => Get.back(),
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.primaryDark,
                       minimumSize: const Size(200, 48),
                     ),
                     child: const Text("Go to Marketplace"),
@@ -256,7 +258,7 @@ class _CartScreenState extends State<CartScreen> {
                                 ),
                               ),
                               IconButton(
-                                icon: const Icon(Icons.add_circle_outline, color: AppTheme.primary),
+                                icon: const Icon(Icons.add_circle_outline, color: AppTheme.primaryDark),
                                 onPressed: () => cart.addToCart(p),
                               ),
                             ],
@@ -436,7 +438,7 @@ class _CartScreenState extends State<CartScreen> {
                             ),
                             child: Row(
                               children: [
-                                const Icon(Icons.info_outline_rounded, color: AppTheme.primary, size: 20),
+                                const Icon(Icons.info_outline_rounded, color: AppTheme.primaryDark, size: 20),
                                 const SizedBox(width: 10),
                                 Expanded(
                                   child: Column(
@@ -534,9 +536,12 @@ class _CartScreenState extends State<CartScreen> {
                         const SizedBox(height: 16),
 
                         _isSubmitting
-                            ? const Center(child: CircularProgressIndicator(color: AppTheme.primary))
+                            ? const Center(child: CircularProgressIndicator(color: AppTheme.primaryDark))
                             : ElevatedButton(
                                 onPressed: () => _processCheckout(cart),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppTheme.primaryDark,
+                                ),
                                 child: const Text("Confirm Order & Checkout"),
                               ),
                       ],

@@ -132,7 +132,7 @@ class _BuyerSettingsScreenState extends State<BuyerSettingsScreen>
       backgroundColor: AppTheme.background,
       bottomNavigationBar: const ClientBottomNav(activeIndex: 3),
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.primaryDark,
         foregroundColor: Colors.white,
         title: const Text('Settings', style: TextStyle(fontWeight: FontWeight.bold)),
         actions: [
@@ -178,9 +178,9 @@ class _BuyerSettingsScreenState extends State<BuyerSettingsScreen>
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [AppTheme.primary, AppTheme.primaryDark],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+                colors: [AppTheme.primaryDark, AppTheme.primary],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
               borderRadius: BorderRadius.circular(AppTheme.radiusLg),
               boxShadow: [AppTheme.cardShadow],
@@ -241,7 +241,7 @@ class _BuyerSettingsScreenState extends State<BuyerSettingsScreen>
               icon: const Icon(Icons.save_rounded, size: 18),
               label: const Text('Save Profile'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primary,
+                backgroundColor: AppTheme.primaryDark,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd)),
               ),

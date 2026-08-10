@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../core/services/product_service.dart';
 import '../../core/utils/theme.dart';
 import '../../core/widgets/admin_drawer.dart';
@@ -37,7 +38,7 @@ class _AdminNegotiationsScreenState extends State<AdminNegotiationsScreen> {
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: -1),
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.secondaryDark,
         title: const Text('B2B Price Bids & Negotiations'),
         actions: [
           IconButton(
@@ -53,7 +54,7 @@ class _AdminNegotiationsScreenState extends State<AdminNegotiationsScreen> {
                 ? _buildEmptyState()
                 : RefreshIndicator(
                     onRefresh: _fetchBids,
-                    color: AppTheme.primary,
+                    color: AppTheme.secondaryDark,
                     child: ListView.separated(
                       padding: const EdgeInsets.all(16),
                       itemCount: _bids.length,
@@ -104,7 +105,7 @@ class _AdminNegotiationsScreenState extends State<AdminNegotiationsScreen> {
     Color badgeColor = AppTheme.pending;
     Color badgeBg = AppTheme.pendingLight;
     if (status == 'accepted') {
-      badgeColor = AppTheme.active;
+      badgeColor = AppTheme.secondaryLight;
       badgeBg = AppTheme.activeLight;
     } else if (status == 'ordered') {
       badgeColor = Colors.blue;
@@ -170,7 +171,7 @@ class _AdminNegotiationsScreenState extends State<AdminNegotiationsScreen> {
                   children: [
                     Text(
                       'Bid Proposal: Rs ${bidPrice.toStringAsFixed(0)}',
-                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppTheme.primary),
+                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppTheme.secondary),
                     ),
                     const SizedBox(height: 2),
                     Text(

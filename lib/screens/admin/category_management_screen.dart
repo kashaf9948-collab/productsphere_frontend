@@ -89,7 +89,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.primary,
+              backgroundColor: AppTheme.secondary,
               minimumSize: const Size(100, 45),
             ),
             onPressed: () async {
@@ -110,7 +110,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
   }
 
   Future<void> _saveCategory({int? id, required String name, String? description}) async {
-    showLoadingDialog(color: AppTheme.primary);
+    showLoadingDialog(color: AppTheme.secondary);
 
     Map<String, dynamic> result;
     if (id == null) {
@@ -144,7 +144,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
 
     if (!confirm) return;
 
-    showLoadingDialog(color: AppTheme.primary);
+    showLoadingDialog(color: AppTheme.secondary);
 
     final result = await ProductService.deleteCategory(id);
     Get.back(); // close loading
@@ -170,7 +170,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: -1),
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.secondaryDark,
         title: const Text('Category Management'),
         actions: [
           IconButton(
@@ -180,7 +180,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.secondaryDark,
         foregroundColor: Colors.white,
         onPressed: () => _showCategoryDialog(),
         child: const Icon(Icons.add),
@@ -188,7 +188,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       body: SafeArea(
         child: _isLoading
             ? const Center(
-                child: CircularProgressIndicator(color: AppTheme.primary),
+                child: CircularProgressIndicator(color: AppTheme.secondary),
               )
             : _categories.isEmpty
                 ? Center(
@@ -228,7 +228,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                           contentPadding: const EdgeInsets.all(16),
                           leading: CircleAvatar(
                             backgroundColor: AppTheme.primaryLight,
-                            child: Icon(Icons.category_rounded, color: AppTheme.primary),
+                            child: Icon(Icons.category_rounded, color: AppTheme.secondaryDark),
                           ),
                           title: Text(
                             name,

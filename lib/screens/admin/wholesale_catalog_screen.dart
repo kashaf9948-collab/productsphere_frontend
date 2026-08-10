@@ -128,14 +128,14 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: -1),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.secondaryDark,
         foregroundColor: Colors.white,
         onPressed: () => Get.toNamed('/wholesaler-product-form')?.then((_) => _fetchProducts()),
         icon: const Icon(Icons.add_circle_outline_rounded),
         label: const Text('Publish on Behalf'),
       ),
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.secondaryDark,
         title: const Text('Wholesalers Catalog'),
         actions: [
           IconButton(
@@ -193,7 +193,7 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
                               ),
                             ),
                             selected: isSelected,
-                            selectedColor: AppTheme.primary,
+                            selectedColor: AppTheme.secondary,
                             backgroundColor: const Color(0xFFECEFF1),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(AppTheme.radiusSm),

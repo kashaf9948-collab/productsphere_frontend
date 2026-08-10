@@ -547,7 +547,7 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
                                           child: ElevatedButton.icon(
                                             onPressed: () => _updateStatus(id, 'shipped'),
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor: AppTheme.primary,
+                                              backgroundColor: AppTheme.primaryDark,
                                               foregroundColor: Colors.white,
                                               elevation: 0,
                                               shape: RoundedRectangleBorder(

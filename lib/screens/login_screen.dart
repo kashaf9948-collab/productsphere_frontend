@@ -13,14 +13,49 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen>
+    with SingleTickerProviderStateMixin {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
   bool _isLoading = false;
   bool _obscurePassword = true;
+
   final box = GetStorage();
 
-  // Helper function to auto-fill for demo purposes
+  // ==============================
+  // Logo Floating Animation
+  // ==============================
+  late AnimationController _logoAnimationController;
+  late Animation<Offset> _logoSlideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _logoAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
+
+    // Smooth Up & Down Motion
+    _logoSlideAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: const Offset(0, -0.28),
+    ).animate(
+      CurvedAnimation(
+        parent: _logoAnimationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    // Continuously move Up ↕ Down
+    _logoAnimationController.repeat(reverse: true);
+  }
+
+  // ==============================
+  // Quick Login Fill
+  // ==============================
   void _quickFill(String email, String password) {
     setState(() {
       _emailController.text = email;
@@ -28,6 +63,9 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  // ==============================
+  // Login
+  // ==============================
   Future<void> _login() async {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
@@ -48,9 +86,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (result['success']) {
       final role = result['data']['user']['role'];
+
       AppSnackbars.success(
         title: "Success",
-        message: "Logged in as ${role[0].toUpperCase()}${role.substring(1)}!",
+        message:
+            "Logged in as ${role[0].toUpperCase()}${role.substring(1)}!",
       );
 
       if (role == 'admin') {
@@ -73,53 +113,68 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24,
+              vertical: 16,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // App Logo Title
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.local_mall_rounded,
-                      color: AppTheme.primary,
-                      size: 36,
-                    ),
-                    const SizedBox(width: 10),
-                    RichText(
-                      text: const TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "Product",
-                            style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.w900,
-                              color: AppTheme.textPrimary,
-                            ),
-                          ),
-                          TextSpan(
-                            text: "Sphere",
-                            style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.w900,
-                              color: AppTheme.primary,
-                            ),
-                          ),
-                        ],
+                // ==============================
+                // Animated ProductSphere Logo
+                // ==============================
+                SlideTransition(
+                  position: _logoSlideAnimation,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.local_mall_rounded,
+                        color: AppTheme.primary,
+                        size: 36,
                       ),
-                    ),
-                  ],
+
+                      const SizedBox(width: 10),
+
+                      RichText(
+                        text: const TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "Product",
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.w900,
+                                color: AppTheme.textPrimary,
+                              ),
+                            ),
+                            TextSpan(
+                              text: "Sphere",
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.w900,
+                                color: AppTheme.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+
                 const SizedBox(height: 32),
 
+                // ==============================
                 // Login Card
+                // ==============================
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(28),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(AppTheme.radiusXl),
+                    borderRadius: BorderRadius.circular(
+                      AppTheme.radiusXl,
+                    ),
                     boxShadow: [AppTheme.cardShadow],
                   ),
                   child: Column(
@@ -135,9 +190,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
+
                       const SizedBox(height: 24),
 
-                      // Email Field
+                      // ==============================
+                      // Email
+                      // ==============================
                       const Text(
                         'Email Address',
                         style: TextStyle(
@@ -146,16 +204,26 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: AppTheme.textPrimary,
                         ),
                       ),
+
                       const SizedBox(height: 8),
+
                       TextField(
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
-                        style: const TextStyle(fontSize: 14, color: AppTheme.textPrimary),
-                        decoration: _inputDecoration('e.g., buyer@productsphere.com'),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: AppTheme.textPrimary,
+                        ),
+                        decoration: _inputDecoration(
+                          'e.g., buyer@productsphere.com',
+                        ),
                       ),
+
                       const SizedBox(height: 18),
 
-                      // Password Field
+                      // ==============================
+                      // Password
+                      // ==============================
                       const Text(
                         'Password',
                         style: TextStyle(
@@ -164,11 +232,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: AppTheme.textPrimary,
                         ),
                       ),
+
                       const SizedBox(height: 8),
+
                       TextField(
                         controller: _passwordController,
                         obscureText: _obscurePassword,
-                        style: const TextStyle(fontSize: 14, color: AppTheme.textPrimary),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: AppTheme.textPrimary,
+                        ),
                         decoration: _inputDecoration(
                           'Enter your password',
                           suffix: IconButton(
@@ -179,13 +252,21 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: AppTheme.textSecondary,
                               size: 20,
                             ),
-                            onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword =
+                                    !_obscurePassword;
+                              });
+                            },
                           ),
                         ),
                       ),
+
                       const SizedBox(height: 28),
 
+                      // ==============================
                       // Login Button
+                      // ==============================
                       SizedBox(
                         width: double.infinity,
                         height: 50,
@@ -193,9 +274,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: _isLoading ? null : _login,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppTheme.primary,
-                            disabledBackgroundColor: AppTheme.primary.withValues(alpha: 0.6),
+                            disabledBackgroundColor:
+                                AppTheme.primary.withValues(
+                              alpha: 0.6,
+                            ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+                              borderRadius: BorderRadius.circular(
+                                AppTheme.radiusMd,
+                              ),
                             ),
                             elevation: 0,
                           ),
@@ -218,11 +304,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                         ),
                       ),
+
                       const SizedBox(height: 20),
 
-                      // Quick Login Section (FYP presentation helper)
-                      const Divider(color: AppTheme.border, height: 20),
+                      // ==============================
+                      // Demo Quick Logins
+                      // ==============================
+                      const Divider(
+                        color: AppTheme.border,
+                        height: 20,
+                      ),
+
                       const SizedBox(height: 8),
+
                       const Text(
                         'Demo Quick Logins',
                         style: TextStyle(
@@ -231,7 +325,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: AppTheme.textSecondary,
                         ),
                       ),
+
                       const SizedBox(height: 8),
+
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
@@ -242,12 +338,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             email: 'admin@productsphere.com',
                             password: 'adminpassword',
                           ),
+
                           _quickLoginChip(
                             label: 'Wholesaler',
                             color: AppTheme.primaryDark,
                             email: 'wholesaler@productsphere.com',
                             password: 'wholesalerpassword',
                           ),
+
                           _quickLoginChip(
                             label: 'Buyer',
                             color: AppTheme.primary,
@@ -259,9 +357,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ),
+
                 const SizedBox(height: 24),
 
-                // Register Redirect
+                // ==============================
+                // Register
+                // ==============================
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -272,8 +373,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontSize: 14,
                       ),
                     ),
+
                     GestureDetector(
-                      onTap: () => Get.to(() => RegisterScreen()),
+                      onTap: () => Get.to(
+                        () => RegisterScreen(),
+                      ),
                       child: const Text(
                         'Register here',
                         style: TextStyle(
@@ -293,6 +397,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  // ==============================
+  // Quick Login Chip
+  // ==============================
   Widget _quickLoginChip({
     required String label,
     required Color color,
@@ -301,40 +408,78 @@ class _LoginScreenState extends State<LoginScreen> {
   }) {
     return ActionChip(
       backgroundColor: color.withValues(alpha: 0.08),
-      side: BorderSide(color: color.withValues(alpha: 0.3)),
+      side: BorderSide(
+        color: color.withValues(alpha: 0.3),
+      ),
       label: Text(
         label,
-        style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.bold),
+        style: TextStyle(
+          color: color,
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+        ),
       ),
-      onPressed: () => _quickFill(email, password),
+      onPressed: () => _quickFill(
+        email,
+        password,
+      ),
     );
   }
 
-  InputDecoration _inputDecoration(String hint, {Widget? suffix}) {
+  // ==============================
+  // Input Decoration
+  // ==============================
+  InputDecoration _inputDecoration(
+    String hint, {
+    Widget? suffix,
+  }) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(color: AppTheme.textHint, fontSize: 13),
+      hintStyle: const TextStyle(
+        color: AppTheme.textHint,
+        fontSize: 13,
+      ),
       filled: true,
       fillColor: const Color(0xFFF1F4F6),
       suffixIcon: suffix,
+
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+        borderRadius: BorderRadius.circular(
+          AppTheme.radiusMd,
+        ),
         borderSide: BorderSide.none,
       ),
+
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+        borderRadius: BorderRadius.circular(
+          AppTheme.radiusMd,
+        ),
         borderSide: BorderSide.none,
       ),
+
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppTheme.radiusMd),
-        borderSide: const BorderSide(color: AppTheme.primary, width: 1.5),
+        borderRadius: BorderRadius.circular(
+          AppTheme.radiusMd,
+        ),
+        borderSide: const BorderSide(
+          color: AppTheme.primary,
+          width: 1.5,
+        ),
       ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 14,
+      ),
     );
   }
 
+  // ==============================
+  // Dispose
+  // ==============================
   @override
   void dispose() {
+    _logoAnimationController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();

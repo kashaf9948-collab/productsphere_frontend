@@ -103,7 +103,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: 0),
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.secondaryDark,
         foregroundColor: Colors.white,
         title: const Text(
           'Admin Control Panel',
@@ -128,9 +128,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [AppTheme.primary, AppTheme.primaryDark],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+                    colors: [AppTheme.secondaryDark, AppTheme.secondary],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                   ),
                   borderRadius: BorderRadius.circular(AppTheme.radiusLg),
                   boxShadow: [AppTheme.cardShadow],
@@ -192,7 +192,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     child: _statCard(
                       label: 'Verified Businesses',
                       value: _approvedWholesalers.length.toString(),
-                      color: Colors.green,
+                      color: AppTheme.secondaryLight,
                       icon: Icons.verified_user_outlined,
                     ),
                   ),
@@ -253,13 +253,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 ),
                 child: Column(
                   children: [
-                    const Icon(Icons.verified_user_rounded, size: 40, color: AppTheme.primary),
+                    const Icon(Icons.verified_user_rounded, size: 40, color: AppTheme.secondaryDark),
                     const SizedBox(height: 12),
                     Text(
                       _pendingWholesalers.isEmpty
                           ? 'No pending applications'
                           : '${_pendingWholesalers.length} Wholesaler applications pending review',
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppTheme.textPrimary),
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppTheme.secondaryDark),
                     ),
                     const SizedBox(height: 12),
                     SizedBox(
@@ -267,10 +267,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       child: OutlinedButton(
                         onPressed: () => Get.toNamed('/admin-verifications'),
                         style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: AppTheme.primary),
+                          side: const BorderSide(color: AppTheme.secondary),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd)),
                         ),
-                        child: const Text('Go to Verifications', style: TextStyle(color: AppTheme.primary)),
+                        child: const Text('Go to Verifications', style: TextStyle(color: AppTheme.secondary)),
                       ),
                     ),
                   ],

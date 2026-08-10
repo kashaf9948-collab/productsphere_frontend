@@ -36,7 +36,10 @@ class WholesalerDrawer extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color.fromARGB(255, 5, 62, 55), Color.fromARGB(255, 0, 121, 107)],
+                  colors: [
+                    AppTheme.primaryDark,
+                    Color.fromARGB(255, 0, 121, 107),
+                  ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),

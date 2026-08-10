@@ -75,7 +75,7 @@ class _BuyersManagementScreenState extends State<BuyersManagementScreen> {
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: 2), // Maps to Users/Buyers tab
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.secondaryDark,
         title: const Text('Registered Buyers'),
         actions: [
           IconButton(

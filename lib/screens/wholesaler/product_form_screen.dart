@@ -254,7 +254,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = AppTheme.primary;
+    final primaryColor = AppTheme.primaryDark;
     final hasImage = _imageBytes != null || (_existingImageBase64 != null && _existingImageBase64!.isNotEmpty);
 
     return Scaffold(

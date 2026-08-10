@@ -33,8 +33,20 @@ class ClientDrawer extends StatelessWidget {
             // Header
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-              color: AppTheme.primary, // Teal
+  padding: const EdgeInsets.symmetric(
+    horizontal: 20,
+    vertical: 24,
+  ),
+  decoration: const BoxDecoration(
+    gradient: LinearGradient(
+      colors: [
+        AppTheme.primaryDark,
+        Color.fromARGB(255, 0, 121, 107),
+      ],
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+    ),
+  ), // Teal
               child: Row(
                 children: [
                   CircleAvatar(

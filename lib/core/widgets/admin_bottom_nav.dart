@@ -9,7 +9,7 @@ class AdminBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeColor = AppTheme.primary;
+    final activeColor = AppTheme.secondary;
     const inactiveColor = Color(0xFF546E7A);
 
     return Container(

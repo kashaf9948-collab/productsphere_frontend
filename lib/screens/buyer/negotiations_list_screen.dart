@@ -53,7 +53,7 @@ class _NegotiationsListScreenState extends State<NegotiationsListScreen> {
                 ? _buildEmptyState()
                 : RefreshIndicator(
                     onRefresh: _fetchBids,
-                    color: AppTheme.primary,
+                    color: AppTheme.primaryDark,
                     child: ListView.separated(
                       padding: const EdgeInsets.all(16),
                       itemCount: _bids.length,

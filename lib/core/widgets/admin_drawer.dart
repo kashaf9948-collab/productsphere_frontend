@@ -34,7 +34,14 @@ class AdminDrawer extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-              color: AppTheme.primary,
+           decoration: const BoxDecoration(
+    gradient: LinearGradient(
+      colors: [
+        AppTheme.secondaryDark, AppTheme.secondary,],
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+    ),
+  ), //
               child: Row(
                 children: [
                   CircleAvatar(

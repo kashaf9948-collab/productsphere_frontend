@@ -44,7 +44,7 @@ class _AdminVerificationsScreenState extends State<AdminVerificationsScreen> {
         child: Card(
           child: Padding(
             padding: EdgeInsets.all(20.0),
-            child: CircularProgressIndicator(color: AppTheme.primary),
+            child: CircularProgressIndicator(color: AppTheme.secondary),
           ),
         ),
       ),
@@ -122,7 +122,7 @@ class _AdminVerificationsScreenState extends State<AdminVerificationsScreen> {
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: 1),
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.secondaryDark,
         foregroundColor: Colors.white,
         title: const Text('Business Verifications', style: TextStyle(fontWeight: FontWeight.bold)),
         actions: [
@@ -134,7 +134,7 @@ class _AdminVerificationsScreenState extends State<AdminVerificationsScreen> {
       ),
       body: SafeArea(
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator(color: AppTheme.primary))
+            ? const Center(child: CircularProgressIndicator(color: AppTheme.secondary))
             : _pendingWholesalers.isEmpty
                 ? _buildEmptyState()
                 : ListView.builder(
@@ -159,7 +159,7 @@ class _AdminVerificationsScreenState extends State<AdminVerificationsScreen> {
             CircleAvatar(
               radius: 48,
               backgroundColor: AppTheme.primaryLight,
-              child: const Icon(Icons.verified_rounded, size: 48, color: AppTheme.primary),
+              child: const Icon(Icons.verified_rounded, size: 48, color: AppTheme.secondary),
             ),
             const SizedBox(height: 18),
             const Text(
@@ -210,7 +210,7 @@ class _AdminVerificationsScreenState extends State<AdminVerificationsScreen> {
                 CircleAvatar(
                   backgroundColor: AppTheme.primaryLight,
                   radius: 20,
-                  child: const Icon(Icons.business_rounded, color: AppTheme.primary, size: 20),
+                  child: const Icon(Icons.business_rounded, color: AppTheme.secondaryDark, size: 20),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
