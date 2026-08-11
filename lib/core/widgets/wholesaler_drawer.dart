@@ -33,8 +33,15 @@ class WholesalerDrawer extends StatelessWidget {
             // Header
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-              color: AppTheme.primaryDark,
+              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 24, ),
+              decoration: const BoxDecoration(
+              gradient: LinearGradient(
+              colors: [AppTheme.primaryDark, AppTheme.primary,],
+                begin: Alignment.topCenter,
+                 end: Alignment.bottomCenter,
+                  ),
+                ), // Teal
+  
               child: Row(
                 children: [
                   CircleAvatar(
@@ -128,6 +135,7 @@ class WholesalerDrawer extends StatelessWidget {
               label: 'Business Settings',
               onTap: () {
                 Get.back();
+                Get.toNamed('/business-settings');
               },
             ),
 
