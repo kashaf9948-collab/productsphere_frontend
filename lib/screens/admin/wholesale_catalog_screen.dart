@@ -9,7 +9,7 @@ import '../../core/widgets/dialogs.dart';
 import '../../core/widgets/snackbars.dart';
 
 class WholesaleCatalogScreen extends StatefulWidget {
-  const WholesaleCatalogScreen({Key? key}) : super(key: key);
+  const WholesaleCatalogScreen({super.key});
 
   @override
   State<WholesaleCatalogScreen> createState() => _WholesaleCatalogScreenState();
@@ -128,14 +128,14 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: -1),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.secondaryDark,
         foregroundColor: Colors.white,
         onPressed: () => Get.toNamed('/wholesaler-product-form')?.then((_) => _fetchProducts()),
         icon: const Icon(Icons.add_circle_outline_rounded),
         label: const Text('Publish on Behalf'),
       ),
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.secondaryDark,
         title: const Text('Wholesalers Catalog'),
         actions: [
           IconButton(
@@ -161,9 +161,9 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
                     },
                     decoration: InputDecoration(
                       hintText: 'Search product or wholesaler...',
-                      prefixIcon: const Icon(Icons.search_rounded, color: AppTheme.textSecondary),
+                      prefixIcon: const Icon(Icons.search_rounded, color: AppTheme.textThird),
                       filled: true,
-                      fillColor: const Color(0xFFF1F4F6),
+                      fillColor: AppTheme.textLight,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                         borderSide: BorderSide.none,
@@ -189,11 +189,11 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
-                                color: isSelected ? Colors.white : AppTheme.textPrimary,
+                                color: isSelected ? Colors.white : AppTheme.secondaryDark,
                               ),
                             ),
                             selected: isSelected,
-                            selectedColor: AppTheme.primary,
+                            selectedColor: AppTheme.secondaryDark,
                             backgroundColor: const Color(0xFFECEFF1),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(AppTheme.radiusSm),
@@ -219,7 +219,7 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
             Expanded(
               child: _isLoading
                   ? const Center(
-                      child: CircularProgressIndicator(color: AppTheme.primary),
+                      child: CircularProgressIndicator(color: AppTheme.secondary),
                     )
                   : _filteredProducts.isEmpty
                       ? _buildEmptyState()
@@ -293,7 +293,7 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppTheme.radiusMd),
         boxShadow: [AppTheme.cardShadow],
-        border: isFlagged ? Border.all(color: AppTheme.expired.withOpacity(0.5), width: 1.5) : null,
+        border: isFlagged ? Border.all(color: AppTheme.expired.withValues(alpha: 0.5), width: 1.5) : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -306,24 +306,24 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: isFlagged ? Colors.red.shade50 : AppTheme.primaryLight,
+                  color: isFlagged ? Colors.red.shade50 : AppTheme.textLight,
                   borderRadius: BorderRadius.circular(AppTheme.radiusSm),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(AppTheme.radiusSm),
                   child: hasImage
                       ? Image.memory(
-                          base64Decode(productImage!),
+                          base64Decode(productImage),
                           fit: BoxFit.cover,
                           errorBuilder: (_, __, ___) => Icon(
                             categoryIcon,
-                            color: isFlagged ? AppTheme.expired : AppTheme.primary,
+                            color: isFlagged ? AppTheme.expired : AppTheme.secondary,
                             size: 24,
                           ),
                         )
                       : Icon(
                           categoryIcon,
-                          color: isFlagged ? AppTheme.expired : AppTheme.primary,
+                          color: isFlagged ? AppTheme.expired : AppTheme.secondary,
                           size: 24,
                         ),
                 ),

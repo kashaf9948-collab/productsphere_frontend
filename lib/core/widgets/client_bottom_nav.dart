@@ -5,7 +5,7 @@ import '../utils/theme.dart';
 class ClientBottomNav extends StatelessWidget {
   final int activeIndex; // 0=Shop, 1=Negotiations, 2=Profile, 3=Settings
 
-  const ClientBottomNav({Key? key, required this.activeIndex}) : super(key: key);
+  const ClientBottomNav({super.key, required this.activeIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class ClientBottomNav extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),

@@ -5,7 +5,6 @@ import '../../core/utils/theme.dart';
 import '../../core/widgets/client_bottom_nav.dart';
 import '../../core/widgets/wholesaler_bottom_nav.dart';
 import '../../core/widgets/admin_bottom_nav.dart';
-import '../../core/widgets/snackbars.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

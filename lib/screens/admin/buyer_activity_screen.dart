@@ -4,7 +4,7 @@ import '../../core/services/product_service.dart';
 import '../../core/utils/theme.dart';
 
 class BuyerActivityScreen extends StatefulWidget {
-  const BuyerActivityScreen({Key? key}) : super(key: key);
+  const BuyerActivityScreen({super.key});
 
   @override
   State<BuyerActivityScreen> createState() => _BuyerActivityScreenState();
@@ -54,7 +54,7 @@ class _BuyerActivityScreenState extends State<BuyerActivityScreen> {
       child: Scaffold(
         backgroundColor: AppTheme.background,
         appBar: AppBar(
-          backgroundColor: AppTheme.primary,
+          backgroundColor: AppTheme.secondaryDark,
           title: Text("$name's Activity Logs"),
           bottom: const TabBar(
             labelColor: Colors.white,
@@ -149,7 +149,7 @@ class _BuyerActivityScreenState extends State<BuyerActivityScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text('Total Amount:', style: TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
-                    Text('Rs ${total.toStringAsFixed(0)}', style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.primary)),
+                    Text('Rs ${total.toStringAsFixed(0)}', style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.secondary)),
                   ],
                 ),
                 const SizedBox(height: 4),

@@ -7,7 +7,7 @@ import '../../core/widgets/client_bottom_nav.dart';
 import '../../core/widgets/snackbars.dart';
 
 class BidCheckoutScreen extends StatefulWidget {
-  const BidCheckoutScreen({Key? key}) : super(key: key);
+  const BidCheckoutScreen({super.key});
 
   @override
   State<BidCheckoutScreen> createState() => _BidCheckoutScreenState();
@@ -107,6 +107,7 @@ class _BidCheckoutScreenState extends State<BidCheckoutScreen> {
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
+
         title: const Text('Convert Bid to Order'),
       ),
       body: SafeArea(
@@ -324,7 +325,7 @@ class _BidCheckoutScreenState extends State<BidCheckoutScreen> {
                   ),
                   const SizedBox(height: 16),
                   _isSubmitting
-                      ? const Center(child: CircularProgressIndicator(color: AppTheme.primary))
+                      ? const Center(child: CircularProgressIndicator(color: AppTheme.primaryDark))
                       : ElevatedButton(
                           onPressed: _processCheckout,
                           child: const Text('Place Negotiation Order'),

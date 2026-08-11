@@ -8,7 +8,7 @@ import '../../core/widgets/dialogs.dart';
 import '../../core/widgets/snackbars.dart';
 
 class CategoryManagementScreen extends StatefulWidget {
-  const CategoryManagementScreen({Key? key}) : super(key: key);
+  const CategoryManagementScreen({super.key});
 
   @override
   State<CategoryManagementScreen> createState() => _CategoryManagementScreenState();
@@ -89,7 +89,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.primary,
+              backgroundColor: AppTheme.secondaryDark,
               minimumSize: const Size(100, 45),
             ),
             onPressed: () async {
@@ -170,7 +170,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: -1),
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.secondaryDark,
         title: const Text('Category Management'),
         actions: [
           IconButton(
@@ -180,7 +180,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.secondaryDark,
         foregroundColor: Colors.white,
         onPressed: () => _showCategoryDialog(),
         child: const Icon(Icons.add),
@@ -188,7 +188,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       body: SafeArea(
         child: _isLoading
             ? const Center(
-                child: CircularProgressIndicator(color: AppTheme.primary),
+                child: CircularProgressIndicator(color: AppTheme.secondary),
               )
             : _categories.isEmpty
                 ? Center(
@@ -204,7 +204,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                         const SizedBox(height: 8),
                         const Text(
                           'Click the + button to add a new category.',
-                          style: TextStyle(fontSize: 14, color: AppTheme.textSecondary),
+                          style: TextStyle(fontSize: 14, color: AppTheme.secondary),
                         ),
                       ],
                     ),
@@ -227,8 +227,8 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(16),
                           leading: CircleAvatar(
-                            backgroundColor: AppTheme.primaryLight,
-                            child: Icon(Icons.category_rounded, color: AppTheme.primary),
+                            backgroundColor: AppTheme.textLight,
+                            child: Icon(Icons.category_rounded, color: AppTheme.secondaryDark),
                           ),
                           title: Text(
                             name,

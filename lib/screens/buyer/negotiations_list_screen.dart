@@ -6,7 +6,7 @@ import '../../core/widgets/client_drawer.dart';
 import '../../core/widgets/client_bottom_nav.dart';
 
 class NegotiationsListScreen extends StatefulWidget {
-  const NegotiationsListScreen({Key? key}) : super(key: key);
+  const NegotiationsListScreen({super.key});
 
   @override
   State<NegotiationsListScreen> createState() => _NegotiationsListScreenState();
@@ -37,7 +37,10 @@ class _NegotiationsListScreenState extends State<NegotiationsListScreen> {
       backgroundColor: AppTheme.background,
       drawer: const ClientDrawer(),
       bottomNavigationBar: const ClientBottomNav(activeIndex: 1),
+      
       appBar: AppBar(
+       backgroundColor: AppTheme.primaryDark,
+        foregroundColor: Colors.white,
         title: const Text('My Sent Bids'),
         actions: [
           IconButton(
@@ -209,7 +212,7 @@ class _NegotiationsListScreenState extends State<NegotiationsListScreen> {
                   ElevatedButton(
                     onPressed: () => Get.toNamed('/bid-checkout', arguments: bid),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.active,
+                      backgroundColor: AppTheme.primary,
                       foregroundColor: Colors.white,
                       minimumSize: const Size(120, 36),
                       padding: const EdgeInsets.symmetric(horizontal: 16),

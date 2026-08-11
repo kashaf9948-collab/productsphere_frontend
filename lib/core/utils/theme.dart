@@ -14,6 +14,7 @@ class AppTheme {
   static const Color surface = Color(0xFFFFFFFF);
   static const Color background = Color(0xFFF5F7FA);
 
+
   // ── Status Colors ─────────────────────────────────────────
   static const Color active = Color(0xFF2E7D32); // Green
   static const Color activeLight = Color(0xFFE8F5E9);
@@ -28,6 +29,8 @@ class AppTheme {
   static const Color textHint = Color(0xFF90A4AE);
   static const Color textOnPrimary = Color(0xFFFFFFFF);
   static const Color textDark = Color(0xFF1A252C);
+  static const Color textThird = Color(0xFF8B7DB8);
+  static const Color textLight = Color(0xFFE5E0F1);
 
   // ── Border & Shadow ───────────────────────────────────────
   static const Color border = Color(0xFFCFD8DC);

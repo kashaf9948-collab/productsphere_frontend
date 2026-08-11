@@ -8,7 +8,7 @@ import '../../core/widgets/dialogs.dart';
 import '../../core/widgets/snackbars.dart';
 
 class WholesalerNegotiationsScreen extends StatefulWidget {
-  const WholesalerNegotiationsScreen({Key? key}) : super(key: key);
+  const WholesalerNegotiationsScreen({super.key});
 
   @override
   State<WholesalerNegotiationsScreen> createState() => _WholesalerNegotiationsScreenState();
@@ -75,7 +75,7 @@ class _WholesalerNegotiationsScreenState extends State<WholesalerNegotiationsScr
       drawer: const WholesalerDrawer(),
       bottomNavigationBar: const WholesalerBottomNav(activeIndex: 2),
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.primaryDark,
         title: const Text('Received Bids & Price Offers'),
         actions: [
           IconButton(
@@ -143,7 +143,7 @@ class _WholesalerNegotiationsScreenState extends State<WholesalerNegotiationsScr
     Color badgeColor = AppTheme.pending;
     Color badgeBg = AppTheme.pendingLight;
     if (status == 'accepted') {
-      badgeColor = AppTheme.active;
+      badgeColor = AppTheme.primary;
       badgeBg = AppTheme.activeLight;
     } else if (status == 'ordered') {
       badgeColor = Colors.blue;

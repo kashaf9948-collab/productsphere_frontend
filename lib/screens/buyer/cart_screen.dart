@@ -9,7 +9,7 @@ import '../../core/utils/theme.dart';
 import '../../core/widgets/snackbars.dart';
 
 class CartScreen extends StatefulWidget {
-  const CartScreen({Key? key}) : super(key: key);
+  const CartScreen({super.key});
 
   @override
   State<CartScreen> createState() => _CartScreenState();
@@ -147,6 +147,7 @@ class _CartScreenState extends State<CartScreen> {
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
+        backgroundColor: AppTheme.primaryDark,
         title: const Text('Your Cart & Checkout'),
       ),
       body: Obx(() {
@@ -177,6 +178,7 @@ class _CartScreenState extends State<CartScreen> {
                   ElevatedButton(
                     onPressed: () => Get.back(),
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.primaryDark,
                       minimumSize: const Size(200, 48),
                     ),
                     child: const Text("Go to Marketplace"),
@@ -275,7 +277,7 @@ class _CartScreenState extends State<CartScreen> {
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, -3),
                   )
@@ -432,7 +434,7 @@ class _CartScreenState extends State<CartScreen> {
                             decoration: BoxDecoration(
                               color: const Color(0xFFE0F2F1),
                               borderRadius: BorderRadius.circular(AppTheme.radiusMd),
-                              border: Border.all(color: AppTheme.primary.withOpacity(0.3)),
+                              border: Border.all(color: AppTheme.primary.withValues(alpha: 0.3)),
                             ),
                             child: Row(
                               children: [
@@ -493,7 +495,7 @@ class _CartScreenState extends State<CartScreen> {
                                           bottom: 0, left: 0, right: 0,
                                           child: Container(
                                             decoration: BoxDecoration(
-                                              color: Colors.black.withOpacity(0.45),
+                                              color: Colors.black.withValues(alpha: 0.45),
                                               borderRadius: const BorderRadius.vertical(bottom: Radius.circular(AppTheme.radiusMd - 1)),
                                             ),
                                             padding: const EdgeInsets.symmetric(vertical: 4),
@@ -537,6 +539,10 @@ class _CartScreenState extends State<CartScreen> {
                             ? const Center(child: CircularProgressIndicator(color: AppTheme.primary))
                             : ElevatedButton(
                                 onPressed: () => _processCheckout(cart),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppTheme.primaryDark,
+                                  minimumSize: const Size(double.infinity, 50),
+                                ),
                                 child: const Text("Confirm Order & Checkout"),
                               ),
                       ],

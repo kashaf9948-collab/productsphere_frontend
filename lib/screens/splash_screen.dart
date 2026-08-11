@@ -7,7 +7,7 @@ import '../routes/app_routes.dart';
 import '../core/utils/theme.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -83,7 +83,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: AppTheme.primary.withOpacity(0.2),
+                          color: AppTheme.primary.withValues(alpha: 0.2),
                           blurRadius: 15,
                           spreadRadius: 2,
                           offset: const Offset(0, 4),

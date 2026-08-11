@@ -10,7 +10,7 @@ import '../../core/widgets/dialogs.dart';
 import '../../core/widgets/snackbars.dart';
 
 class WholesalerInventoryScreen extends StatefulWidget {
-  const WholesalerInventoryScreen({Key? key}) : super(key: key);
+  const WholesalerInventoryScreen({super.key});
 
   @override
   State<WholesalerInventoryScreen> createState() => _WholesalerInventoryScreenState();
@@ -99,7 +99,7 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
       drawer: const WholesalerDrawer(),
       bottomNavigationBar: const WholesalerBottomNav(activeIndex: 1),
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.primaryDark,
         title: const Text('My Inventory'),
         actions: [
           IconButton(
@@ -109,7 +109,7 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.primaryDark,
         foregroundColor: Colors.white,
         onPressed: () => Get.toNamed('/wholesaler-product-form')?.then((_) => _fetchProducts()),
         icon: const Icon(Icons.add_circle_outline_rounded),
@@ -179,7 +179,7 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
                                       borderRadius: BorderRadius.circular(AppTheme.radiusSm),
                                       child: hasImage
                                           ? Image.memory(
-                                              base64Decode(productImage!),
+                                              base64Decode(productImage),
                                               fit: BoxFit.cover,
                                               errorBuilder: (_, __, ___) => const Icon(
                                                 Icons.shopping_bag_outlined,

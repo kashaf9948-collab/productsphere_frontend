@@ -6,7 +6,7 @@ import '../../core/widgets/client_bottom_nav.dart';
 import '../../core/widgets/snackbars.dart';
 
 class BuyerSettingsScreen extends StatefulWidget {
-  const BuyerSettingsScreen({Key? key}) : super(key: key);
+  const BuyerSettingsScreen({super.key});
 
   @override
   State<BuyerSettingsScreen> createState() => _BuyerSettingsScreenState();
@@ -132,7 +132,7 @@ class _BuyerSettingsScreenState extends State<BuyerSettingsScreen>
       backgroundColor: AppTheme.background,
       bottomNavigationBar: const ClientBottomNav(activeIndex: 3),
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.primaryDark,
         foregroundColor: Colors.white,
         title: const Text('Settings', style: TextStyle(fontWeight: FontWeight.bold)),
         actions: [
@@ -178,9 +178,9 @@ class _BuyerSettingsScreenState extends State<BuyerSettingsScreen>
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [AppTheme.primary, AppTheme.primaryDark],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+                colors: [AppTheme.primaryDark, AppTheme.primary],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
               borderRadius: BorderRadius.circular(AppTheme.radiusLg),
               boxShadow: [AppTheme.cardShadow],
@@ -189,7 +189,7 @@ class _BuyerSettingsScreenState extends State<BuyerSettingsScreen>
               children: [
                 CircleAvatar(
                   radius: 30,
-                  backgroundColor: Colors.white.withOpacity(0.25),
+                  backgroundColor: Colors.white.withValues(alpha: 0.25),
                   child: Text(initial, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
                 ),
                 const SizedBox(width: 16),
@@ -199,7 +199,7 @@ class _BuyerSettingsScreenState extends State<BuyerSettingsScreen>
                     children: [
                       Text(name, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 4),
-                      Text(email, style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12)),
+                      Text(email, style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 12)),
                     ],
                   ),
                 ),
@@ -241,7 +241,7 @@ class _BuyerSettingsScreenState extends State<BuyerSettingsScreen>
               icon: const Icon(Icons.save_rounded, size: 18),
               label: const Text('Save Profile'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primary,
+                backgroundColor: AppTheme.primaryDark,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd)),
               ),
@@ -342,7 +342,7 @@ class _BuyerSettingsScreenState extends State<BuyerSettingsScreen>
               icon: const Icon(Icons.lock_reset_rounded, size: 18),
               label: const Text('Update Password'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primary,
+                backgroundColor: AppTheme.primaryDark,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd)),
               ),
@@ -399,7 +399,7 @@ class _BuyerSettingsScreenState extends State<BuyerSettingsScreen>
               icon: const Icon(Icons.save_rounded, size: 18),
               label: const Text('Save Preferences'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primary,
+                backgroundColor: AppTheme.primaryDark,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd)),
               ),
@@ -455,7 +455,7 @@ class _BuyerSettingsScreenState extends State<BuyerSettingsScreen>
             ],
           ),
         ),
-        Switch(activeColor: AppTheme.primary, value: value, onChanged: onChanged),
+        Switch(activeThumbColor: AppTheme.primary, value: value, onChanged: onChanged),
       ],
     );
   }

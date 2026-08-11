@@ -8,7 +8,7 @@ import '../../core/widgets/admin_drawer.dart';
 import '../../core/widgets/snackbars.dart';
 
 class AdminSettingsScreen extends StatefulWidget {
-  const AdminSettingsScreen({Key? key}) : super(key: key);
+  const AdminSettingsScreen({super.key});
 
   @override
   State<AdminSettingsScreen> createState() => _AdminSettingsScreenState();
@@ -141,7 +141,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen>
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: 3),
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.secondaryDark,
         foregroundColor: Colors.white,
         title: const Text('System Settings', style: TextStyle(fontWeight: FontWeight.bold)),
         actions: [
@@ -170,7 +170,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen>
         ),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: AppTheme.primary))
+          ? const Center(child: CircularProgressIndicator(color: AppTheme.secondary))
           : TabBarView(
               controller: _tabController,
               children: [
@@ -214,12 +214,12 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen>
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                     decoration: BoxDecoration(
-                      color: AppTheme.primaryLight,
+                      color: AppTheme.textLight,
                       borderRadius: BorderRadius.circular(AppTheme.radiusSm),
                     ),
                     child: Text(
                       '${_commissionPercent.round()}%',
-                      style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.primary, fontSize: 14),
+                      style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.secondary, fontSize: 14),
                     ),
                   ),
                 ],
@@ -229,7 +229,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen>
                 min: 0,
                 max: 20,
                 divisions: 20,
-                activeColor: AppTheme.primary,
+                activeColor: AppTheme.secondary,
                 inactiveColor: AppTheme.border,
                 onChanged: (v) => setState(() => _commissionPercent = v),
               ),
@@ -241,12 +241,12 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen>
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                     decoration: BoxDecoration(
-                      color: AppTheme.primaryLight,
+                      color: AppTheme.textLight,
                       borderRadius: BorderRadius.circular(AppTheme.radiusSm),
                     ),
                     child: Text(
                       '${_maxNegotiationRounds.round()} rounds',
-                      style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.primary, fontSize: 14),
+                      style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.secondary, fontSize: 14),
                     ),
                   ),
                 ],
@@ -256,7 +256,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen>
                 min: 1,
                 max: 10,
                 divisions: 9,
-                activeColor: AppTheme.primary,
+                activeColor: AppTheme.secondary,
                 inactiveColor: AppTheme.border,
                 onChanged: (v) => setState(() => _maxNegotiationRounds = v),
               ),
@@ -304,20 +304,20 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen>
                   Row(
                     children: [
                       Icon(Icons.construction_rounded,
-                          color: _maintenanceMode ? Colors.orange.shade700 : AppTheme.textSecondary, size: 18),
+                          color: _maintenanceMode ? Colors.orange.shade700 : AppTheme.textThird, size: 18),
                       const SizedBox(width: 8),
                       Text(
                         'Maintenance Mode',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
-                          color: _maintenanceMode ? Colors.orange.shade800 : AppTheme.textPrimary,
+                          color: _maintenanceMode ? Colors.orange.shade800 : AppTheme.secondaryDark,
                         ),
                       ),
                       const Spacer(),
                       Switch(
                         value: _maintenanceMode,
-                        activeColor: Colors.orange.shade700,
+                        activeThumbColor: Colors.orange.shade700,
                         onChanged: (v) => setState(() => _maintenanceMode = v),
                       ),
                     ],
@@ -329,15 +329,14 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen>
                         : 'When enabled, the platform will be inaccessible to buyers and sellers.',
                     style: TextStyle(
                       fontSize: 12,
-                      color: _maintenanceMode ? Colors.orange.shade700 : AppTheme.textSecondary,
+                      color: _maintenanceMode ? Colors.orange.shade700 : AppTheme.secondary,
                     ),
                   ),
                 ],
-              ),
+              )
             ),
           ),
           const SizedBox(height: 24),
-
           SizedBox(
             width: double.infinity,
             height: 50,
@@ -346,7 +345,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen>
               icon: const Icon(Icons.save_rounded, size: 18),
               label: const Text('Save Platform Settings'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primary,
+                backgroundColor: AppTheme.secondaryDark,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd)),
               ),
@@ -418,7 +417,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen>
               icon: const Icon(Icons.save_rounded, size: 18),
               label: const Text('Save Account Settings'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primary,
+                backgroundColor: AppTheme.secondaryDark,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd)),
               ),
@@ -444,9 +443,9 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(children: [
-            Icon(icon, size: 18, color: AppTheme.primary),
+            Icon(icon, size: 18, color: AppTheme.secondaryDark),
             const SizedBox(width: 8),
-            Text(title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppTheme.textPrimary)),
+            Text(title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppTheme.secondaryDark)),
           ]),
           const Divider(color: AppTheme.border, height: 20),
           ...children,
@@ -464,11 +463,11 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen>
             children: [
               Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
               const SizedBox(height: 2),
-              Text(subtitle, style: const TextStyle(fontSize: 11, color: AppTheme.textSecondary)),
+              Text(subtitle, style: const TextStyle(fontSize: 11, color: AppTheme.textThird)),
             ],
           ),
         ),
-        Switch(activeColor: AppTheme.primary, value: value, onChanged: onChanged),
+        Switch(activeThumbColor: AppTheme.secondary, value: value, onChanged: onChanged),
       ],
     );
   }
@@ -487,7 +486,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen>
           fillColor: Colors.white,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd), borderSide: BorderSide(color: Colors.grey.shade300)),
           enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd), borderSide: BorderSide(color: Colors.grey.shade200)),
-          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd), borderSide: const BorderSide(color: AppTheme.primary, width: 1.5)),
+          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd), borderSide: const BorderSide(color: AppTheme.secondary, width: 1.5)),
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         ),
       );
@@ -502,10 +501,10 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen>
           hintStyle: const TextStyle(color: AppTheme.textHint, fontSize: 13),
           filled: true,
           fillColor: Colors.white,
-          suffixIcon: IconButton(icon: Icon(obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined, size: 20, color: AppTheme.textSecondary), onPressed: toggle),
+          suffixIcon: IconButton(icon: Icon(obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined, size: 20, color: AppTheme.secondary), onPressed: toggle),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd), borderSide: BorderSide(color: Colors.grey.shade300)),
           enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd), borderSide: BorderSide(color: Colors.grey.shade200)),
-          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd), borderSide: const BorderSide(color: AppTheme.primary, width: 1.5)),
+          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd), borderSide: const BorderSide(color: AppTheme.secondary, width: 1.5)),
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         ),
       );

@@ -14,7 +14,7 @@ import '../../core/widgets/client_bottom_nav.dart';
 import '../../core/widgets/dialogs.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({super.key});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -135,7 +135,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ? const WholesalerBottomNav(activeIndex: 0)
           : const ClientBottomNav(activeIndex: 0),
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.primaryDark,
         foregroundColor: Colors.white,
         title: Text(
           isWholesaler ? 'Wholesaler Portal' : 'Buyer Marketplace',
@@ -191,9 +191,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [AppTheme.primary, Color(0xFF009688)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+                   colors: [AppTheme.primaryDark, Color.fromARGB(255, 0, 121, 107)],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                   ),
                   borderRadius: BorderRadius.circular(AppTheme.radiusLg),
                   boxShadow: [AppTheme.cardShadow],
@@ -205,7 +205,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       children: [
                         CircleAvatar(
                           radius: 28,
-                          backgroundColor: Colors.white.withOpacity(0.25),
+                          backgroundColor: Colors.white.withValues(alpha: 0.25),
                           child: Text(
                             name.isNotEmpty ? name[0].toUpperCase() : '?',
                             style: const TextStyle(
@@ -232,7 +232,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               Text(
                                 isWholesaler ? 'Role: Wholesaler / Donor' : 'Role: Buyer / Retailer',
                                 style: TextStyle(
-                                  color: Colors.white.withOpacity(0.85),
+                                  color: Colors.white.withValues(alpha: 0.85),
                                   fontSize: 13,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -248,11 +248,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       children: [
                         Text(
                           email,
-                          style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 13),
+                          style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 13),
                         ),
                         Text(
                           phone,
-                          style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 13),
+                          style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 13),
                         ),
                       ],
                     ),
@@ -475,7 +475,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         value: w['id'],
                         child: Text(w['name'] ?? 'Wholesaler'),
                       );
-                    }).toList(),
+                    }),
                   ],
                   onChanged: (val) {
                     setState(() {
@@ -519,7 +519,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     _applyFilters();
                   });
                 });
-              }).toList(),
+              }),
             ],
           ),
         ),
@@ -628,7 +628,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundColor: color.withOpacity(0.08),
+            backgroundColor: color.withValues(alpha: 0.08),
             child: Icon(icon, color: color, size: 20),
           ),
           const SizedBox(width: 14),
@@ -678,7 +678,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: AppTheme.primary.withOpacity(0.2),
+                    color: AppTheme.primary.withValues(alpha: 0.2),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   )
@@ -719,7 +719,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.08),
+                color: color.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(AppTheme.radiusSm),
               ),
               child: Icon(icon, color: color, size: 24),
@@ -772,7 +772,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         border: Border.all(color: Colors.grey.shade200, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.01),
+            color: Colors.black.withValues(alpha: 0.01),
             blurRadius: 6,
             offset: const Offset(0, 3),
           )

@@ -6,7 +6,7 @@ import '../../core/widgets/admin_drawer.dart';
 import '../../core/widgets/admin_bottom_nav.dart';
 
 class AdminNegotiationsScreen extends StatefulWidget {
-  const AdminNegotiationsScreen({Key? key}) : super(key: key);
+  const AdminNegotiationsScreen({super.key});
 
   @override
   State<AdminNegotiationsScreen> createState() => _AdminNegotiationsScreenState();
@@ -38,7 +38,7 @@ class _AdminNegotiationsScreenState extends State<AdminNegotiationsScreen> {
       drawer: const AdminDrawer(),
       bottomNavigationBar: const AdminBottomNav(activeIndex: -1),
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.secondaryDark,
         title: const Text('B2B Price Bids & Negotiations'),
         actions: [
           IconButton(
@@ -171,7 +171,7 @@ class _AdminNegotiationsScreenState extends State<AdminNegotiationsScreen> {
                   children: [
                     Text(
                       'Bid Proposal: Rs ${bidPrice.toStringAsFixed(0)}',
-                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppTheme.primary),
+                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppTheme.secondary),
                     ),
                     const SizedBox(height: 2),
                     Text(

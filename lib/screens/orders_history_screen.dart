@@ -12,7 +12,7 @@ import '../core/widgets/snackbars.dart';
 import '../core/widgets/dialogs.dart';
 
 class OrdersHistoryScreen extends StatefulWidget {
-  const OrdersHistoryScreen({Key? key}) : super(key: key);
+  const OrdersHistoryScreen({super.key});
 
   @override
   State<OrdersHistoryScreen> createState() => _OrdersHistoryScreenState();
@@ -143,7 +143,7 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
           ? const WholesalerBottomNav(activeIndex: -1)
           : const ClientBottomNav(activeIndex: -1),
       appBar: AppBar(
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.primaryDark,
         title: Text(isWholesaler ? 'Incoming Purchase Orders' : 'My Placed Orders'),
         actions: [
           IconButton(
@@ -337,7 +337,7 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
                                         Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                           decoration: BoxDecoration(
-                                            color: statusColor.withOpacity(0.1),
+                                            color: statusColor.withValues(alpha: 0.1),
                                             borderRadius: BorderRadius.circular(AppTheme.radiusSm),
                                           ),
                                           child: Text(
@@ -501,7 +501,7 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
                                           ],
                                         ),
                                       );
-                                    }).toList(),
+                                    }),
 
                                     const Divider(height: 24, color: AppTheme.border),
 
@@ -548,7 +548,7 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
                                           child: ElevatedButton.icon(
                                             onPressed: () => _updateStatus(id, 'shipped'),
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor: AppTheme.primary,
+                                              backgroundColor: AppTheme.primaryDark,
                                               foregroundColor: Colors.white,
                                               elevation: 0,
                                               shape: RoundedRectangleBorder(
