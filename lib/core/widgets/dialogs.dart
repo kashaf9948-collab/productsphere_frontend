@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import '../utils/theme.dart';
-import '../services/product_service.dart';
-import 'snackbars.dart';
+import '../theme/theme.dart';
+import 'package:kashaf_frontend/features/buyer/services/buyer_service.dart';
+import './snackbars.dart';
 
 // Standalone loading loader dialog
 void showLoadingDialog({Color color = AppTheme.primary}) {
@@ -96,7 +96,7 @@ void showBidDialog({
 
   List<dynamic> bids = [];
   try {
-    bids = await ProductService.fetchBuyerBids();
+    bids = await BuyerService.fetchBuyerBids();
   } catch (e) {
     print('Failed to check bids: $e');
   }
@@ -180,7 +180,7 @@ void showBidDialog({
             Get.back(); // close input dialog
 
             showLoadingDialog();
-            final result = await ProductService.submitBid(
+            final result = await BuyerService.submitBid(
               productId: productId,
               productName: name,
               originalPrice: catalogPrice,
