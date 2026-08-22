@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../utils/theme.dart';
-import '../utils/theme.dart';
 
 class AdminBottomNav extends StatelessWidget {
   final int activeIndex; // 0=Home, 1=Verifications, 2=Users, 3=Profile

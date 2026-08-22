@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:get/get.dart';
 import '../../core/services/product_service.dart';
 import '../../core/utils/theme.dart';
 import '../../core/widgets/admin_drawer.dart';
