@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../utils/theme.dart';
+import '../theme/theme.dart';
 
 class AppSnackbars {
   static void success({required String title, required String message}) {
