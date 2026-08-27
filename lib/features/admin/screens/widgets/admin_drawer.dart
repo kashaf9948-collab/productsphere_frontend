@@ -24,171 +24,192 @@ class AdminDrawer extends StatelessWidget {
     final String email = user['email'] ?? 'admin@productsphere.com';
     final String initial = name.isNotEmpty ? name[0].toUpperCase() : 'A';
 
-    return Drawer(
-      backgroundColor: Colors.white,
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header
-            Container(
-                 width: double.infinity,
-                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24,),
-                 decoration: BoxDecoration(
-                 gradient: LinearGradient(
-                 colors: [AppTheme.secondaryDark, AppTheme.secondary,],
+    // Screen ki height aur width get karne ke liye (Responsiveness ke liye)
+    final mediaQuery = MediaQuery.of(context);
+    final screenWidth = mediaQuery.size.width;
+
+    // Drawer ki width ko responsive banane ke liye (Tablet par thoda bada, mobile par standard)
+    final drawerWidth = screenWidth > 600 ? 320.0 : screenWidth * 0.75;
+
+    return SizedBox(
+      width: drawerWidth,
+      child: Drawer(
+        backgroundColor: Colors.white,
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header (Responsive Padding & Text scaling)
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth > 600 ? 24 : 16,
+                  vertical: 20,
+                ),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [AppTheme.secondaryDark, AppTheme.secondary],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                   ),
-                 ),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundColor: Colors.white.withValues(alpha: 0.25),
-                    child: Text(
-                      initial,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: screenWidth > 600 ? 28 : 22,
+                      backgroundColor: Colors.white.withValues(alpha: 0.25),
+                      child: Text(
+                        initial,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: screenWidth > 600 ? 22 : 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: screenWidth > 600 ? 17 : 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            email,
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.75),
+                              fontSize: screenWidth > 600 ? 13 : 11,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+
+              // Scrollable Items List (Overflow se bachne ke liye)
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      _drawerItem(
+                        icon: Icons.dashboard_outlined,
+                        label: 'Overview Dashboard',
+                        onTap: () {
+                          Get.back();
+                          Get.offAllNamed('/admin-dashboard');
+                        },
+                      ),
+                      _drawerItem(
+                        icon: Icons.verified_user_outlined,
+                        label: 'Business Verifications',
+                        onTap: () {
+                          Get.back();
+                          Get.offAllNamed('/admin-verifications');
+                        },
+                      ),
+                      _drawerItem(
+                        icon: Icons.storefront_outlined,
+                        label: 'Wholesalers Catalog',
+                        onTap: () {
+                          Get.back();
+                          Get.offAllNamed('/admin-catalog');
+                        },
+                      ),
+                      _drawerItem(
+                        icon: Icons.people_outline_rounded,
+                        label: 'Registered Buyers',
+                        onTap: () {
+                          Get.back();
+                          Get.toNamed('/admin-buyers');
+                        },
+                      ),
+                      _drawerItem(
+                        icon: Icons.receipt_long_rounded,
+                        label: 'Marketplace Orders',
+                        onTap: () {
+                          Get.back();
+                          Get.toNamed('/admin-orders');
+                        },
+                      ),
+                      _drawerItem(
+                        icon: Icons.category_outlined,
+                        label: 'Category Management',
+                        onTap: () {
+                          Get.back();
+                          Get.toNamed('/admin-categories');
+                        },
+                      ),
+                      _drawerItem(
+                        icon: Icons.gavel_rounded,
+                        label: 'Price Negotiations',
+                        onTap: () {
+                          Get.back();
+                          Get.toNamed('/admin-negotiations');
+                        },
+                      ),
+                      _drawerItem(
+                        icon: Icons.settings_outlined,
+                        label: 'System Settings',
+                        onTap: () {
+                          Get.back();
+                          Get.toNamed('/admin-settings');
+                        },
+                      ),
+                      _drawerItem(
+                        icon: Icons.notifications_active_outlined,
+                        label: 'Notifications Audit',
+                        onTap: () {
+                          Get.back();
+                          Get.toNamed('/admin-notifications');
+                        },
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          name,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          email,
-                          style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.75),
-                            fontSize: 12,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                ),
+              ),
+
+              Divider(color: AppTheme.border),
+
+              // Logout Button (Fixed at bottom)
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: ListTile(
+                  onTap: _logout,
+                  leading: Icon(
+                    Icons.logout_rounded,
+                    color: AppTheme.expired,
+                    size: 22,
+                  ),
+                  title: Text(
+                    'Sign Out',
+                    style: TextStyle(
+                      color: AppTheme.expired,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            // Items
-            _drawerItem(
-              icon: Icons.dashboard_outlined,
-              label: 'Overview Dashboard',
-              onTap: () {
-                Get.back();
-                Get.offAllNamed('/admin-dashboard');
-              },
-            ),
-            _drawerItem(
-              icon: Icons.verified_user_outlined,
-              label: 'Business Verifications',
-              onTap: () {
-                Get.back();
-                Get.offAllNamed('/admin-verifications');
-              },
-            ),
-            _drawerItem(
-              icon: Icons.storefront_outlined,
-              label: 'Wholesalers Catalog',
-              onTap: () {
-                Get.back();
-                Get.offAllNamed('/admin-catalog');
-              },
-            ),
-            _drawerItem(
-              icon: Icons.people_outline_rounded,
-              label: 'Registered Buyers',
-              onTap: () {
-                Get.back();
-                Get.toNamed('/admin-buyers');
-              },
-            ),
-            _drawerItem(
-              icon: Icons.receipt_long_rounded,
-              label: 'Marketplace Orders',
-              onTap: () {
-                Get.back();
-                Get.toNamed('/admin-orders');
-              },
-            ),
-            _drawerItem(
-              icon: Icons.category_outlined,
-              label: 'Category Management',
-              onTap: () {
-                Get.back();
-                Get.toNamed('/admin-categories');
-              },
-            ),
-            _drawerItem(
-              icon: Icons.gavel_rounded,
-              label: 'Price Negotiations',
-              onTap: () {
-                Get.back();
-                Get.toNamed('/admin-negotiations');
-              },
-            ),
-            _drawerItem(
-              icon: Icons.settings_outlined,
-              label: 'System Settings',
-              onTap: () {
-                Get.back();
-                Get.toNamed('/admin-settings');
-              },
-            ),
-            _drawerItem(
-              icon: Icons.notifications_active_outlined,
-              label: 'Notifications Audit',
-              onTap: () {
-                Get.back();
-                Get.toNamed('/admin-notifications');
-              },
-            ),
-
-            const Spacer(),
-            Divider(color: AppTheme.border),
-
-            // Logout
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: ListTile(
-                onTap: _logout,
-                leading: Icon(
-                  Icons.logout_rounded,
-                  color: AppTheme.expired,
-                  size: 22,
-                ),
-                title: Text(
-                  'Sign Out',
-                  style: TextStyle(
-                    color: AppTheme.expired,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                   ),
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppTheme.radiusMd),
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -200,14 +221,15 @@ class AdminDrawer extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
       child: ListTile(
+        dense: true, // Choti screens ke liye compact spacing
         onTap: onTap,
-        leading: Icon(icon, color: AppTheme.textSecondary, size: 22),
+        leading: Icon(icon, color: AppTheme.textSecondary, size: 21),
         title: Text(
           label,
           style: const TextStyle(
-            fontSize: 14,
+            fontSize: 13.5,
             color: AppTheme.textPrimary,
             fontWeight: FontWeight.w500,
           ),
