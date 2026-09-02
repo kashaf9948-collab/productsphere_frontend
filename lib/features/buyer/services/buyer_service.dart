@@ -36,21 +36,35 @@ class BuyerService {
   }
 
   // Fetch Categories
-  static Future<List<dynamic>> fetchCategories() async {
-    try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/categories'),
-        headers: {'Content-Type': 'application/json'},
-      );
-      final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
-        return data['data'] ?? [];
-      return [];
-    } catch (e) {
-      return [];
-    }
-  }
+ static Future<List<dynamic>> fetchCategories() async {
+  try {
+    final url = Uri.parse('$baseUrl/categories');
 
+    print('Fetching categories from: $url');
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    print('Categories status: ${response.statusCode}');
+    print('Categories response: ${response.body}');
+
+    final data = json.decode(response.body);
+
+    if (response.statusCode == 200 && data['success'] == true) {
+      return data['data'] ?? [];
+    }
+
+    print('Categories API error: ${data['message']}');
+    return [];
+  } catch (e) {
+    print('FETCH CATEGORIES ERROR: $e');
+    return [];
+  }
+}
   // Fetch Approved Wholesalers
   static Future<List<dynamic>> fetchApprovedWholesalers() async {
     try {

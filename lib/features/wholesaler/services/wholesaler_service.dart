@@ -155,27 +155,47 @@ class WholesalerService {
   }
 
   // Update Bid Status (Accept/Reject)
-  static Future<Map<String, dynamic>> updateBidStatus(
+ static Future<Map<String, dynamic>> updateBidStatus(
     int bidId,
-    String status,
-  ) async {
-    try {
-      final response = await http.put(
-        Uri.parse('$baseUrl/negotiations/$bidId/status'),
-        headers: _headers,
-        body: json.encode({'status': status}),
-      );
-      final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
-        return {'success': true, 'message': data['message']};
-      return {
-        'success': false,
-        'message': data['message'] ?? 'Failed to update status.',
-      };
-    } catch (e) {
-      return {'success': false, 'message': 'Cannot connect to backend: $e'};
+    String status, {
+    String? rejectionMessage,
+}) async {
+  try {
+    final body = {
+      'status': status,
+    };
+
+    if (rejectionMessage != null &&
+        rejectionMessage.trim().isNotEmpty) {
+      body['rejection_message'] = rejectionMessage.trim();
     }
+
+    final response = await http.put(
+      Uri.parse('$baseUrl/negotiations/$bidId/status'),
+      headers: _headers,
+      body: json.encode(body),
+    );
+
+    final data = json.decode(response.body);
+
+    if (response.statusCode == 200 && data['success'] == true) {
+      return {
+        'success': true,
+        'message': data['message'],
+      };
+    }
+
+    return {
+      'success': false,
+      'message': data['message'] ?? 'Failed to update status.',
+    };
+  } catch (e) {
+    return {
+      'success': false,
+      'message': 'Cannot connect to backend: $e',
+    };
   }
+}
 
   // Fetch User Notifications
   static Future<List<dynamic>> fetchNotifications() async {
