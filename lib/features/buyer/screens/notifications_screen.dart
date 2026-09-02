@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/buyer_service.dart';
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/snackbars.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});

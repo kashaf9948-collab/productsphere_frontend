@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../services/buyer_service.dart';
-import '../../wholesaler/services/wholesaler_service.dart';
 import '../../../core/theme/theme.dart';
 import './widgets/client_drawer.dart';
 import './widgets/client_bottom_nav.dart';

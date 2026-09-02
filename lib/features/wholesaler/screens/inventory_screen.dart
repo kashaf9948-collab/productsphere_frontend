@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../services/wholesaler_service.dart';
-import '../../buyer/services/buyer_service.dart';
 import '../../../core/theme/theme.dart';
 import './widgets/wholesaler_drawer.dart';
 import './widgets/wholesaler_bottom_nav.dart';

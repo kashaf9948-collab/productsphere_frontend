@@ -3,11 +3,9 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../buyer/services/buyer_service.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/snackbars.dart';
 import './widgets/wholesaler_bottom_nav.dart';
-import './widgets/wholesaler_drawer.dart';
 
 class BusinessSettingsScreen extends StatefulWidget {
   const BusinessSettingsScreen({super.key});

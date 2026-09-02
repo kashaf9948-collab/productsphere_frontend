@@ -7,14 +7,14 @@ import 'package:get_storage/get_storage.dart';
 class AuthService {
   static String get baseUrl {
     if (kIsWeb) {
-      return "http://localhost:3000";
+      return "http://b2b.sandbox.pk";
     }
     try {
       if (Platform.isAndroid) {
         return "http://10.0.2.2:3000";
       }
     } catch (_) {}
-    return "http://localhost:3000";
+    return "http://b2b.sandbox.pk";
   }
 
   static final box = GetStorage();
@@ -93,9 +93,15 @@ class AuthService {
 
       if ((response.statusCode == 201 || response.statusCode == 200) &&
           data['success'] == true) {
-        return {'success': true, 'message': data['message'] ?? 'Signup successful'};
+        return {
+          'success': true,
+          'message': data['message'] ?? 'Signup successful',
+        };
       } else {
-        return {'success': false, 'message': data['message'] ?? 'Signup failed'};
+        return {
+          'success': false,
+          'message': data['message'] ?? 'Signup failed',
+        };
       }
     } catch (e) {
       print('Register error: $e');
@@ -131,7 +137,10 @@ class AuthService {
   }
 
   // Update Wholesaler status (approve/reject)
-  static Future<Map<String, dynamic>> updateBusinessStatus(int userId, String status) async {
+  static Future<Map<String, dynamic>> updateBusinessStatus(
+    int userId,
+    String status,
+  ) async {
     try {
       final token = box.read('token');
       final response = await http.post(
@@ -140,10 +149,7 @@ class AuthService {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
         },
-        body: json.encode({
-          'userId': userId,
-          'status': status,
-        }),
+        body: json.encode({'userId': userId, 'status': status}),
       );
 
       final data = json.decode(response.body);
@@ -152,15 +158,16 @@ class AuthService {
       if (response.statusCode == 200 && data['success'] == true) {
         return {'success': true, 'message': data['message']};
       } else {
-        return {'success': false, 'message': data['message'] ?? 'Failed to update status'};
+        return {
+          'success': false,
+          'message': data['message'] ?? 'Failed to update status',
+        };
       }
     } catch (e) {
       print('Update status error: $e');
       return {'success': false, 'message': 'Cannot connect to backend: $e'};
     }
   }
-
-
 
   // Logout
   static void logout() {

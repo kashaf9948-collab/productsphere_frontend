@@ -116,7 +116,7 @@ class _AdminNotificationsScreenState extends State<AdminNotificationsScreen>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.history_outlined, size: 70, color: AppTheme.textLight.withOpacity(0.5)),
+                      Icon(Icons.history_outlined, size: 70, color: AppTheme.textLight.withValues(alpha: 0.5)),
                       const SizedBox(height: 16),
                       const Text(
                         'No Notification Logs Found',
@@ -158,9 +158,9 @@ class _AdminNotificationsScreenState extends State<AdminNotificationsScreen>
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                     decoration: BoxDecoration(
-                                      color: _getRoleBadgeColor(senderRole).withOpacity(0.15),
+                                      color: _getRoleBadgeColor(senderRole).withValues(alpha: 0.15),
                                       borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(color: _getRoleBadgeColor(senderRole).withOpacity(0.4)),
+                                      border: Border.all(color: _getRoleBadgeColor(senderRole).withValues(alpha: 0.4)),
                                     ),
                                     child: Text(
                                       senderRole.toUpperCase(),

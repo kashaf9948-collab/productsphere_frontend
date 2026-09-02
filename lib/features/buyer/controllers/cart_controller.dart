@@ -52,7 +52,7 @@ class CartController extends GetxController {
     cartItems.forEach((id, item) {
       final product = item['product'] as Map<String, dynamic>;
       final qty = item['quantity'] as int;
-      final price = (product['price'] as num).toDouble();
+      final price = double.tryParse(product['price'].toString()) ?? 0.0;
       total += price * qty;
     });
     return total;

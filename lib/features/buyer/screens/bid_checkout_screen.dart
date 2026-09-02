@@ -4,7 +4,6 @@ import 'package:get_storage/get_storage.dart';
 import '../services/buyer_service.dart';
 import '../../wholesaler/services/wholesaler_service.dart';
 import '../../../core/theme/theme.dart';
-import './widgets/client_bottom_nav.dart';
 import '../../../core/widgets/snackbars.dart';
 
 class BidCheckoutScreen extends StatefulWidget {
