@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,13 +20,21 @@ class WholesalerNegotiationsScreen extends StatefulWidget {
 class _WholesalerNegotiationsScreenState
     extends State<WholesalerNegotiationsScreen> {
   List<dynamic> _bids = [];
+
   bool _isLoading = true;
   bool _isProcessing = false;
+
+  // ============================================================
+  // INIT
+  // ============================================================
 
   @override
   void initState() {
     super.initState();
-    _fetchBids();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchBids();
+    });
   }
 
   // ============================================================
@@ -64,10 +73,13 @@ class _WholesalerNegotiationsScreenState
     return int.tryParse(value.toString().trim()) ?? 0;
   }
 
-  String _toString(dynamic value, {String fallback = ''}) {
+  String _toString(
+    dynamic value, {
+    String fallback = '',
+  }) {
     if (value == null) return fallback;
 
-    final text = value.toString().trim();
+    final String text = value.toString().trim();
 
     if (text.isEmpty || text == 'null') {
       return fallback;
@@ -88,22 +100,36 @@ class _WholesalerNegotiationsScreenState
     });
 
     try {
+      debugPrint('========================================');
+      debugPrint('FETCHING WHOLESALER BIDS');
+      debugPrint('========================================');
+
       final data = await WholesalerService.fetchWholesalerBids();
 
       if (!mounted) return;
 
-      setState(() {
-        _bids = data;
-        _isLoading = false;
-      });
+      List<dynamic> safeData = [];
+
+      if (data is List) {
+        safeData = data;
+      }
 
       debugPrint('========================================');
-      debugPrint('WHOLESALER BIDS RECEIVED');
-      debugPrint('Total bids: ${_bids.length}');
-      debugPrint('Data: $_bids');
+      debugPrint('WHOLESALER BIDS RESPONSE');
+      debugPrint('TOTAL: ${safeData.length}');
+      debugPrint('DATA: $safeData');
       debugPrint('========================================');
-    } catch (e) {
-      debugPrint('❌ Fetch wholesaler bids error: $e');
+
+      setState(() {
+        _bids = safeData;
+        _isLoading = false;
+      });
+    } catch (e, stackTrace) {
+      debugPrint('========================================');
+      debugPrint('❌ FETCH BIDS ERROR');
+      debugPrint('$e');
+      debugPrint('$stackTrace');
+      debugPrint('========================================');
 
       if (!mounted) return;
 
@@ -117,6 +143,57 @@ class _WholesalerNegotiationsScreenState
         message: 'Could not retrieve buyer bids. Please try again.',
       );
     }
+  }
+
+  // ============================================================
+  // CLOSE LOADING DIALOG SAFELY
+  // ============================================================
+
+  void _closeLoadingDialog() {
+    try {
+      if (Get.isDialogOpen == true) {
+        Get.back();
+      }
+    } catch (e) {
+      debugPrint('⚠️ Error closing loading dialog: $e');
+    }
+  }
+
+  // ============================================================
+  // UPDATE BID LOCALLY
+  // ============================================================
+
+  void _updateBidLocally(
+    int bidId,
+    String status, {
+    String? message,
+  }) {
+    if (!mounted) return;
+
+    setState(() {
+      for (int i = 0; i < _bids.length; i++) {
+        final item = _bids[i];
+
+        if (item is Map) {
+          final int currentId = _toInt(item['id']);
+
+          if (currentId == bidId) {
+            final updatedBid =
+                Map<String, dynamic>.from(item);
+
+            updatedBid['status'] = status;
+
+            if (message != null) {
+              updatedBid['message'] = message;
+            }
+
+            _bids[i] = updatedBid;
+
+            break;
+          }
+        }
+      }
+    });
   }
 
   // ============================================================
@@ -135,7 +212,7 @@ class _WholesalerNegotiationsScreenState
     // ==========================================================
 
     if (status == 'accepted') {
-      final confirm = await showConfirmDialog(
+      final bool confirm = await showConfirmDialog(
         title: 'Accept Bid',
         content:
             'Are you sure you want to accept the price offer for "$productName"?',
@@ -145,50 +222,78 @@ class _WholesalerNegotiationsScreenState
 
       if (!confirm) return;
 
-      _isProcessing = true;
+      if (!mounted) return;
 
-      showLoadingDialog(color: AppTheme.primary);
+      setState(() {
+        _isProcessing = true;
+      });
+
+      showLoadingDialog(
+        color: AppTheme.primary,
+      );
 
       try {
-        final result = await WholesalerService.updateBidStatus(
+        debugPrint('========================================');
+        debugPrint('ACCEPTING BID');
+        debugPrint('Bid ID: $bidId');
+        debugPrint('Product: $productName');
+        debugPrint('========================================');
+
+        final result =
+            await WholesalerService.updateBidStatus(
           bidId,
           'accepted',
         );
 
-        // Close loading dialog only if it exists.
-        if (Get.isDialogOpen == true) {
-          Get.back();
-        }
+        debugPrint('ACCEPT RESPONSE: $result');
 
-        _isProcessing = false;
+        _closeLoadingDialog();
+
+        if (!mounted) return;
+
+        setState(() {
+          _isProcessing = false;
+        });
 
         if (result['success'] == true) {
+          // Update only this bid.
+          _updateBidLocally(
+            bidId,
+            'accepted',
+          );
+
           AppSnackbars.success(
             title: 'Offer Status Updated',
             message: 'The bid is now marked as accepted.',
           );
-
-          await _fetchBids();
         } else {
           AppSnackbars.error(
             title: 'Action Failed',
-            message:
-                result['message']?.toString() ??
-                'Could not update bid status.',
+            message: _toString(
+              result['message'],
+              fallback: 'Could not update bid status.',
+            ),
           );
         }
-      } catch (e) {
-        if (Get.isDialogOpen == true) {
-          Get.back();
-        }
+      } catch (e, stackTrace) {
+        debugPrint('========================================');
+        debugPrint('❌ ACCEPT BID ERROR');
+        debugPrint('$e');
+        debugPrint('$stackTrace');
+        debugPrint('========================================');
 
-        _isProcessing = false;
+        _closeLoadingDialog();
 
-        debugPrint('❌ Accept bid error: $e');
+        if (!mounted) return;
+
+        setState(() {
+          _isProcessing = false;
+        });
 
         AppSnackbars.error(
           title: 'Action Failed',
-          message: 'Something went wrong while accepting the bid.',
+          message:
+              'Something went wrong while accepting the bid.',
         );
       }
 
@@ -202,196 +307,289 @@ class _WholesalerNegotiationsScreenState
     final TextEditingController messageController =
         TextEditingController();
 
-    final formKey = GlobalKey<FormState>();
+    String? rejectionMessage;
 
-    final rejectionMessage = await Get.dialog<String>(
-      AlertDialog(
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppTheme.radiusMd),
-        ),
-        title: const Text(
-          'Reject Bid',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: AppTheme.textPrimary,
+    try {
+      rejectionMessage = await Get.dialog<String>(
+        AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(AppTheme.radiusMd),
           ),
-        ),
-        content: Form(
-          key: formKey,
-          child: SizedBox(
+
+          // ----------------------------------------------------
+          // TITLE
+          // ----------------------------------------------------
+
+          title: const Text(
+            'Reject Bid',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: AppTheme.textPrimary,
+            ),
+          ),
+
+          // ----------------------------------------------------
+          // CONTENT
+          // ----------------------------------------------------
+
+          content: SizedBox(
             width: 450,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Are you sure you want to reject the price offer for "$productName"?',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: AppTheme.textSecondary,
-                  ),
-                ),
-
-                const SizedBox(height: 18),
-
-                const Text(
-                  'Rejection Message *',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.textPrimary,
-                  ),
-                ),
-
-                const SizedBox(height: 8),
-
-                TextFormField(
-                  controller: messageController,
-                  maxLines: 4,
-                  maxLength: 500,
-                  decoration: InputDecoration(
-                    hintText:
-                        'Enter the reason for rejecting this bid...',
-                    alignLabelWithHint: true,
-                    filled: true,
-                    fillColor: Colors.grey.shade50,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        AppTheme.radiusSm,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        AppTheme.radiusSm,
-                      ),
-                      borderSide: BorderSide(
-                        color: Colors.grey.shade300,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        AppTheme.radiusSm,
-                      ),
-                      borderSide: const BorderSide(
-                        color: AppTheme.primary,
-                        width: 1.5,
-                      ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Are you sure you want to reject the price offer for "$productName"?',
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppTheme.textSecondary,
                     ),
                   ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a rejection message.';
-                    }
 
-                    if (value.trim().length < 3) {
-                      return 'Message must be at least 3 characters.';
-                    }
+                  const SizedBox(height: 18),
 
-                    return null;
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Get.back();
-            },
-            child: const Text(
-              'Cancel',
-              style: TextStyle(
-                color: AppTheme.textSecondary,
-                fontWeight: FontWeight.w600,
+                  const Text(
+                    'Rejection Message *',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.textPrimary,
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  TextField(
+                    controller: messageController,
+                    maxLines: 4,
+                    maxLength: 500,
+                    textInputAction:
+                        TextInputAction.newline,
+                    decoration: InputDecoration(
+                      hintText:
+                          'Enter the reason for rejecting this bid...',
+                      alignLabelWithHint: true,
+                      filled: true,
+                      fillColor: Colors.grey.shade50,
+                      border: OutlineInputBorder(
+                        borderRadius:
+                            BorderRadius.circular(
+                          AppTheme.radiusSm,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius:
+                            BorderRadius.circular(
+                          AppTheme.radiusSm,
+                        ),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius:
+                            BorderRadius.circular(
+                          AppTheme.radiusSm,
+                        ),
+                        borderSide:
+                            const BorderSide(
+                          color: AppTheme.primary,
+                          width: 1.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
 
-          ElevatedButton(
-            onPressed: () {
-              if (formKey.currentState!.validate()) {
+          // ----------------------------------------------------
+          // ACTIONS
+          // ----------------------------------------------------
+
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  color: AppTheme.textSecondary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+                final String text =
+                    messageController.text.trim();
+
+                // Manual validation.
+                if (text.isEmpty) {
+                  AppSnackbars.error(
+                    title: 'Message Required',
+                    message:
+                        'Please enter a rejection message.',
+                  );
+                  return;
+                }
+
+                if (text.length < 3) {
+                  AppSnackbars.error(
+                    title: 'Invalid Message',
+                    message:
+                        'Message must be at least 3 characters.',
+                  );
+                  return;
+                }
+
                 Get.back(
-                  result: messageController.text.trim(),
+                  result: text,
                 );
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.expired,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  AppTheme.radiusSm,
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.expired,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(
+                    AppTheme.radiusSm,
+                  ),
+                ),
+              ),
+              child: const Text(
+                'Reject Bid',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            child: const Text(
-              'Reject Bid',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
-      barrierDismissible: false,
-    );
+          ],
+        ),
 
-    messageController.dispose();
+        barrierDismissible: false,
+      );
+    } catch (e) {
+      debugPrint(
+        '❌ Reject dialog error: $e',
+      );
 
-    // User cancelled
+      rejectionMessage = null;
+    } finally {
+      messageController.dispose();
+    }
+
+    // ==========================================================
+    // USER CANCELLED
+    // ==========================================================
+
     if (rejectionMessage == null ||
         rejectionMessage.trim().isEmpty) {
       return;
     }
 
     // ==========================================================
-    // SEND REJECTION TO BACKEND
+    // SEND REJECTION
     // ==========================================================
 
-    _isProcessing = true;
+    if (!mounted) return;
 
-    showLoadingDialog(color: AppTheme.primary);
+    setState(() {
+      _isProcessing = true;
+    });
+
+    showLoadingDialog(
+      color: AppTheme.primary,
+    );
 
     try {
-      final result = await WholesalerService.updateBidStatus(
+      debugPrint('========================================');
+      debugPrint('REJECTING BID');
+      debugPrint('Bid ID: $bidId');
+      debugPrint('Product: $productName');
+      debugPrint(
+        'Message: ${rejectionMessage.trim()}',
+      );
+      debugPrint('========================================');
+
+      final result =
+          await WholesalerService.updateBidStatus(
         bidId,
         'rejected',
-        rejectionMessage: rejectionMessage.trim(),
+        rejectionMessage:
+            rejectionMessage.trim(),
       );
 
-      if (Get.isDialogOpen == true) {
-        Get.back();
-      }
+      debugPrint('========================================');
+      debugPrint('REJECT RESPONSE');
+      debugPrint('$result');
+      debugPrint('========================================');
 
-      _isProcessing = false;
+      _closeLoadingDialog();
+
+      if (!mounted) return;
+
+      setState(() {
+        _isProcessing = false;
+      });
+
+      // ========================================================
+      // SUCCESS
+      // ========================================================
 
       if (result['success'] == true) {
+        // IMPORTANT:
+        // Don't call _fetchBids() here.
+        // Just update this card locally.
+        _updateBidLocally(
+          bidId,
+          'rejected',
+          message: rejectionMessage.trim(),
+        );
+
         AppSnackbars.success(
           title: 'Bid Rejected',
           message:
               'The bid was rejected and your message was sent.',
         );
+      }
 
-        await _fetchBids();
-      } else {
+      // ========================================================
+      // FAILED
+      // ========================================================
+
+      else {
         AppSnackbars.error(
           title: 'Action Failed',
-          message:
-              result['message']?.toString() ??
-              'Could not reject the bid.',
+          message: _toString(
+            result['message'],
+            fallback:
+                'Could not reject the bid.',
+          ),
         );
       }
-    } catch (e) {
-      if (Get.isDialogOpen == true) {
-        Get.back();
-      }
+    } catch (e, stackTrace) {
+      debugPrint('========================================');
+      debugPrint('❌ REJECT BID ERROR');
+      debugPrint('$e');
+      debugPrint('$stackTrace');
+      debugPrint('========================================');
 
-      _isProcessing = false;
+      _closeLoadingDialog();
 
-      debugPrint('❌ Reject bid error: $e');
+      if (!mounted) return;
+
+      setState(() {
+        _isProcessing = false;
+      });
 
       AppSnackbars.error(
         title: 'Action Failed',
@@ -410,30 +608,60 @@ class _WholesalerNegotiationsScreenState
     return Scaffold(
       backgroundColor: AppTheme.background,
 
+      // --------------------------------------------------------
+      // DRAWER
+      // --------------------------------------------------------
+
       drawer: const WholesalerDrawer(),
 
+      // --------------------------------------------------------
+      // BOTTOM NAV
+      // --------------------------------------------------------
+
       bottomNavigationBar:
-          const WholesalerBottomNav(activeIndex: 2),
+          const WholesalerBottomNav(
+        activeIndex: 2,
+      ),
+
+      // --------------------------------------------------------
+      // APP BAR
+      // --------------------------------------------------------
 
       appBar: AppBar(
         backgroundColor: AppTheme.primaryDark,
         foregroundColor: Colors.white,
+        elevation: 0,
+
         title: const Text(
           'Received Bids & Price Offers',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
         ),
+
         actions: [
           IconButton(
             tooltip: 'Refresh',
-            icon: const Icon(Icons.refresh_rounded),
-            onPressed: _isLoading ? null : _fetchBids,
+            icon: const Icon(
+              Icons.refresh_rounded,
+              color: Colors.white,
+            ),
+            onPressed:
+                _isLoading ? null : _fetchBids,
           ),
         ],
       ),
 
+      // --------------------------------------------------------
+      // BODY
+      // --------------------------------------------------------
+
       body: SafeArea(
         child: _isLoading
             ? const Center(
-                child: CircularProgressIndicator(
+                child:
+                    CircularProgressIndicator(
                   color: AppTheme.primary,
                 ),
               )
@@ -445,11 +673,16 @@ class _WholesalerNegotiationsScreenState
                     child: ListView.separated(
                       physics:
                           const AlwaysScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(16),
+                      padding:
+                          const EdgeInsets.all(16),
                       itemCount: _bids.length,
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: 12),
-                      itemBuilder: (context, index) {
+                      separatorBuilder:
+                          (context, index) =>
+                              const SizedBox(
+                        height: 12,
+                      ),
+                      itemBuilder:
+                          (context, index) {
                         final bid = _bids[index];
 
                         if (bid is! Map) {
@@ -457,7 +690,9 @@ class _WholesalerNegotiationsScreenState
                         }
 
                         return _buildBidCard(
-                          Map<String, dynamic>.from(bid),
+                          Map<String, dynamic>.from(
+                            bid,
+                          ),
                         );
                       },
                     ),
@@ -475,15 +710,20 @@ class _WholesalerNegotiationsScreenState
       onRefresh: _fetchBids,
       color: AppTheme.primary,
       child: ListView(
-        physics: const AlwaysScrollableScrollPhysics(),
+        physics:
+            const AlwaysScrollableScrollPhysics(),
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.65,
+            height:
+                MediaQuery.of(context).size.height *
+                    0.65,
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.all(24),
+                padding:
+                    const EdgeInsets.all(24),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment:
+                      MainAxisAlignment.center,
                   children: [
                     Icon(
                       Icons.gavel_rounded,
@@ -497,8 +737,10 @@ class _WholesalerNegotiationsScreenState
                       'No Received Bids',
                       style: TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.textPrimary,
+                        fontWeight:
+                            FontWeight.bold,
+                        color:
+                            AppTheme.textPrimary,
                       ),
                     ),
 
@@ -506,10 +748,12 @@ class _WholesalerNegotiationsScreenState
 
                     const Text(
                       'Buyer bids and price offers will appear here.',
-                      textAlign: TextAlign.center,
+                      textAlign:
+                          TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
-                        color: AppTheme.textSecondary,
+                        color:
+                            AppTheme.textSecondary,
                       ),
                     ),
 
@@ -520,7 +764,9 @@ class _WholesalerNegotiationsScreenState
                       icon: const Icon(
                         Icons.refresh_rounded,
                       ),
-                      label: const Text('Refresh'),
+                      label: const Text(
+                        'Refresh',
+                      ),
                     ),
                   ],
                 ),
@@ -551,14 +797,17 @@ class _WholesalerNegotiationsScreenState
       fallback: 'Buyer',
     );
 
-    final double originalPrice =
-        _toDouble(bid['price']);
+    final double originalPrice = _toDouble(
+      bid['price'],
+    );
 
-    final double bidPrice =
-        _toDouble(bid['bid_price']);
+    final double bidPrice = _toDouble(
+      bid['bid_price'],
+    );
 
-    final int qty =
-        _toInt(bid['quantity']);
+    final int qty = _toInt(
+      bid['quantity'],
+    );
 
     final String status = _toString(
       bid['status'],
@@ -569,8 +818,9 @@ class _WholesalerNegotiationsScreenState
       bid['message'],
     );
 
-    final String dateStr =
-        _formatDate(bid['created_at']);
+    final String dateStr = _formatDate(
+      bid['created_at'],
+    );
 
     // ==========================================================
     // STATUS COLORS
@@ -590,7 +840,8 @@ class _WholesalerNegotiationsScreenState
       badgeBg = AppTheme.expiredLight;
     }
 
-    final bool isPending = status == 'pending';
+    final bool isPending =
+        status == 'pending';
 
     // ==========================================================
     // CARD
@@ -601,43 +852,41 @@ class _WholesalerNegotiationsScreenState
       elevation: 0,
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
+        borderRadius:
+            BorderRadius.circular(
           AppTheme.radiusMd,
         ),
         side: BorderSide(
           color: Colors.grey.shade200,
         ),
       ),
-
       child: Padding(
         padding: const EdgeInsets.all(16),
-
         child: Column(
           crossAxisAlignment:
               CrossAxisAlignment.start,
-
           children: [
-            // ====================================================
-            // PRODUCT + STATUS
-            // ====================================================
+            // ==================================================
+            // PRODUCT + BUYER + STATUS
+            // ==================================================
 
             Row(
               crossAxisAlignment:
                   CrossAxisAlignment.start,
-
               children: [
                 Expanded(
                   child: Column(
                     crossAxisAlignment:
                         CrossAxisAlignment.start,
-
                     children: [
                       Text(
                         productName,
                         style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+                          fontWeight:
+                              FontWeight.bold,
                           fontSize: 16,
-                          color: AppTheme.textPrimary,
+                          color:
+                              AppTheme.textPrimary,
                         ),
                         maxLines: 2,
                         overflow:
@@ -686,7 +935,8 @@ class _WholesalerNegotiationsScreenState
                     horizontal: 10,
                     vertical: 5,
                   ),
-                  decoration: BoxDecoration(
+                  decoration:
+                      BoxDecoration(
                     color: badgeBg,
                     borderRadius:
                         BorderRadius.circular(12),
@@ -695,7 +945,8 @@ class _WholesalerNegotiationsScreenState
                     status.toUpperCase(),
                     style: TextStyle(
                       fontSize: 10,
-                      fontWeight: FontWeight.bold,
+                      fontWeight:
+                          FontWeight.bold,
                       color: badgeColor,
                     ),
                   ),
@@ -708,20 +959,18 @@ class _WholesalerNegotiationsScreenState
               color: AppTheme.border,
             ),
 
-            // ====================================================
+            // ==================================================
             // PRICE + QUANTITY
-            // ====================================================
+            // ==================================================
 
             Row(
               crossAxisAlignment:
                   CrossAxisAlignment.start,
-
               children: [
                 Expanded(
                   child: Column(
                     crossAxisAlignment:
                         CrossAxisAlignment.start,
-
                     children: [
                       const Text(
                         'Buyer Offer',
@@ -767,7 +1016,6 @@ class _WholesalerNegotiationsScreenState
                 Column(
                   crossAxisAlignment:
                       CrossAxisAlignment.end,
-
                   children: [
                     const Text(
                       'Quantity',
@@ -794,7 +1042,6 @@ class _WholesalerNegotiationsScreenState
 
                     if (dateStr.isNotEmpty) ...[
                       const SizedBox(height: 5),
-
                       Text(
                         dateStr,
                         style:
@@ -810,9 +1057,9 @@ class _WholesalerNegotiationsScreenState
               ],
             ),
 
-            // ====================================================
-            // MESSAGE
-            // ====================================================
+            // ==================================================
+            // BUYER / REJECTION MESSAGE
+            // ==================================================
 
             if (message.isNotEmpty) ...[
               const SizedBox(height: 12),
@@ -821,7 +1068,6 @@ class _WholesalerNegotiationsScreenState
                 width: double.infinity,
                 padding:
                     const EdgeInsets.all(12),
-
                 decoration: BoxDecoration(
                   color:
                       const Color(0xFFF8F9FA),
@@ -830,17 +1076,19 @@ class _WholesalerNegotiationsScreenState
                     AppTheme.radiusSm,
                   ),
                   border: Border.all(
-                    color: Colors.grey.shade200,
+                    color:
+                        Colors.grey.shade200,
                   ),
                 ),
-
                 child: Column(
                   crossAxisAlignment:
                       CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Buyer Message',
-                      style: TextStyle(
+                    Text(
+                      status == 'rejected'
+                          ? 'Rejection Message'
+                          : 'Buyer Message',
+                      style: const TextStyle(
                         fontSize: 11,
                         fontWeight:
                             FontWeight.bold,
@@ -867,29 +1115,30 @@ class _WholesalerNegotiationsScreenState
               ),
             ],
 
-            // ====================================================
+            // ==================================================
             // ACCEPT / REJECT
-            // ====================================================
+            // ==================================================
 
             if (isPending) ...[
               const SizedBox(height: 16),
 
               Row(
-                mainAxisAlignment:
-                    MainAxisAlignment.end,
-
                 children: [
+                  // ------------------------------------------------
+                  // REJECT
+                  // ------------------------------------------------
+
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: _isProcessing
-                          ? null
-                          : () =>
-                              _processStatusUpdate(
+                      onPressed:
+                          _isProcessing
+                              ? null
+                              : () =>
+                                  _processStatusUpdate(
                                 id,
                                 'rejected',
                                 productName,
                               ),
-
                       style:
                           OutlinedButton.styleFrom(
                         foregroundColor:
@@ -900,7 +1149,10 @@ class _WholesalerNegotiationsScreenState
                               AppTheme.expired,
                         ),
                         minimumSize:
-                            const Size(0, 42),
+                            const Size(
+                          0,
+                          42,
+                        ),
                         shape:
                             RoundedRectangleBorder(
                           borderRadius:
@@ -909,7 +1161,6 @@ class _WholesalerNegotiationsScreenState
                           ),
                         ),
                       ),
-
                       child: const Text(
                         'Reject',
                         style: TextStyle(
@@ -923,17 +1174,21 @@ class _WholesalerNegotiationsScreenState
 
                   const SizedBox(width: 10),
 
+                  // ------------------------------------------------
+                  // ACCEPT
+                  // ------------------------------------------------
+
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: _isProcessing
-                          ? null
-                          : () =>
-                              _processStatusUpdate(
+                      onPressed:
+                          _isProcessing
+                              ? null
+                              : () =>
+                                  _processStatusUpdate(
                                 id,
                                 'accepted',
                                 productName,
                               ),
-
                       style:
                           ElevatedButton.styleFrom(
                         backgroundColor:
@@ -941,7 +1196,10 @@ class _WholesalerNegotiationsScreenState
                         foregroundColor:
                             Colors.white,
                         minimumSize:
-                            const Size(0, 42),
+                            const Size(
+                          0,
+                          42,
+                        ),
                         shape:
                             RoundedRectangleBorder(
                           borderRadius:
@@ -950,7 +1208,6 @@ class _WholesalerNegotiationsScreenState
                           ),
                         ),
                       ),
-
                       child: const Text(
                         'Accept',
                         style: TextStyle(
@@ -975,7 +1232,9 @@ class _WholesalerNegotiationsScreenState
   // ============================================================
 
   String _formatDate(dynamic value) {
-    if (value == null) return '';
+    if (value == null) {
+      return '';
+    }
 
     final String raw =
         value.toString().trim();
@@ -988,19 +1247,23 @@ class _WholesalerNegotiationsScreenState
       final DateTime date =
           DateTime.parse(raw).toLocal();
 
-      final String day =
-          date.day.toString().padLeft(2, '0');
+      final String day = date.day
+          .toString()
+          .padLeft(2, '0');
 
-      final String month =
-          date.month.toString().padLeft(2, '0');
+      final String month = date.month
+          .toString()
+          .padLeft(2, '0');
 
       final String year =
           date.year.toString();
 
       return '$day-$month-$year';
-    } catch (_) {
-      // If backend sends another date format,
-      // show the original value instead of crashing.
+    } catch (e) {
+      debugPrint(
+        '⚠️ Date parse error: $e',
+      );
+
       return raw.split('T').first;
     }
   }
