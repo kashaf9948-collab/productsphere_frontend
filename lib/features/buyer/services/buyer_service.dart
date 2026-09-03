@@ -27,8 +27,9 @@ class BuyerService {
         headers: _headers,
       );
       final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
+      if (response.statusCode == 200 && data['success'] == true) {
         return data['data'] ?? [];
+      }
       return [];
     } catch (e) {
       return [];
@@ -73,8 +74,9 @@ class BuyerService {
         headers: _headers,
       );
       final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
+      if (response.statusCode == 200 && data['success'] == true) {
         return data['data'] ?? [];
+      }
       return [];
     } catch (e) {
       return [];
@@ -129,8 +131,9 @@ class BuyerService {
         headers: _headers,
       );
       final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
+      if (response.statusCode == 200 && data['success'] == true) {
         return data['data'] ?? [];
+      }
       return [];
     } catch (e) {
       return [];
@@ -187,8 +190,9 @@ class BuyerService {
         headers: _headers,
       );
       final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
+      if (response.statusCode == 200 && data['success'] == true) {
         return data['data'] ?? [];
+      }
       return [];
     } catch (e) {
       return [];
@@ -241,8 +245,9 @@ class BuyerService {
         }),
       );
       final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
+      if (response.statusCode == 200 && data['success'] == true) {
         return {'success': true, 'message': data['message']};
+      }
       return {
         'success': false,
         'message': data['message'] ?? 'Failed to change password',
@@ -283,8 +288,9 @@ class BuyerService {
         headers: _headers,
       );
       final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
+      if (response.statusCode == 200 && data['success'] == true) {
         return data['data'] ?? [];
+      }
       return [];
     } catch (e) {
       return [];

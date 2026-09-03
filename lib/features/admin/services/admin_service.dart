@@ -27,8 +27,9 @@ class AdminService {
         headers: _headers,
       );
       final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
+      if (response.statusCode == 200 && data['success'] == true) {
         return data['data'] ?? [];
+      }
       return [];
     } catch (e) {
       return [];
@@ -47,8 +48,9 @@ class AdminService {
         body: json.encode({'userId': userId, 'status': status}),
       );
       final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
+      if (response.statusCode == 200 && data['success'] == true) {
         return {'success': true, 'message': data['message']};
+      }
       return {
         'success': false,
         'message': data['message'] ?? 'Failed to update status',
@@ -66,8 +68,9 @@ class AdminService {
         headers: _headers,
       );
       final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
+      if (response.statusCode == 200 && data['success'] == true) {
         return {'success': true, 'message': data['message']};
+      }
       return {
         'success': false,
         'message': data['message'] ?? 'Failed to delete product',
@@ -89,8 +92,9 @@ class AdminService {
         body: json.encode({'productId': productId, 'status': status}),
       );
       final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
+      if (response.statusCode == 200 && data['success'] == true) {
         return {'success': true, 'message': data['message']};
+      }
       return {
         'success': false,
         'message': data['message'] ?? 'Failed to update product status',
@@ -142,8 +146,9 @@ class AdminService {
         body: json.encode({'name': name, 'description': description}),
       );
       final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
+      if (response.statusCode == 200 && data['success'] == true) {
         return {'success': true, 'message': data['message']};
+      }
       return {
         'success': false,
         'message': data['message'] ?? 'Failed to update category',
@@ -161,8 +166,9 @@ class AdminService {
         headers: _headers,
       );
       final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
+      if (response.statusCode == 200 && data['success'] == true) {
         return {'success': true, 'message': data['message']};
+      }
       return {
         'success': false,
         'message': data['message'] ?? 'Failed to delete category',
@@ -180,8 +186,9 @@ class AdminService {
         headers: _headers,
       );
       final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
+      if (response.statusCode == 200 && data['success'] == true) {
         return data['data'] ?? [];
+      }
       return [];
     } catch (e) {
       return [];
@@ -196,8 +203,9 @@ class AdminService {
         headers: _headers,
       );
       final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
+      if (response.statusCode == 200 && data['success'] == true) {
         return data['data'] ?? [];
+      }
       return [];
     } catch (e) {
       return [];
@@ -212,8 +220,9 @@ class AdminService {
         headers: _headers,
       );
       final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
+      if (response.statusCode == 200 && data['success'] == true) {
         return data['data'] ?? [];
+      }
       return [];
     } catch (e) {
       return [];
@@ -254,8 +263,9 @@ class AdminService {
         body: json.encode(settings),
       );
       final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
+      if (response.statusCode == 200 && data['success'] == true) {
         return {'success': true, 'message': data['message']};
+      }
       return {
         'success': false,
         'message': data['message'] ?? 'Failed to save settings',
@@ -273,8 +283,9 @@ class AdminService {
         headers: _headers,
       );
       final data = json.decode(response.body);
-      if (response.statusCode == 200 && data['success'] == true)
+      if (response.statusCode == 200 && data['success'] == true) {
         return data['data'] ?? [];
+      }
       return [];
     } catch (e) {
       return [];
