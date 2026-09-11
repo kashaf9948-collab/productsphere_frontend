@@ -80,7 +80,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               subtitle: const Text('Use camera'),
               onTap: () async {
                 Navigator.pop(ctx);
-                final picked = await _picker.pickImage(source: ImageSource.camera, imageQuality: 70);
+                final picked = await _picker.pickImage(source: ImageSource.camera, imageQuality: 45,maxWidth: 1200,
+  maxHeight: 1200,);
                 if (picked != null) {
                   final bytes = await picked.readAsBytes();
                   onPicked(bytes);
@@ -93,7 +94,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               subtitle: const Text('Select from photos'),
               onTap: () async {
                 Navigator.pop(ctx);
-                final picked = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 70);
+                final picked = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 45,maxWidth: 1200,
+  maxHeight: 1200,);
                 if (picked != null) {
                   final bytes = await picked.readAsBytes();
                   onPicked(bytes);
