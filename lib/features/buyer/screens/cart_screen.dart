@@ -155,11 +155,21 @@ class _CartScreenState extends State<CartScreen> {
 
                   final picked = await _picker.pickImage(
                     source: ImageSource.camera,
-                    imageQuality: 70,
+                    maxWidth: 800,
+                    maxHeight: 800,
+                    imageQuality: 60,
                   );
 
                   if (picked != null) {
                     final bytes = await picked.readAsBytes();
+
+                    if (bytes.lengthInBytes > 2 * 1024 * 1024) {
+                      AppSnackbars.warning(
+                        title: "File Too Large",
+                        message: "Image size must be 2MB or less.",
+                      );
+                      return;
+                    }
 
                     if (!mounted) return;
 
@@ -180,7 +190,6 @@ class _CartScreenState extends State<CartScreen> {
                   child: Icon(
                     Icons.photo_library_rounded,
                     color: Colors.white,
-                    size: 20,
                   ),
                 ),
                 title: const Text('Choose from Gallery'),
@@ -190,11 +199,21 @@ class _CartScreenState extends State<CartScreen> {
 
                   final picked = await _picker.pickImage(
                     source: ImageSource.gallery,
-                    imageQuality: 70,
+                    maxWidth: 800,
+                    maxHeight: 800,
+                    imageQuality: 60,
                   );
 
                   if (picked != null) {
                     final bytes = await picked.readAsBytes();
+
+                    if (bytes.lengthInBytes > 2 * 1024 * 1024) {
+                      AppSnackbars.warning(
+                        title: "File Too Large",
+                        message: "Image size must be 2MB or less.",
+                      );
+                      return;
+                    }
 
                     if (!mounted) return;
 

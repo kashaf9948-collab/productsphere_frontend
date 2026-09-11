@@ -358,6 +358,14 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                     final bytes =
                         await picked.readAsBytes();
 
+                    if (bytes.lengthInBytes > 2 * 1024 * 1024) {
+                      AppSnackbars.warning(
+                        title: "File Too Large",
+                        message: "Image size must be 2MB or less.",
+                      );
+                      return;
+                    }
+
                     if (!mounted) return;
 
                     setState(() {
@@ -429,6 +437,14 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                   if (picked != null) {
                     final bytes =
                         await picked.readAsBytes();
+
+                    if (bytes.lengthInBytes > 2 * 1024 * 1024) {
+                      AppSnackbars.warning(
+                        title: "File Too Large",
+                        message: "Image size must be 2MB or less.",
+                      );
+                      return;
+                    }
 
                     if (!mounted) return;
 

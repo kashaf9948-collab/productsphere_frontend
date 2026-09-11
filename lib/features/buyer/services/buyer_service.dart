@@ -6,11 +6,11 @@ import 'package:get_storage/get_storage.dart';
 
 class BuyerService {
   static String get baseUrl {
-    if (kIsWeb) return "http://b2b.sandbox.pk";
+    if (kIsWeb) return "http://localhost:3000";
     try {
-      if (Platform.isAndroid) return "http://10.0.2.2:3000";
+      if (Platform.isAndroid) return "http://localhost:3000";
     } catch (_) {}
-    return "http://b2b.sandbox.pk";
+    return "http://localhost:3000";
   }
 
   static final box = GetStorage();
@@ -37,35 +37,34 @@ class BuyerService {
   }
 
   // Fetch Categories
- static Future<List<dynamic>> fetchCategories() async {
-  try {
-    final url = Uri.parse('$baseUrl/categories');
+  static Future<List<dynamic>> fetchCategories() async {
+    try {
+      final url = Uri.parse('$baseUrl/categories');
 
-    print('Fetching categories from: $url');
+      print('Fetching categories from: $url');
 
-    final response = await http.get(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    );
+      final response = await http.get(
+        url,
+        headers: {'Content-Type': 'application/json'},
+      );
 
-    print('Categories status: ${response.statusCode}');
-    print('Categories response: ${response.body}');
+      print('Categories status: ${response.statusCode}');
+      print('Categories response: ${response.body}');
 
-    final data = json.decode(response.body);
+      final data = json.decode(response.body);
 
-    if (response.statusCode == 200 && data['success'] == true) {
-      return data['data'] ?? [];
+      if (response.statusCode == 200 && data['success'] == true) {
+        return data['data'] ?? [];
+      }
+
+      print('Categories API error: ${data['message']}');
+      return [];
+    } catch (e) {
+      print('FETCH CATEGORIES ERROR: $e');
+      return [];
     }
-
-    print('Categories API error: ${data['message']}');
-    return [];
-  } catch (e) {
-    print('FETCH CATEGORIES ERROR: $e');
-    return [];
   }
-}
+
   // Fetch Approved Wholesalers
   static Future<List<dynamic>> fetchApprovedWholesalers() async {
     try {

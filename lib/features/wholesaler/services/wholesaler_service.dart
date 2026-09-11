@@ -6,11 +6,11 @@ import 'package:get_storage/get_storage.dart';
 
 class WholesalerService {
   static String get baseUrl {
-    if (kIsWeb) return "http://b2b.sandbox.pk";
+    if (kIsWeb) return "http://localhost:3000";
     try {
-      if (Platform.isAndroid) return "http://10.0.2.2:3000";
+      if (Platform.isAndroid) return "http://localhost:3000";
     } catch (_) {}
-    return "http://b2b.sandbox.pk";
+    return "http://localhost:3000";
   }
 
   static final box = GetStorage();
@@ -159,47 +159,38 @@ class WholesalerService {
   }
 
   // Update Bid Status (Accept/Reject)
- static Future<Map<String, dynamic>> updateBidStatus(
+  static Future<Map<String, dynamic>> updateBidStatus(
     int bidId,
     String status, {
     String? rejectionMessage,
-}) async {
-  try {
-    final body = {
-      'status': status,
-    };
+  }) async {
+    try {
+      final body = {'status': status};
 
-    if (rejectionMessage != null &&
-        rejectionMessage.trim().isNotEmpty) {
-      body['rejection_message'] = rejectionMessage.trim();
-    }
+      if (rejectionMessage != null && rejectionMessage.trim().isNotEmpty) {
+        body['rejection_message'] = rejectionMessage.trim();
+      }
 
-    final response = await http.put(
-      Uri.parse('$baseUrl/negotiations/$bidId/status'),
-      headers: _headers,
-      body: json.encode(body),
-    );
+      final response = await http.put(
+        Uri.parse('$baseUrl/negotiations/$bidId/status'),
+        headers: _headers,
+        body: json.encode(body),
+      );
 
-    final data = json.decode(response.body);
+      final data = json.decode(response.body);
 
-    if (response.statusCode == 200 && data['success'] == true) {
+      if (response.statusCode == 200 && data['success'] == true) {
+        return {'success': true, 'message': data['message']};
+      }
+
       return {
-        'success': true,
-        'message': data['message'],
+        'success': false,
+        'message': data['message'] ?? 'Failed to update status.',
       };
+    } catch (e) {
+      return {'success': false, 'message': 'Cannot connect to backend: $e'};
     }
-
-    return {
-      'success': false,
-      'message': data['message'] ?? 'Failed to update status.',
-    };
-  } catch (e) {
-    return {
-      'success': false,
-      'message': 'Cannot connect to backend: $e',
-    };
   }
-}
 
   // Fetch User Notifications
   static Future<List<dynamic>> fetchNotifications() async {

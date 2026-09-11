@@ -80,10 +80,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
               subtitle: const Text('Use camera'),
               onTap: () async {
                 Navigator.pop(ctx);
-                final picked = await _picker.pickImage(source: ImageSource.camera, imageQuality: 45,maxWidth: 1200,
-  maxHeight: 1200,);
+                final picked = await _picker.pickImage(
+                  source: ImageSource.camera,
+                  maxWidth: 800,
+                  maxHeight: 800,
+                  imageQuality: 60,
+                );
                 if (picked != null) {
                   final bytes = await picked.readAsBytes();
+                  if (bytes.lengthInBytes > 2 * 1024 * 1024) {
+                    AppSnackbars.warning(
+                      title: "File Too Large",
+                      message: "Image size must be 2MB or less.",
+                    );
+                    return;
+                  }
                   onPicked(bytes);
                 }
               },
@@ -94,10 +105,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
               subtitle: const Text('Select from photos'),
               onTap: () async {
                 Navigator.pop(ctx);
-                final picked = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 45,maxWidth: 1200,
-  maxHeight: 1200,);
+                final picked = await _picker.pickImage(
+                  source: ImageSource.gallery,
+                  maxWidth: 800,
+                  maxHeight: 800,
+                  imageQuality: 60,
+                );
                 if (picked != null) {
                   final bytes = await picked.readAsBytes();
+                  if (bytes.lengthInBytes > 2 * 1024 * 1024) {
+                    AppSnackbars.warning(
+                      title: "File Too Large",
+                      message: "Image size must be 2MB or less.",
+                    );
+                    return;
+                  }
                   onPicked(bytes);
                 }
               },

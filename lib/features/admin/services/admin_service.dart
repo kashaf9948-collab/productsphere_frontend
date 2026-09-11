@@ -6,11 +6,11 @@ import 'package:get_storage/get_storage.dart';
 
 class AdminService {
   static String get baseUrl {
-    if (kIsWeb) return "http://b2b.sandbox.pk";
+    if (kIsWeb) return "http://localhost:3000";
     try {
-      if (Platform.isAndroid) return "http://10.0.2.2:3000";
+      if (Platform.isAndroid) return "http://localhost:3000";
     } catch (_) {}
-    return "http://b2b.sandbox.pk";
+    return "http://localhost:3000";
   }
 
   static final box = GetStorage();
