@@ -86,7 +86,7 @@ class _AdminNotificationsScreenState extends State<AdminNotificationsScreen>
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         title: const Text('Notifications Audit Log', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-        backgroundColor: AppTheme.primaryDark,
+        backgroundColor: AppTheme.secondaryDark,
         elevation: 0,
         actions: [
           IconButton(
@@ -110,7 +110,7 @@ class _AdminNotificationsScreenState extends State<AdminNotificationsScreen>
         ),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: AppTheme.primaryDark))
+          ? const Center(child: CircularProgressIndicator(color: AppTheme.secondaryDark))
           : _filteredNotifications.isEmpty
               ? Center(
                   child: Column(

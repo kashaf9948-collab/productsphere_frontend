@@ -397,7 +397,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 obscureText: _obscurePassword,
                 style: const TextStyle(fontSize: 14, color: AppTheme.textPrimary),
                 decoration: InputDecoration(
-                  hintText: 'Enter your password',
+                  hintText: 'Enter your password...',
                   hintStyle: const TextStyle(color: AppTheme.textHint, fontSize: 13),
                   filled: true,
                   fillColor: const Color(0xFFF1F4F6),

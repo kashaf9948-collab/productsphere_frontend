@@ -110,9 +110,7 @@ class _WholesalerNegotiationsScreenState
 
       List<dynamic> safeData = [];
 
-      if (data is List) {
-        safeData = data;
-      }
+      safeData = data;
 
       debugPrint('========================================');
       debugPrint('WHOLESALER BIDS RESPONSE');

@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen>
   // ==============================
   // Quick Login Fill
   // ==============================
-  void _quickFill(String email, String password) {
+  void S(String email, String password) {
     setState(() {
       _emailController.text = email;
       _passwordController.text = password;
@@ -209,7 +209,7 @@ class _LoginScreenState extends State<LoginScreen>
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         style: const TextStyle(fontSize: 14, color: AppTheme.textPrimary),
-                        decoration: _inputDecoration('e.g., buyer@productsphere.com'),
+                        decoration: _inputDecoration('Enter your email...'),
                       ),
 
                       const SizedBox(height: 18),
@@ -393,7 +393,7 @@ class _LoginScreenState extends State<LoginScreen>
         label,
         style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.bold),
       ),
-      onPressed: () => _quickFill(
+      onPressed: () => S(
         email,
         password,
       ),
