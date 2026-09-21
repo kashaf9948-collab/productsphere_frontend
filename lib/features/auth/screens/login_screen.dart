@@ -52,17 +52,6 @@ class _LoginScreenState extends State<LoginScreen>
     // Continuously move Up ↕ Down
     _logoAnimationController.repeat(reverse: true);
   }
-
-  // ==============================
-  // Quick Login Fill
-  // ==============================
-  void S(String email, String password) {
-    setState(() {
-      _emailController.text = email;
-      _passwordController.text = password;
-    });
-  }
-
   // ==============================
   // Login
   // ==============================
@@ -103,303 +92,243 @@ class _LoginScreenState extends State<LoginScreen>
       );
     }
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF2F4F8),
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24,
-              vertical: 16,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // ==============================
-                // Animated ProductSphere Logo
-                // ==============================
-                SlideTransition(
-                  position: _logoSlideAnimation,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.local_mall_rounded,
-                        color: AppTheme.primary,
-                        size: 36,
-                      ),
-
-                      const SizedBox(width: 10),
-
-                      RichText(
-                        text: const TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "Product",
-                              style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.w900,
-                                color: AppTheme.textPrimary,
-                              ),
-                            ),
-                            TextSpan(
-                              text: "Sphere",
-                              style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.w900,
-                                color: AppTheme.primary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 32),
-
-                // ==============================
-                // Login Card
-                // ==============================
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(28),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(
-                      AppTheme.radiusXl,
-                    ),
-                    boxShadow: [AppTheme.cardShadow],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Center(
-                        child: Text(
-                          'Welcome Back',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: AppTheme.textPrimary,
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 24),
-
-                      // ==============================
-                      // Email
-                      // ==============================
-                      const Text(
-                        'Email Address',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.textPrimary,
-                        ),
-                      ),
-
-                      const SizedBox(height: 8),
-
-                      TextField(
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        style: const TextStyle(fontSize: 14, color: AppTheme.textPrimary),
-                        decoration: _inputDecoration('Enter your email...'),
-                      ),
-
-                      const SizedBox(height: 18),
-
-                      // ==============================
-                      // Password
-                      // ==============================
-                      const Text(
-                        'Password',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.textPrimary,
-                        ),
-                      ),
-
-                      const SizedBox(height: 8),
-
-                      TextField(
-                        controller: _passwordController,
-                        obscureText: _obscurePassword,
-                        style: const TextStyle(fontSize: 14, color: AppTheme.textPrimary),
-                        decoration: _inputDecoration(
-                          'Enter your password',
-                          suffix: IconButton(
-                            icon: Icon(
-                              _obscurePassword
-                                  ? Icons.visibility_off_outlined
-                                  : Icons.visibility_outlined,
-                              color: AppTheme.textSecondary,
-                              size: 20,
-                            ),
-                            onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 28),
-
-                      // ==============================
-                      // Login Button
-                      // ==============================
-                      SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: _isLoading ? null : _login,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppTheme.primary,
-                            disabledBackgroundColor: AppTheme.primary.withValues(alpha: 0.6),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(AppTheme.radiusMd),
-                            ),
-                            elevation: 0,
-                          ),
-                          child: _isLoading
-                              ? const SizedBox(
-                                  width: 22,
-                                  height: 22,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 2.5,
-                                  ),
-                                )
-                              : const Text(
-                                  'Login',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      // ==============================
-                      // Demo Quick Logins
-                      // ==============================
-                      const Divider(
-                        color: AppTheme.border,
-                        height: 20,
-                      ),
-
-                      const SizedBox(height: 8),
-
-                      const Text(
-                        'Demo Quick Logins',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.textSecondary,
-                        ),
-                      ),
-
-                      const SizedBox(height: 8),
-
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: [
-                          _quickLoginChip(
-                            label: 'Admin',
-                            color: Colors.blueGrey,
-                            email: 'admin@productsphere.com',
-                            password: 'adminpassword',
-                          ),
-
-                          _quickLoginChip(
-                            label: 'Wholesaler',
-                            color: AppTheme.primaryDark,
-                            email: 'wholesaler@productsphere.com',
-                            password: 'wholesalerpassword',
-                          ),
-
-                          _quickLoginChip(
-                            label: 'Buyer',
-                            color: AppTheme.primary,
-                            email: 'buyer@productsphere.com',
-                            password: 'buyerpassword',
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 24),
-
-                // ==============================
-                // Register
-                // ==============================
-                Row(
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: const Color(0xFFF2F4F8),
+    body: SafeArea(
+      child: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 16,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // ==============================
+              // Animated ProductSphere Logo
+              // ==============================
+              SlideTransition(
+                position: _logoSlideAnimation,
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      "Don't have an account? ",
-                      style: TextStyle(
-                        color: AppTheme.textSecondary,
-                        fontSize: 14,
-                      ),
+                    const Icon(
+                      Icons.local_mall_rounded,
+                      color: AppTheme.primary,
+                      size: 36,
                     ),
 
-                    GestureDetector(
-                      onTap: () => Get.to(
-                        () => RegisterScreen(),
-                      ),
-                      child: const Text(
-                        'Register here',
-                        style: TextStyle(
-                          color: AppTheme.primary,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                        ),
+                    const SizedBox(width: 10),
+
+                    RichText(
+                      text: const TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Product",
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.w900,
+                              color: AppTheme.textPrimary,
+                            ),
+                          ),
+                          TextSpan(
+                            text: "Sphere",
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.w900,
+                              color: AppTheme.primary,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+
+              const SizedBox(height: 32),
+
+              // ==============================
+              // Login Card
+              // ==============================
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(28),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(
+                    AppTheme.radiusXl,
+                  ),
+                  boxShadow: [AppTheme.cardShadow],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Center(
+                      child: Text(
+                        'Welcome Back',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.textPrimary,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    // ==============================
+                    // Email
+                    // ==============================
+                    const Text(
+                      'Email Address',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.textPrimary,
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    TextField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.textPrimary,
+                      ),
+                      decoration: _inputDecoration(
+                        'Enter your email...',
+                      ),
+                    ),
+
+                    const SizedBox(height: 18),
+
+                    // ==============================
+                    // Password
+                    // ==============================
+                    const Text(
+                      'Password',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.textPrimary,
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    TextField(
+                      controller: _passwordController,
+                      obscureText: _obscurePassword,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.textPrimary,
+                      ),
+                      decoration: _inputDecoration(
+                        'Enter your password',
+                        suffix: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
+                            color: AppTheme.textSecondary,
+                            size: 20,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 28),
+
+                    // ==============================
+                    // Login Button
+                    // ==============================
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: _isLoading ? null : _login,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.primary,
+                          disabledBackgroundColor:
+                              AppTheme.primary.withValues(alpha: 0.6),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              AppTheme.radiusMd,
+                            ),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: _isLoading
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2.5,
+                                ),
+                              )
+                            : const Text(
+                                'Login',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // ==============================
+              // Register
+              // ==============================
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Don't have an account? ",
+                    style: TextStyle(
+                      color: AppTheme.textSecondary,
+                      fontSize: 14,
+                    ),
+                  ),
+
+                  GestureDetector(
+                    onTap: () => Get.to(
+                      () => RegisterScreen(),
+                    ),
+                    child: const Text(
+                      'Register here',
+                      style: TextStyle(
+                        color: AppTheme.primary,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
-    );
-  }
-
-  // ==============================
-  // Quick Login Chip
-  // ==============================
-  Widget _quickLoginChip({
-    required String label,
-    required Color color,
-    required String email,
-    required String password,
-  }) {
-    return ActionChip(
-      backgroundColor: color.withValues(alpha: 0.08),
-      side: BorderSide(color: color.withValues(alpha: 0.3)),
-      label: Text(
-        label,
-        style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.bold),
-      ),
-      onPressed: () => S(
-        email,
-        password,
-      ),
-    );
-  }
-
+    ),
+  );
+}
   // ==============================
   // Input Decoration
   // ==============================

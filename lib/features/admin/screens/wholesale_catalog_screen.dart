@@ -779,7 +779,7 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
                   child: hasImage
                       ? Image.memory(
                           base64Decode(
-                            productImage!,
+                            productImage,
                           ),
 
                           fit:
