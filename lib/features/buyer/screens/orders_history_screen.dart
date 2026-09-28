@@ -51,7 +51,7 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
       });
       _applyFilters();
     } catch (e) {
-      print('Fetch orders history error: $e');
+      debugPrint('Fetch orders history error: $e');
       setState(() => _isLoading = false);
     }
   }

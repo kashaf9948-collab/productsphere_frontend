@@ -34,7 +34,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      print('Error fetching categories: $e');
+      debugPrint('Error fetching categories: $e');
       setState(() => _isLoading = false);
     }
   }

@@ -6,7 +6,6 @@ import '../../buyer/services/buyer_service.dart';
 import '../../../core/theme/theme.dart';
 import './widgets/admin_drawer.dart';
 import './widgets/admin_bottom_nav.dart';
-import '../../../core/widgets/snackbars.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -42,53 +41,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      print('Admin Dashboard fetch data error: $e');
+      debugPrint('Admin Dashboard fetch data error: $e');
       setState(() => _isLoading = false);
     }
-  }
-
-  Future<void> _updateStatus(int userId, String name, String status) async {
-    // Show a loading dialog
-    Get.dialog(
-      const Center(
-        child: Card(
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: CircularProgressIndicator(color: AppTheme.primary),
-          ),
-        ),
-      ),
-      barrierDismissible: false,
-    );
-
-    final result = await AuthService.updateBusinessStatus(userId, status);
-    
-    Get.back(); // close dialog
-
-    if (result['success']) {
-      if (status == 'approved') {
-        AppSnackbars.success(
-          title: "Action Successful",
-          message: "Business '$name' is now approved.",
-        );
-      } else {
-        AppSnackbars.error(
-          title: "Action Successful",
-          message: "Business '$name' is now rejected.",
-        );
-      }
-      _fetchData(); // reload list
-    } else {
-      AppSnackbars.error(
-        title: "Action Failed",
-        message: result['message'] ?? "Failed to update business status",
-      );
-    }
-  }
-
-  void _logout() {
-    AuthService.logout();
-    Get.offAllNamed('/login');
   }
 
   @override
@@ -121,13 +76,17 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // --- ADMIN WELCOME HEADER ---
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(color: AppTheme.primary),
+            )
+          : SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // --- ADMIN WELCOME HEADER ---
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),

@@ -32,7 +32,7 @@ class AuthService {
       );
 
       final data = json.decode(response.body);
-      print('Login API Response: $data');
+      debugPrint('Login API Response: $data');
 
       if (response.statusCode == 200 && data['success'] == true) {
         // Save Auth States
@@ -48,7 +48,7 @@ class AuthService {
         return {'success': false, 'message': data['message'] ?? 'Login failed'};
       }
     } catch (e) {
-      print('Login error: $e');
+      debugPrint('Login error: $e');
       return {'success': false, 'message': 'Cannot connect to backend: $e'};
     }
   }
@@ -89,7 +89,7 @@ class AuthService {
       );
 
       final data = json.decode(response.body);
-      print('Register API Response: $data');
+      debugPrint('Register API Response: $data');
 
       if ((response.statusCode == 201 || response.statusCode == 200) &&
           data['success'] == true) {
@@ -104,7 +104,7 @@ class AuthService {
         };
       }
     } catch (e) {
-      print('Register error: $e');
+      debugPrint('Register error: $e');
       return {'success': false, 'message': 'Cannot connect to backend: $e'};
     }
   }
@@ -122,16 +122,16 @@ class AuthService {
       );
 
       final data = json.decode(response.body);
-      print('Fetch Pending Wholesalers Response: $data');
+      debugPrint('Fetch Pending Wholesalers Response: $data');
 
       if (response.statusCode == 200 && data['success'] == true) {
         return data['data'] ?? [];
       } else {
-        print('Failed to load pending businesses: ${data['message']}');
+        debugPrint('Failed to load pending businesses: ${data['message']}');
         return [];
       }
     } catch (e) {
-      print('Fetch Pending error: $e');
+      debugPrint('Fetch Pending error: $e');
       return [];
     }
   }
@@ -153,7 +153,7 @@ class AuthService {
       );
 
       final data = json.decode(response.body);
-      print('Update status Response: $data');
+      debugPrint('Update status Response: $data');
 
       if (response.statusCode == 200 && data['success'] == true) {
         return {'success': true, 'message': data['message']};
@@ -164,7 +164,7 @@ class AuthService {
         };
       }
     } catch (e) {
-      print('Update status error: $e');
+      debugPrint('Update status error: $e');
       return {'success': false, 'message': 'Cannot connect to backend: $e'};
     }
   }

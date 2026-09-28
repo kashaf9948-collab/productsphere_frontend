@@ -41,15 +41,15 @@ class BuyerService {
     try {
       final url = Uri.parse('$baseUrl/categories');
 
-      print('Fetching categories from: $url');
+      debugPrint('Fetching categories from: $url');
 
       final response = await http.get(
         url,
         headers: {'Content-Type': 'application/json'},
       );
 
-      print('Categories status: ${response.statusCode}');
-      print('Categories response: ${response.body}');
+      debugPrint('Categories status: ${response.statusCode}');
+      debugPrint('Categories response: ${response.body}');
 
       final data = json.decode(response.body);
 
@@ -57,10 +57,10 @@ class BuyerService {
         return data['data'] ?? [];
       }
 
-      print('Categories API error: ${data['message']}');
+      debugPrint('Categories API error: ${data['message']}');
       return [];
     } catch (e) {
-      print('FETCH CATEGORIES ERROR: $e');
+      debugPrint('FETCH CATEGORIES ERROR: $e');
       return [];
     }
   }

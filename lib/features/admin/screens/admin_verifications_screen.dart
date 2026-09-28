@@ -33,7 +33,7 @@ class _AdminVerificationsScreenState extends State<AdminVerificationsScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      print('Fetch verifications error: $e');
+      debugPrint('Fetch verifications error: $e');
       setState(() => _isLoading = false);
     }
   }
