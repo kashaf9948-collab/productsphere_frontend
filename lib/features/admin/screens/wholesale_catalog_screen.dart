@@ -117,11 +117,11 @@ class _WholesaleCatalogScreenState extends State<WholesaleCatalogScreen> {
         ),
       );
     } finally {
-      if (!mounted) return;
-
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 

@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../buyer/controllers/cart_controller.dart';
-import '../../auth/services/auth_service.dart';
 import '../services/buyer_service.dart';
 import '../../wholesaler/services/wholesaler_service.dart';
 
@@ -40,6 +39,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   List<dynamic> _wholesalerProducts = [];
   List<dynamic> _wholesalerBids = [];
+  List<dynamic> _wholesalerOrders = [];
 
   // ============================================================
   // BUYER STATES
@@ -129,6 +129,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         final results = await Future.wait([
           WholesalerService.fetchWholesalerProducts(wholesalerId),
           WholesalerService.fetchWholesalerBids(),
+          WholesalerService.fetchWholesalerOrders(),
         ]);
 
         if (!mounted) return;
@@ -136,6 +137,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         setState(() {
           _wholesalerProducts = results[0];
           _wholesalerBids = results[1];
+          _wholesalerOrders = results[2];
           _isLoading = false;
         });
       }
@@ -234,16 +236,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     setState(() {
       _applyFiltersWithoutSetState();
     });
-  }
-
-  // ============================================================
-  // LOGOUT
-  // ============================================================
-
-  void _logout() {
-    AuthService.logout();
-
-    Get.offAllNamed('/login');
   }
 
   // ============================================================
@@ -589,24 +581,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
     BuildContext context,
     Map<String, dynamic> user,
   ) {
-    final String totalListings =
-        _wholesalerProducts.length.toString();
+    final String activeProducts =
+        _wholesalerProducts
+            .where((p) => p['status']?.toString().toLowerCase() != 'flagged')
+            .length
+            .toString();
+
+    final String pendingOrders =
+        _wholesalerOrders
+            .where((o) => (o['status'] ?? 'pending').toString().toLowerCase() == 'pending')
+            .length
+            .toString();
 
     final String pendingOffers =
         _wholesalerBids
-            .where((b) => b['status'] == 'pending')
+            .where((b) => (b['status'] ?? 'pending').toString().toLowerCase() == 'pending')
             .length
             .toString();
 
-    final String activeOrders =
-        _wholesalerBids
-            .where((b) => b['status'] == 'ordered')
-            .length
-            .toString();
-
-    final String completedDeals =
-        _wholesalerBids
-            .where((b) => b['status'] == 'completed')
+    final String completedOrders =
+        _wholesalerOrders
+            .where((o) => (o['status'] ?? '').toString().toLowerCase() == 'delivered')
             .length
             .toString();
 
@@ -631,10 +626,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             Expanded(
               child: _statItem(
-                title: 'Total Listings',
-                value: totalListings,
+                title: 'Active Products',
+                value: activeProducts,
                 color: Colors.teal,
                 icon: Icons.inventory_2_outlined,
+                onTap: () => Get.toNamed('/wholesaler-inventory'),
               ),
             ),
 
@@ -642,10 +638,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
             Expanded(
               child: _statItem(
-                title: 'Pending Offers',
-                value: pendingOffers,
+                title: 'Pending Orders',
+                value: pendingOrders,
                 color: Colors.orange,
-                icon: Icons.gavel_rounded,
+                icon: Icons.pending_actions_rounded,
+                onTap: () => Get.toNamed('/orders-history'),
               ),
             ),
           ],
@@ -657,10 +654,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             Expanded(
               child: _statItem(
-                title: 'Active Orders',
-                value: activeOrders,
+                title: 'Pending Offers',
+                value: pendingOffers,
                 color: Colors.blue,
-                icon: Icons.local_shipping_outlined,
+                icon: Icons.gavel_rounded,
+                onTap: () => Get.toNamed('/wholesaler-negotiations'),
               ),
             ),
 
@@ -668,10 +666,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
             Expanded(
               child: _statItem(
-                title: 'Completed Deals',
-                value: completedDeals,
+                title: 'Delivered Orders',
+                value: completedOrders,
                 color: Colors.green,
-                icon: Icons.handshake_outlined,
+                icon: Icons.done_all_rounded,
+                onTap: () => Get.toNamed('/orders-history'),
               ),
             ),
           ],
@@ -1151,83 +1150,73 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required String value,
     required Color color,
     required IconData icon,
+    VoidCallback? onTap,
   }) {
-    return Container(
-      padding:
-          const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 20,
-      ),
-
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius:
-            BorderRadius.circular(
-          AppTheme.radiusMd,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 20,
         ),
-
-        boxShadow: [
-          AppTheme.cardShadow,
-        ],
-
-        border: Border(
-          left: BorderSide(
-            color: color,
-            width: 4,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(
+            AppTheme.radiusMd,
           ),
-        ),
-      ),
-
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundColor:
-                color.withValues(alpha: 0.08),
-
-            child: Icon(
-              icon,
+          boxShadow: [
+            AppTheme.cardShadow,
+          ],
+          border: Border(
+            left: BorderSide(
               color: color,
-              size: 20,
+              width: 4,
             ),
           ),
-
-          const SizedBox(width: 14),
-
-          Expanded(
-            child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
-
-              children: [
-                Text(
-                  value,
-
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.textPrimary,
-                  ),
-                ),
-
-                const SizedBox(height: 2),
-
-                Text(
-                  title,
-
-                  maxLines: 2,
-                  overflow:
-                      TextOverflow.ellipsis,
-
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: AppTheme.textSecondary,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
+        ),
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundColor:
+                  color.withValues(alpha: 0.08),
+              child: Icon(
+                icon,
+                color: color,
+                size: 20,
+              ),
             ),
-          ),
-        ],
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    value,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    title,
+                    maxLines: 2,
+                    overflow:
+                        TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: AppTheme.textSecondary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1842,266 +1831,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           size: 30,
         ),
       ),
-    );
-  }
-
-  // ============================================================
-  // OLD PRODUCT ITEM
-  // Kept because it may be used elsewhere in this screen later.
-  // ============================================================
-
-  Widget _productItem(
-    BuildContext context,
-    Map<String, dynamic> product,
-    CartController cartController,
-  ) {
-    final String name =
-        product['name']?.toString() ?? '';
-
-    final String wholesaler =
-        product['wholesaler_name']?.toString() ??
-            'Wholesaler';
-
-    final String priceStr =
-        'Rs ${product['price'] ?? 0}';
-
-    final String originalPriceStr =
-        'Rs ${product['original_price'] ?? 0}';
-
-    final int qty =
-        int.tryParse(
-              product['quantity']?.toString() ??
-                  '0',
-            ) ??
-            0;
-
-    final String category =
-        product['category']?.toString() ?? '';
-
-    final String? productImage =
-        product['product_image']?.toString();
-
-    final bool hasImage =
-        productImage != null &&
-        productImage.isNotEmpty;
-
-    return Row(
-      crossAxisAlignment:
-          CrossAxisAlignment.start,
-
-      children: [
-        ClipRRect(
-          borderRadius:
-              BorderRadius.circular(
-            AppTheme.radiusSm,
-          ),
-
-          child: SizedBox(
-            width: 56,
-            height: 56,
-
-            child: hasImage
-                ? _buildProductImage(
-                    productImage,
-                  )
-                : _emptyProductImage(),
-          ),
-        ),
-
-        const SizedBox(width: 14),
-
-        Expanded(
-          child: Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.start,
-
-            children: [
-              Text(
-                name,
-
-                maxLines: 2,
-                overflow:
-                    TextOverflow.ellipsis,
-
-                style:
-                    const TextStyle(
-                  fontSize: 14,
-                  fontWeight:
-                      FontWeight.bold,
-                  color:
-                      AppTheme.textPrimary,
-                ),
-              ),
-
-              const SizedBox(height: 2),
-
-              Text(
-                'By $wholesaler • $category',
-
-                maxLines: 1,
-                overflow:
-                    TextOverflow.ellipsis,
-
-                style:
-                    const TextStyle(
-                  fontSize: 12,
-                  color:
-                      AppTheme.textSecondary,
-                ),
-              ),
-
-              const SizedBox(height: 2),
-
-              Text(
-                'Stock: $qty units available',
-
-                style:
-                    const TextStyle(
-                  fontSize: 11,
-                  color:
-                      AppTheme.textSecondary,
-                ),
-              ),
-
-              const SizedBox(height: 4),
-
-              Row(
-                children: [
-                  Text(
-                    priceStr,
-
-                    style:
-                        const TextStyle(
-                      fontSize: 13,
-                      fontWeight:
-                          FontWeight.bold,
-                      color:
-                          AppTheme.primary,
-                    ),
-                  ),
-
-                  const SizedBox(width: 8),
-
-                  Text(
-                    originalPriceStr,
-
-                    style:
-                        const TextStyle(
-                      fontSize: 11,
-                      color:
-                          AppTheme.textHint,
-                      decoration:
-                          TextDecoration
-                              .lineThrough,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-
-        const SizedBox(width: 8),
-
-        Column(
-          children: [
-            ElevatedButton.icon(
-              onPressed: qty <= 0
-                  ? null
-                  : () {
-                      cartController
-                          .addToCart(product);
-
-                      AppSnackbars.success(
-                        title:
-                            'Added to Cart',
-                        message:
-                            '$name has been added to your shopping cart.',
-                      );
-                    },
-
-              style:
-                  ElevatedButton.styleFrom(
-                backgroundColor:
-                    AppTheme.primary,
-                foregroundColor:
-                    Colors.white,
-                minimumSize:
-                    const Size(80, 32),
-                padding:
-                    const EdgeInsets.symmetric(
-                  horizontal: 10,
-                ),
-                shape:
-                    RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(
-                    AppTheme.radiusSm,
-                  ),
-                ),
-              ),
-
-              icon: const Icon(
-                Icons.add_shopping_cart,
-                size: 14,
-              ),
-
-              label: const Text(
-                'Add',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight:
-                      FontWeight.bold,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 6),
-
-            ElevatedButton(
-              onPressed: qty <= 0
-                  ? null
-                  : () {
-                      showBidDialog(
-                        context: context,
-                        product: product,
-                        onSuccess: () {},
-                      );
-                    },
-
-              style:
-                  ElevatedButton.styleFrom(
-                backgroundColor:
-                    AppTheme.primaryLight,
-                foregroundColor:
-                    AppTheme.primary,
-                minimumSize:
-                    const Size(80, 30),
-                padding:
-                    const EdgeInsets.symmetric(
-                  horizontal: 12,
-                ),
-                shape:
-                    RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(
-                    AppTheme.radiusSm,
-                  ),
-                ),
-              ),
-
-              child: const Text(
-                'Bid',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight:
-                      FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

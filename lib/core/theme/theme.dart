@@ -54,7 +54,6 @@ class AppTheme {
       primary: primary,
       onPrimary: textOnPrimary,
       surface: surface,
-      background: background,
     ),
     scaffoldBackgroundColor: background,
     fontFamily: 'Lexend',

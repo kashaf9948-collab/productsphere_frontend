@@ -47,7 +47,7 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      print('Error fetching wholesaler products: $e');
+      debugPrint('Error fetching wholesaler products: $e');
       setState(() => _isLoading = false);
     }
   }
@@ -66,18 +66,6 @@ class _WholesalerInventoryScreenState extends State<WholesalerInventoryScreen> {
     final result = await WholesalerService.deleteWholesalerProduct(productId);
     Get.back(); // close loading
 
-    if (result['success']) {
-      AppSnackbars.success(
-        title: "Product Deleted",
-        message: "Product has been removed from your catalog.",
-      );
-      _fetchProducts();
-    } else {
-      AppSnackbars.error(
-        title: "Delete Failed",
-        message: result['message'] ?? "Unable to delete product.",
-      );
-    }
     if (result['success']) {
       AppSnackbars.success(
         title: "Product Deleted",
